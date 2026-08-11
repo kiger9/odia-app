@@ -23,6 +23,12 @@ export default function Splash({
         alt="Three children walking to school in an Odisha village"
       />
 
+      <div className="splash-dots" aria-label="Loading">
+        <span />
+        <span />
+        <span />
+      </div>
+
       <p className="splash-legal">
         Lessons adapted from <i>Oriya in Small Bites — a Self-study Language Guide</i> by Niels
         Erik Wegge (The Modern Book Depot, Bhubaneswar, 2000; ISBN 81-85253-05-6). Curriculum ©
