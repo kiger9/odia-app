@@ -233,6 +233,10 @@ body {
 .chapter-pbar {
   margin: 2px 0 4px;
 }
+/* lesson bars are thinner than the chapter bars above them */
+.lesson-row .pbar {
+  height: 4px;
+}
 .lesson-icon {
   flex: none;
   width: 26px;
