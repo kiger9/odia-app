@@ -1,34 +1,58 @@
-// The on-device progress store. Everything a learner does is written here
-// immediately, into the browser's built-in IndexedDB storage (via Dexie, a
-// friendlier wrapper). That's what lets you close the app, reopen it tomorrow,
-// and find your progress — and your due reviews — exactly where you left them.
+// The on-device store (IndexedDB via Dexie). Everything a learner does is written
+// here immediately, so progress survives closing the app.
 
 import Dexie, { type Table } from 'dexie'
 import type { Card } from './srs'
 
+// --- spaced-repetition state per learned item (foundation from Milestone 0) ---
 export interface Progress {
-  lexemeId: string // which word this tracks (primary key)
-  due: number // when it's next due, as a timestamp (indexed, so we can find due cards fast)
-  reviews: number // how many times it's been reviewed
-  card: Card // the full ts-fsrs scheduling state
+  lexemeId: string
+  due: number
+  reviews: number
+  card: Card
+  updatedAt: number
+}
+
+// --- per-lesson progress (Milestone 1) ---
+export interface LessonProgress {
+  lessonId: string // primary key
+  step: number // furthest step reached (for resume)
+  completed: boolean
   updatedAt: number
 }
 
 class OdiaDB extends Dexie {
   progress!: Table<Progress, string>
+  lessonProgress!: Table<LessonProgress, string>
 
   constructor() {
     super('odia-app')
-    this.version(1).stores({
+    this.version(1).stores({ progress: 'lexemeId, due' })
+    this.version(2).stores({
       progress: 'lexemeId, due',
+      lessonProgress: 'lessonId, completed',
     })
   }
 }
 
 export const db = new OdiaDB()
 
-// Ask the browser to keep our data safe from automatic eviction. On iOS Safari
-// this reduces the chance progress gets cleared to reclaim space.
+// Record how far a learner got in a lesson (and whether they finished it).
+export async function saveLessonProgress(
+  lessonId: string,
+  step: number,
+  completed: boolean,
+): Promise<void> {
+  const existing = await db.lessonProgress.get(lessonId)
+  await db.lessonProgress.put({
+    lessonId,
+    step: Math.max(step, existing?.step ?? 0),
+    completed: completed || (existing?.completed ?? false),
+    updatedAt: Date.now(),
+  })
+}
+
+// Ask the browser to keep our data safe from automatic eviction (iOS Safari).
 export async function requestPersistentStorage(): Promise<void> {
   if (navigator.storage?.persist) {
     await navigator.storage.persist()
