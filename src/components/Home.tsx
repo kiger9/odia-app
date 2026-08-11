@@ -2,6 +2,13 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type LessonProgress } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 
+// How far through a single lesson (0–1).
+function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
+  if (p?.completed) return 1
+  if (!p) return 0
+  return Math.min(p.step / lesson.items.length, 1)
+}
+
 export default function Home({
   onStart,
   onSettings,
@@ -32,6 +39,9 @@ export default function Home({
       {CHAPTERS.map((ch) => {
         const lessons = ch.lessons.map((id) => LESSON_BY_ID[id])
         const doneInCh = ch.lessons.filter((id) => byId.get(id)?.completed).length
+        const chFrac =
+          lessons.reduce((sum, l) => sum + lessonFrac(l, byId.get(l.id)), 0) / lessons.length
+
         return (
           <section className="chapter" key={ch.key}>
             <div className="chapter-head">
@@ -41,33 +51,35 @@ export default function Home({
               </span>
             </div>
             <p className="chapter-blurb muted">{ch.blurb}</p>
+            <div className="pbar chapter-pbar">
+              <i style={{ width: `${Math.round(chFrac * 100)}%` }} />
+            </div>
 
             <div className="lesson-list">
               {lessons.map((lesson) => {
                 const p = byId.get(lesson.id)
-                const state = p?.completed
-                  ? 'done'
-                  : p && p.step > 0
-                    ? 'progress'
-                    : 'new'
-                const pct = p?.completed
-                  ? 100
-                  : p
-                    ? Math.round((p.step / lesson.items.length) * 100)
-                    : 0
+                const frac = lessonFrac(lesson, p)
+                const state = p?.completed ? 'done' : p && p.step > 0 ? 'progress' : 'new'
                 return (
                   <button
                     className={`lesson-row ${state}`}
                     key={lesson.id}
                     onClick={() => onStart(lesson.id)}
                   >
-                    <span className="lesson-icon">{state === 'done' ? '✓' : '›'}</span>
-                    <span className="lesson-text">
-                      <b>{lesson.title}</b>
-                      <small>
-                        {state === 'progress' ? `In progress · ${pct}%` : lesson.sub}
-                      </small>
-                    </span>
+                    <div className="lesson-main">
+                      <span className="lesson-icon">{state === 'done' ? '✓' : '›'}</span>
+                      <span className="lesson-text">
+                        <b>{lesson.title}</b>
+                        <small>
+                          {state === 'progress'
+                            ? `In progress · ${Math.round(frac * 100)}%`
+                            : lesson.sub}
+                        </small>
+                      </span>
+                    </div>
+                    <div className="pbar">
+                      <i style={{ width: `${Math.round(frac * 100)}%` }} />
+                    </div>
                   </button>
                 )
               })}

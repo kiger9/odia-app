@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import type { Lesson, Step } from '../data/lessons'
 import { saveLessonProgress } from '../db'
 import { answerMatches } from '../lib/normalize'
+import { SHOW_SCRIPT_FEATURE } from '../settings'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -29,7 +30,8 @@ function Phrase({
   return (
     <div className="phrase">
       <p className={size === 'lg' ? 'phonetic-lg' : 'phonetic-md'}>{phonetic}</p>
-      {showScript && script && <p className="script-sub">{script}</p>}
+      {/* Odia-script subtext — hidden until the script content layer is ready. */}
+      {SHOW_SCRIPT_FEATURE && showScript && script && <p className="script-sub">{script}</p>}
     </div>
   )
 }
@@ -122,7 +124,7 @@ function ClozeStep({ step, onNext }: StepProps) {
     <div className="step">
       <p className="q">{step.q}</p>
       <p className="cloze-line">
-        {step.pre} <span className="blank">{picked !== null ? opts[picked] : '____'}</span>{' '}
+        {step.pre} <span className="blank">{picked !== null ? opts[picked] : ' '}</span>{' '}
         {step.post}
       </p>
       <div className="opts">

@@ -14,13 +14,18 @@ export default function App() {
   const [showScript, setShowScript] = useState(getShowScript())
 
   useEffect(() => {
-    const t1 = setTimeout(() => setSplash('leaving'), 1100)
-    const t2 = setTimeout(() => setSplash('gone'), 1500)
+    const t1 = setTimeout(() => setSplash('leaving'), 2600)
+    const t2 = setTimeout(() => setSplash('gone'), 3000)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
     }
   }, [])
+
+  function dismissSplash() {
+    setSplash((s) => (s === 'showing' ? 'leaving' : s))
+    setTimeout(() => setSplash('gone'), 400)
+  }
 
   function toggleScript(v: boolean) {
     setShowScript(v)
@@ -59,7 +64,7 @@ export default function App() {
   return (
     <>
       {view}
-      {splash !== 'gone' && <Splash leaving={splash === 'leaving'} />}
+      {splash !== 'gone' && <Splash leaving={splash === 'leaving'} onDismiss={dismissSplash} />}
     </>
   )
 }

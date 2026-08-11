@@ -1,3 +1,5 @@
+import { SHOW_SCRIPT_FEATURE } from '../settings'
+
 export default function Settings({
   showScript,
   onToggleScript,
@@ -16,29 +18,38 @@ export default function Settings({
         <h2>Settings</h2>
       </header>
 
-      <section className="card setting-card">
-        <label className="setting-row">
-          <span className="setting-text">
-            <b>Show Odia script</b>
-            <small className="muted">
-              Display the Odia script beneath the phonetic spelling while learning.
-            </small>
-          </span>
-          <span className={`switch ${showScript ? 'on' : ''}`} role="switch" aria-checked={showScript}>
-            <input
-              type="checkbox"
-              checked={showScript}
-              onChange={(e) => onToggleScript(e.target.checked)}
-            />
-            <span className="knob" />
-          </span>
-        </label>
-      </section>
+      {/* Odia-script toggle — hidden until the script content layer is ready. */}
+      {SHOW_SCRIPT_FEATURE && (
+        <>
+          <section className="card setting-card">
+            <label className="setting-row">
+              <span className="setting-text">
+                <b>Show Odia script</b>
+                <small className="muted">
+                  Display the Odia script beneath the phonetic spelling while learning.
+                </small>
+              </span>
+              <span
+                className={`switch ${showScript ? 'on' : ''}`}
+                role="switch"
+                aria-checked={showScript}
+              >
+                <input
+                  type="checkbox"
+                  checked={showScript}
+                  onChange={(e) => onToggleScript(e.target.checked)}
+                />
+                <span className="knob" />
+              </span>
+            </label>
+          </section>
 
-      <p className="muted setting-note">
-        Script is being added lesson by lesson — this toggle reveals it wherever it's
-        available.
-      </p>
+          <p className="muted setting-note">
+            Script is being added lesson by lesson — this toggle reveals it wherever it's
+            available.
+          </p>
+        </>
+      )}
 
       <footer className="credit muted">
         Curriculum from <em>Oriya in Small Bites — a Self-study Language Guide</em> by Niels
