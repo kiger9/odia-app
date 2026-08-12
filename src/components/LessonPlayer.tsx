@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import type { Lesson, Step } from '../data/lessons'
 import { saveLessonProgress } from '../db'
 import { enqueueLessonItems } from '../reviews'
-import { recordActivity } from '../streak'
+import { markPracticedToday } from '../streak'
 import { answerMatches } from '../lib/normalize'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
 
@@ -357,9 +357,11 @@ export default function LessonPlayer({
     const nextIndex = index + 1
     const done = nextIndex >= total
     void saveLessonProgress(lesson.id, nextIndex, done)
-    void recordActivity() // count this step toward today's goal / streak
-    // On completion, add this lesson's taught phrases to the review pool.
-    if (done) void enqueueLessonItems(lesson.id)
+    // On completion, add this lesson's phrases to the review pool and count the day.
+    if (done) {
+      void enqueueLessonItems(lesson.id)
+      void markPracticedToday()
+    }
     setIndex(nextIndex)
   }
 

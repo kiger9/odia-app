@@ -1,9 +1,17 @@
+import { useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type LessonProgress, type Progress, type Stats } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 import { poolStats, formatWhen } from '../reviews'
-import { viewStreak } from '../streak'
+import {
+  viewStreak,
+  todayString,
+  getCelebratedDay,
+  setCelebratedDay,
+  CELEBRATION_PHRASES,
+} from '../streak'
 import Wordmark from './Wordmark'
+import Celebration from './Celebration'
 
 // How far through a single lesson (0–1).
 function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
@@ -15,13 +23,13 @@ function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
 export default function Home({
   onStart,
   onReview,
+  onQuiz,
   onSettings,
-  dailyGoal,
 }: {
   onStart: (lessonId: string) => void
   onReview: () => void
+  onQuiz: () => void
   onSettings: () => void
-  dailyGoal: number
 }) {
   const progress = useLiveQuery(() => db.lessonProgress.toArray(), [], [] as LessonProgress[])
   const reviewRows = useLiveQuery(() => db.progress.toArray(), [], [] as Progress[])
@@ -31,8 +39,30 @@ export default function Home({
   const totalLessons = CHAPTERS.reduce((n, c) => n + c.lessons.length, 0)
   const completed = progress.filter((p) => p.completed).length
   const { poolSize, dueCount, nextDue } = poolStats(reviewRows)
-  const streak = viewStreak(statsRec, dailyGoal)
-  const goalPct = Math.min((streak.count / streak.goal) * 100, 100)
+  const streak = viewStreak(statsRec)
+
+  // Celebration: play once, the first time home reopens after practicing today.
+  const [celebrate, setCelebrate] = useState<string | null>(null)
+  const triggered = useRef(false)
+  useEffect(() => {
+    if (triggered.current || !statsRec) return
+    if (viewStreak(statsRec).practicedToday && getCelebratedDay() !== todayString()) {
+      triggered.current = true
+      setCelebratedDay(todayString())
+      setCelebrate(CELEBRATION_PHRASES[Math.floor(Math.random() * CELEBRATION_PHRASES.length)])
+    }
+  }, [statsRec])
+  useEffect(() => {
+    if (!celebrate) return
+    const t = setTimeout(() => setCelebrate(null), 2300)
+    return () => clearTimeout(t)
+  }, [celebrate])
+
+  const streakSub = streak.practicedToday
+    ? 'Practiced today ✓'
+    : streak.streak > 0
+      ? 'Practice to keep it going'
+      : 'Start your streak today'
 
   return (
     <main className="app">
@@ -46,41 +76,51 @@ export default function Home({
         </p>
       </header>
 
-      <div className="tiles">
-        <div className="stat-tile">
-          <div className="stat-head">
-            <span className={`flame ${streak.streak > 0 ? 'lit' : ''}`}>🔥</span>
-            <span className="stat-num">{streak.streak}</span>
-            <span className="stat-cap">day{streak.streak === 1 ? '' : 's'}</span>
-          </div>
-          <div className="stat-sub muted">
-            {streak.metToday ? 'Goal met ✓' : `${streak.count} / ${streak.goal} exercises today`}
-          </div>
-          <div className="pbar mini">
-            <i style={{ width: `${goalPct}%` }} />
-          </div>
-        </div>
-
-        {poolSize > 0 && (
-          <button
-            className="stat-tile stat-button"
-            onClick={onReview}
-            disabled={dueCount === 0}
-          >
+      {celebrate ? (
+        <Celebration phrase={celebrate} />
+      ) : (
+        <div className="tiles">
+          <div className="stat-tile">
             <div className="stat-head">
-              <span className="stat-num review-num">{dueCount > 0 ? dueCount : '✓'}</span>
-              <span className="stat-cap">{dueCount > 0 ? 'reviews due' : 'reviews'}</span>
+              <span className={`flame ${streak.streak > 0 ? 'lit' : ''}`}>🔥</span>
+              <span className="stat-num">{streak.streak}</span>
+              <span className="stat-cap">Day Streak</span>
             </div>
-            <div className="stat-sub muted">
-              {dueCount > 0
-                ? 'Tap to begin'
-                : nextDue
-                  ? `Next ${formatWhen(nextDue)}`
-                  : 'Up to date'}
-            </div>
-          </button>
-        )}
-      </div>
+            <div className="stat-sub muted">{streakSub}</div>
+          </div>
+
+          {poolSize > 0 && (
+            <button
+              className="stat-tile stat-button"
+              onClick={onReview}
+              disabled={dueCount === 0}
+            >
+              <div className="stat-head">
+                <span className="stat-num review-num">{dueCount > 0 ? dueCount : '✓'}</span>
+                <span className="stat-cap">{dueCount > 0 ? 'reviews due' : 'reviews'}</span>
+              </div>
+              <div className="stat-sub muted">
+                {dueCount > 0
+                  ? 'Tap to begin'
+                  : nextDue
+                    ? `Next ${formatWhen(nextDue)}`
+                    : 'Up to date'}
+              </div>
+            </button>
+          )}
+        </div>
+      )}
+
+      {poolSize >= 4 && (
+        <button className="quiz-btn" onClick={onQuiz}>
+          <span className="quiz-emoji">🎲</span>
+          <span className="quiz-text">
+            <b>Pop Quiz</b>
+            <small>Fresh questions from everything you've learned</small>
+          </span>
+          <span className="quiz-arrow">›</span>
+        </button>
+      )}
 
       {CHAPTERS.map((ch) => {
         const lessons = ch.lessons.map((id) => LESSON_BY_ID[id])

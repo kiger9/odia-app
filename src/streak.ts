@@ -1,9 +1,9 @@
-// Streak + daily-goal tracking. Every learning action (a lesson step answered or
-// a review rated) counts toward today's goal; meeting the goal on consecutive days
-// grows the streak.
+// Streak tracking, "did you practice today?" model. A day counts toward the
+// streak when the learner does something meaningful — finishes their due reviews,
+// completes a Pop Quiz, or completes a lesson. Consecutive practiced days grow the
+// streak; a skipped day resets it.
 
 import { db, type Stats } from './db'
-import { getDailyGoal } from './settings'
 
 // Local calendar date as YYYY-MM-DD (so streaks follow the learner's own midnight).
 function localDay(d = new Date()): string {
@@ -16,45 +16,52 @@ function dayBefore(day: string): string {
   return localDay(d)
 }
 
+// Older records used `lastGoalMetDate`; new ones use `lastPracticedDate`.
+function lastDate(rec: Stats | undefined): string | null {
+  return rec?.lastPracticedDate ?? rec?.lastGoalMetDate ?? null
+}
+
+export function todayString(): string {
+  return localDay()
+}
+
+// Mark that the learner practiced today (idempotent within a day).
+export async function markPracticedToday(): Promise<void> {
+  const today = localDay()
+  const rec = await db.stats.get('main')
+  const last = lastDate(rec)
+  if (last === today) return
+  const streak = last === dayBefore(today) ? (rec?.streak ?? 0) + 1 : 1
+  await db.stats.put({ id: 'main', streak, lastPracticedDate: today })
+}
+
 export interface StreakView {
   streak: number
-  count: number
-  goal: number
-  metToday: boolean
+  practicedToday: boolean
 }
 
-// Called once per learning action. Handles day rollover, counting, and streaks.
-export async function recordActivity(): Promise<void> {
-  const goal = getDailyGoal()
-  const today = localDay()
-  const rec: Stats = (await db.stats.get('main')) ?? {
-    id: 'main',
-    day: today,
-    count: 0,
-    streak: 0,
-    lastGoalMetDate: null,
-  }
-
-  if (rec.day !== today) {
-    rec.day = today
-    rec.count = 0
-  }
-  rec.count += 1
-
-  if (rec.count >= goal && rec.lastGoalMetDate !== today) {
-    rec.streak = rec.lastGoalMetDate === dayBefore(today) ? rec.streak + 1 : 1
-    rec.lastGoalMetDate = today
-  }
-
-  await db.stats.put(rec)
+export function viewStreak(rec: Stats | undefined, today = localDay()): StreakView {
+  const last = lastDate(rec)
+  const practicedToday = last === today
+  const alive = last === today || last === dayBefore(today)
+  return { streak: alive ? (rec?.streak ?? 0) : 0, practicedToday }
 }
 
-// Derive what to show, accounting for day rollover and whether the streak is still alive.
-export function viewStreak(rec: Stats | undefined, goal: number, today = localDay()): StreakView {
-  if (!rec) return { streak: 0, count: 0, goal, metToday: false }
+// --- celebration (shown once per day, the first time home reopens after practicing) ---
+const CELEBRATED_KEY = 'odia:celebratedDay'
 
-  const count = rec.day === today ? rec.count : 0
-  const metToday = rec.lastGoalMetDate === today
-  const alive = rec.lastGoalMetDate === today || rec.lastGoalMetDate === dayBefore(today)
-  return { streak: alive ? rec.streak : 0, count, goal, metToday }
+export const CELEBRATION_PHRASES = [
+  'Nice job!',
+  'Well done today!',
+  "You're on fire!",
+  'Great work!',
+  'Keep it blazing!',
+  'That’s the spirit!',
+]
+
+export function getCelebratedDay(): string | null {
+  return localStorage.getItem(CELEBRATED_KEY)
+}
+export function setCelebratedDay(day: string): void {
+  localStorage.setItem(CELEBRATED_KEY, day)
 }

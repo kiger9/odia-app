@@ -1,16 +1,12 @@
-import { SHOW_SCRIPT_FEATURE, GOAL_OPTIONS } from '../settings'
+import { SHOW_SCRIPT_FEATURE } from '../settings'
 
 export default function Settings({
   showScript,
   onToggleScript,
-  dailyGoal,
-  onSetGoal,
   onBack,
 }: {
   showScript: boolean
   onToggleScript: (v: boolean) => void
-  dailyGoal: number
-  onSetGoal: (v: number) => void
   onBack: () => void
 }) {
   return (
@@ -21,25 +17,6 @@ export default function Settings({
         </button>
         <h2>Settings</h2>
       </header>
-
-      <section className="card setting-card">
-        <div className="setting-text">
-          <b>Daily goal</b>
-          <small className="muted">How much practice counts as a full day for your streak.</small>
-        </div>
-        <div className="goal-picker">
-          {GOAL_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              className={`goal-option ${dailyGoal === opt.value ? 'active' : ''}`}
-              onClick={() => onSetGoal(opt.value)}
-            >
-              <b>{opt.value}</b>
-              <small>{opt.label}</small>
-            </button>
-          ))}
-        </div>
-      </section>
 
       {/* Odia-script toggle — hidden until the script content layer is ready. */}
       {SHOW_SCRIPT_FEATURE && (

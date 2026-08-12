@@ -21,13 +21,15 @@ export interface LessonProgress {
   updatedAt: number
 }
 
-// --- streak / daily-goal tracking (single row, id = 'main') ---
+// --- streak tracking (single row, id = 'main') ---
 export interface Stats {
   id: string
-  day: string // today's local date, YYYY-MM-DD
-  count: number // activities done today
-  streak: number // consecutive days the goal was met
-  lastGoalMetDate: string | null // local date the goal was last met
+  streak: number // consecutive practiced days
+  lastPracticedDate?: string | null // local date the learner last practiced
+  // legacy fields from earlier versions, kept for read-time migration:
+  day?: string
+  count?: number
+  lastGoalMetDate?: string | null
 }
 
 class OdiaDB extends Dexie {
