@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { Lesson, Step } from '../data/lessons'
 import { saveLessonProgress } from '../db'
 import { enqueueLessonItems } from '../reviews'
 import { markPracticedToday } from '../streak'
+import { recordLessonCompleted, encouragement } from '../profile'
 import { answerMatches } from '../lib/normalize'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
+import Modal from './Modal'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -283,13 +285,33 @@ function AssembleStep({ step, showScript, onNext }: StepProps) {
 function TypeStep({ step, onNext }: StepProps) {
   const [value, setValue] = useState('')
   const [checked, setChecked] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
   const ans = step.ans as string
   const correct = checked && answerMatches(value, ans, step.alts)
+
+  // Insert a special character (e.g. å) at the cursor, so learners don't need to
+  // switch their phone keyboard.
+  function insertChar(ch: string) {
+    const el = inputRef.current
+    if (!el) {
+      setValue((v) => v + ch)
+      return
+    }
+    const start = el.selectionStart ?? value.length
+    const end = el.selectionEnd ?? value.length
+    setValue(value.slice(0, start) + ch + value.slice(end))
+    requestAnimationFrame(() => {
+      el.focus()
+      const pos = start + ch.length
+      el.setSelectionRange(pos, pos)
+    })
+  }
 
   return (
     <div className="step">
       <p className="q">{step.q}</p>
       <input
+        ref={inputRef}
         className="type-input"
         value={value}
         autoFocus
@@ -300,6 +322,13 @@ function TypeStep({ step, onNext }: StepProps) {
         }}
         placeholder="Type your answer…"
       />
+      {!checked && (
+        <div className="char-row">
+          <button type="button" className="char-btn" onClick={() => insertChar('å')}>
+            å
+          </button>
+        </div>
+      )}
       {!checked ? (
         <button
           className="btn-primary"
@@ -343,15 +372,19 @@ function StepView(props: StepProps) {
 export default function LessonPlayer({
   lesson,
   showScript,
+  startStep = 0,
   onExit,
 }: {
   lesson: Lesson
   showScript: boolean
+  startStep?: number
   onExit: () => void
 }) {
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(startStep)
+  const [confirmQuit, setConfirmQuit] = useState(false)
   const total = lesson.items.length
   const finished = index >= total
+  const praise = useMemo(() => encouragement(), [])
 
   function next() {
     const nextIndex = index + 1
@@ -361,6 +394,7 @@ export default function LessonPlayer({
     if (done) {
       void enqueueLessonItems(lesson.id)
       void markPracticedToday()
+      void recordLessonCompleted()
     }
     setIndex(nextIndex)
   }
@@ -370,8 +404,8 @@ export default function LessonPlayer({
       <main className="app">
         <section className="card done-card">
           <p className="done-mark">✓</p>
-          <p className="due-count">Lesson complete</p>
-          <p className="muted">{lesson.title}</p>
+          <p className="due-count">{praise}</p>
+          <p className="muted">Lesson complete — {lesson.title}</p>
           <button className="btn-primary" onClick={onExit}>
             Back to lessons
           </button>
@@ -383,7 +417,7 @@ export default function LessonPlayer({
   return (
     <main className="app player">
       <div className="player-top">
-        <button className="x-btn" onClick={onExit} aria-label="Quit lesson">
+        <button className="x-btn" onClick={() => setConfirmQuit(true)} aria-label="Quit lesson">
           ✕
         </button>
         <div className="progress-bar">
@@ -391,6 +425,17 @@ export default function LessonPlayer({
         </div>
       </div>
       <StepView key={index} step={lesson.items[index]} showScript={showScript} onNext={next} />
+
+      {confirmQuit && (
+        <Modal
+          title="Quit lesson?"
+          message="Return to the main menu? Your progress in this lesson is saved."
+          actions={[
+            { label: 'Keep going', variant: 'ghost', onClick: () => setConfirmQuit(false) },
+            { label: 'Quit', variant: 'danger', onClick: onExit },
+          ]}
+        />
+      )}
     </main>
   )
 }

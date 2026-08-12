@@ -3,11 +3,13 @@ import { db, type Progress } from '../db'
 import { dueItemsFrom, recordReview, type ReviewItem } from '../reviews'
 import { markPracticedToday } from '../streak'
 import { Rating, type Grade } from '../srs'
+import Modal from './Modal'
 
 export default function ReviewSession({ onExit }: { onExit: () => void }) {
   const [queue, setQueue] = useState<ReviewItem[] | null>(null)
   const [index, setIndex] = useState(0)
   const [revealed, setRevealed] = useState(false)
+  const [confirmQuit, setConfirmQuit] = useState(false)
 
   // Snapshot the due items once when the session starts.
   useEffect(() => {
@@ -52,12 +54,15 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
   return (
     <main className="app player">
       <div className="player-top">
-        <button className="x-btn" onClick={onExit} aria-label="Quit review">
+        <button className="x-btn" onClick={() => setConfirmQuit(true)} aria-label="Quit review">
           ✕
         </button>
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${(index / queue.length) * 100}%` }} />
         </div>
+        <span className="q-count">
+          {index + 1} / {queue.length}
+        </span>
       </div>
 
       <section className="card review-q">
@@ -93,6 +98,17 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
             Easy
           </button>
         </div>
+      )}
+
+      {confirmQuit && (
+        <Modal
+          title="Quit review?"
+          message="Return to the main menu? Reviews you've already rated are saved."
+          actions={[
+            { label: 'Keep going', variant: 'ghost', onClick: () => setConfirmQuit(false) },
+            { label: 'Quit', variant: 'danger', onClick: onExit },
+          ]}
+        />
       )}
     </main>
   )

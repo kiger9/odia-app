@@ -3,15 +3,11 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type LessonProgress, type Progress, type Stats } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 import { poolStats, formatWhen } from '../reviews'
-import {
-  viewStreak,
-  todayString,
-  getCelebratedDay,
-  setCelebratedDay,
-  CELEBRATION_PHRASES,
-} from '../streak'
+import { viewStreak, todayString, getCelebratedDay, setCelebratedDay } from '../streak'
+import { encouragement } from '../profile'
 import Wordmark from './Wordmark'
 import Celebration from './Celebration'
+import Modal from './Modal'
 
 // How far through a single lesson (0–1).
 function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
@@ -24,12 +20,12 @@ export default function Home({
   onStart,
   onReview,
   onQuiz,
-  onSettings,
+  onProfile,
 }: {
-  onStart: (lessonId: string) => void
+  onStart: (lessonId: string, startStep: number) => void
   onReview: () => void
   onQuiz: () => void
-  onSettings: () => void
+  onProfile: () => void
 }) {
   const progress = useLiveQuery(() => db.lessonProgress.toArray(), [], [] as LessonProgress[])
   const reviewRows = useLiveQuery(() => db.progress.toArray(), [], [] as Progress[])
@@ -41,6 +37,14 @@ export default function Home({
   const { poolSize, dueCount, nextDue } = poolStats(reviewRows)
   const streak = viewStreak(statsRec)
 
+  // Resume-or-restart prompt for a partly-done lesson.
+  const [resumeLesson, setResumeLesson] = useState<{ id: string; step: number } | null>(null)
+  function handleLessonClick(id: string) {
+    const p = byId.get(id)
+    if (p && !p.completed && p.step > 0) setResumeLesson({ id, step: p.step })
+    else onStart(id, 0)
+  }
+
   // Celebration: play once, the first time home reopens after practicing today.
   const [celebrate, setCelebrate] = useState<string | null>(null)
   const triggered = useRef(false)
@@ -49,7 +53,7 @@ export default function Home({
     if (viewStreak(statsRec).practicedToday && getCelebratedDay() !== todayString()) {
       triggered.current = true
       setCelebratedDay(todayString())
-      setCelebrate(CELEBRATION_PHRASES[Math.floor(Math.random() * CELEBRATION_PHRASES.length)])
+      setCelebrate(encouragement())
     }
   }, [statsRec])
   useEffect(() => {
@@ -67,8 +71,8 @@ export default function Home({
   return (
     <main className="app">
       <header className="brand">
-        <button className="gear" onClick={onSettings} aria-label="Settings">
-          ⚙
+        <button className="gear" onClick={onProfile} aria-label="Profile">
+          👤
         </button>
         <Wordmark size="md" />
         <p className="muted">
@@ -96,6 +100,7 @@ export default function Home({
               disabled={dueCount === 0}
             >
               <div className="stat-head">
+                <span className="review-icon">📝</span>
                 <span className="stat-num review-num">{dueCount > 0 ? dueCount : '✓'}</span>
                 <span className="stat-cap">{dueCount > 0 ? 'reviews due' : 'reviews'}</span>
               </div>
@@ -111,16 +116,18 @@ export default function Home({
         </div>
       )}
 
-      {poolSize >= 4 && (
-        <button className="quiz-btn" onClick={onQuiz}>
-          <span className="quiz-emoji">🎲</span>
-          <span className="quiz-text">
-            <b>Pop Quiz</b>
-            <small>Fresh questions from everything you've learned</small>
-          </span>
-          <span className="quiz-arrow">›</span>
-        </button>
-      )}
+      <button className="quiz-btn" onClick={onQuiz} disabled={completed === 0}>
+        <span className="quiz-emoji">🎲</span>
+        <span className="quiz-text">
+          <b>Pop Quiz</b>
+          <small>
+            {completed === 0
+              ? 'Complete any lesson to unlock this feature'
+              : "Fresh questions from everything you've learned"}
+          </small>
+        </span>
+        <span className="quiz-arrow">›</span>
+      </button>
 
       {CHAPTERS.map((ch) => {
         const lessons = ch.lessons.map((id) => LESSON_BY_ID[id])
@@ -150,7 +157,7 @@ export default function Home({
                   <button
                     className={`lesson-row ${state}`}
                     key={lesson.id}
-                    onClick={() => onStart(lesson.id)}
+                    onClick={() => handleLessonClick(lesson.id)}
                   >
                     <div className="lesson-main">
                       <span className="lesson-icon">{state === 'done' ? '✓' : '›'}</span>
@@ -177,6 +184,33 @@ export default function Home({
       <footer className="credit muted">
         Curriculum from <em>Oriya in Small Bites</em> by Niels Erik Wegge.
       </footer>
+
+      {resumeLesson && (
+        <Modal
+          title="Continue lesson?"
+          message="You're partway through this lesson — pick up where you left off, or start over?"
+          actions={[
+            {
+              label: 'Start over',
+              variant: 'ghost',
+              onClick: () => {
+                const r = resumeLesson
+                setResumeLesson(null)
+                onStart(r.id, 0)
+              },
+            },
+            {
+              label: 'Continue',
+              variant: 'primary',
+              onClick: () => {
+                const r = resumeLesson
+                setResumeLesson(null)
+                onStart(r.id, r.step)
+              },
+            },
+          ]}
+        />
+      )}
     </main>
   )
 }

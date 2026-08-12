@@ -1,21 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { buildQuiz, getLearnedItems, type QuizQuestion } from '../quiz'
 import { markPracticedToday } from '../streak'
+import { recordQuizResult, encouragement } from '../profile'
+import Modal from './Modal'
 
 export default function PopQuiz({ onExit }: { onExit: () => void }) {
   const [questions, setQuestions] = useState<QuizQuestion[] | null>(null)
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<string | null>(null)
   const [score, setScore] = useState(0)
+  const [confirmQuit, setConfirmQuit] = useState(false)
+  const praise = useMemo(() => encouragement(), [])
 
   useEffect(() => {
     getLearnedItems().then((items) => setQuestions(buildQuiz(items, 10)))
   }, [])
 
   const finished = !!questions && index >= questions.length
+  const pct = questions && questions.length ? Math.round((score / questions.length) * 100) : 0
 
   useEffect(() => {
-    if (finished) void markPracticedToday() // doing a Pop Quiz counts for the day
+    if (finished) {
+      void markPracticedToday() // doing a Pop Quiz counts for the day
+      void recordQuizResult(pct)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished])
 
   if (!questions) {
@@ -41,16 +50,15 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
   }
 
   if (finished) {
-    const pct = Math.round((score / questions.length) * 100)
     return (
       <main className="app">
-        <section className="card done-card">
-          <p className="done-mark">🎉</p>
-          <p className="due-count">
-            {score} / {questions.length}
-          </p>
+        <section className="card quiz-result">
+          <div className={`score-ring ${pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low'}`}>
+            <span className="score-pct">{pct}%</span>
+          </div>
+          <p className="due-count">{praise}</p>
           <p className="muted">
-            {pct >= 80 ? 'Excellent!' : pct >= 50 ? 'Nice work — keep practicing.' : 'Good effort — review and try again.'}
+            You got {score} of {questions.length} correct.
           </p>
           <button className="btn-primary" onClick={onExit}>
             Back to home
@@ -76,7 +84,7 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
   return (
     <main className="app player">
       <div className="player-top">
-        <button className="x-btn" onClick={onExit} aria-label="Quit quiz">
+        <button className="x-btn" onClick={() => setConfirmQuit(true)} aria-label="Quit quiz">
           ✕
         </button>
         <div className="progress-bar">
@@ -85,6 +93,9 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
             style={{ width: `${(index / questions.length) * 100}%` }}
           />
         </div>
+        <span className="q-count">
+          {index + 1} / {questions.length}
+        </span>
       </div>
 
       <section className="card review-q">
@@ -115,6 +126,17 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
         <button className="btn-primary" onClick={next}>
           Continue
         </button>
+      )}
+
+      {confirmQuit && (
+        <Modal
+          title="Quit quiz?"
+          message="Your quiz progress won't be saved — you'll start fresh next time. Return to the main menu?"
+          actions={[
+            { label: 'Keep going', variant: 'ghost', onClick: () => setConfirmQuit(false) },
+            { label: 'Quit', variant: 'danger', onClick: onExit },
+          ]}
+        />
       )}
     </main>
   )

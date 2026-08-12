@@ -25,14 +25,37 @@ export function todayString(): string {
   return localDay()
 }
 
-// Mark that the learner practiced today (idempotent within a day).
+// Mark that the learner practiced today (idempotent within a day). Also maintains
+// the current streak's start date and the all-time longest streak.
 export async function markPracticedToday(): Promise<void> {
   const today = localDay()
   const rec = await db.stats.get('main')
   const last = lastDate(rec)
   if (last === today) return
-  const streak = last === dayBefore(today) ? (rec?.streak ?? 0) + 1 : 1
-  await db.stats.put({ id: 'main', streak, lastPracticedDate: today })
+
+  const continuing = last === dayBefore(today)
+  const streak = continuing ? (rec?.streak ?? 0) + 1 : 1
+  const streakStart = continuing ? (rec?.streakStart ?? today) : today
+
+  let longestStreak = rec?.longestStreak ?? 0
+  let longestStart = rec?.longestStart ?? null
+  let longestEnd = rec?.longestEnd ?? null
+  if (streak >= longestStreak) {
+    longestStreak = streak
+    longestStart = streakStart
+    longestEnd = today
+  }
+
+  await db.stats.put({
+    ...(rec ?? {}),
+    id: 'main',
+    streak,
+    lastPracticedDate: today,
+    streakStart,
+    longestStreak,
+    longestStart,
+    longestEnd,
+  })
 }
 
 export interface StreakView {

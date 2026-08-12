@@ -21,11 +21,18 @@ export interface LessonProgress {
   updatedAt: number
 }
 
-// --- streak tracking (single row, id = 'main') ---
+// --- streak + profile stats (single row, id = 'main') ---
 export interface Stats {
   id: string
   streak: number // consecutive practiced days
   lastPracticedDate?: string | null // local date the learner last practiced
+  streakStart?: string | null // date the current streak began
+  longestStreak?: number
+  longestStart?: string | null
+  longestEnd?: string | null
+  lessonsCompleted?: number // total lesson completions, including redos
+  quizzesTaken?: number
+  quizScoreSum?: number // sum of quiz percentages (for the average)
   // legacy fields from earlier versions, kept for read-time migration:
   day?: string
   count?: number

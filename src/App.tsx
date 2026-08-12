@@ -1,24 +1,30 @@
 import { useEffect, useState } from 'react'
 import Splash from './components/Splash'
 import Home from './components/Home'
-import Settings from './components/Settings'
+import Profile from './components/Profile'
 import LessonPlayer from './components/LessonPlayer'
 import ReviewSession from './components/ReviewSession'
 import PopQuiz from './components/PopQuiz'
+import Modal from './components/Modal'
 import { LESSON_BY_ID } from './data/lessons'
-import { getShowScript, setShowScript as persistShowScript } from './settings'
+import { getShowScript } from './settings'
+import { getName, setName, hasBeenAskedName, markNameAsked } from './profile'
 
 type Screen =
   | { name: 'home' }
-  | { name: 'lesson'; id: string }
+  | { name: 'lesson'; id: string; startStep: number }
   | { name: 'review' }
   | { name: 'quiz' }
-  | { name: 'settings' }
+  | { name: 'profile' }
 
 export default function App() {
   const [splash, setSplash] = useState<'showing' | 'leaving' | 'gone'>('showing')
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
-  const [showScript, setShowScript] = useState(getShowScript())
+  const [showScript] = useState(getShowScript())
+
+  // First-run (or first time since this feature shipped): ask for the learner's name.
+  const [askName, setAskName] = useState(() => !hasBeenAskedName())
+  const [nameDraft, setNameDraft] = useState('')
 
   useEffect(() => {
     const t1 = setTimeout(() => setSplash('leaving'), 2600)
@@ -34,17 +40,19 @@ export default function App() {
     setTimeout(() => setSplash('gone'), 400)
   }
 
-  function toggleScript(v: boolean) {
-    setShowScript(v)
-    persistShowScript(v)
+  function saveWelcomeName() {
+    const n = nameDraft.trim()
+    if (n) setName(n)
+    markNameAsked()
+    setAskName(false)
   }
 
   const home = (
     <Home
-      onStart={(id) => setScreen({ name: 'lesson', id })}
+      onStart={(id, startStep) => setScreen({ name: 'lesson', id, startStep })}
       onReview={() => setScreen({ name: 'review' })}
       onQuiz={() => setScreen({ name: 'quiz' })}
-      onSettings={() => setScreen({ name: 'settings' })}
+      onProfile={() => setScreen({ name: 'profile' })}
     />
   )
 
@@ -55,6 +63,7 @@ export default function App() {
       <LessonPlayer
         lesson={lesson}
         showScript={showScript}
+        startStep={screen.startStep}
         onExit={() => setScreen({ name: 'home' })}
       />
     ) : (
@@ -64,22 +73,40 @@ export default function App() {
     view = <ReviewSession onExit={() => setScreen({ name: 'home' })} />
   } else if (screen.name === 'quiz') {
     view = <PopQuiz onExit={() => setScreen({ name: 'home' })} />
-  } else if (screen.name === 'settings') {
-    view = (
-      <Settings
-        showScript={showScript}
-        onToggleScript={toggleScript}
-        onBack={() => setScreen({ name: 'home' })}
-      />
-    )
+  } else if (screen.name === 'profile') {
+    view = <Profile onBack={() => setScreen({ name: 'home' })} />
   } else {
     view = home
   }
+
+  const showWelcome = splash === 'gone' && askName && !getName()
 
   return (
     <>
       {view}
       {splash !== 'gone' && <Splash leaving={splash === 'leaving'} onDismiss={dismissSplash} />}
+      {showWelcome && (
+        <Modal
+          title="Welcome! 🎉"
+          message="What should we call you?"
+          actions={[
+            { label: 'Not now', variant: 'ghost', onClick: () => { markNameAsked(); setAskName(false) } },
+            { label: 'Save', variant: 'primary', onClick: saveWelcomeName, disabled: !nameDraft.trim() },
+          ]}
+        >
+          <input
+            className="name-input"
+            value={nameDraft}
+            autoFocus
+            maxLength={24}
+            onChange={(e) => setNameDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && nameDraft.trim()) saveWelcomeName()
+            }}
+            placeholder="Type your name"
+          />
+        </Modal>
+      )}
     </>
   )
 }
