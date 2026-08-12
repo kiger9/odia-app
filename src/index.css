@@ -309,6 +309,68 @@ button {
   padding-top: 8px;
 }
 
+/* ---------- reviews ---------- */
+.review-card .due-count strong {
+  color: var(--saffron-dk);
+  font-size: 1.6rem;
+}
+.review-idle {
+  margin: 0;
+  font-size: 1rem;
+}
+.review-q {
+  padding: 34px 20px;
+}
+.prompt-label {
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+}
+.prompt-en {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0 0 22px;
+}
+.answer-phonetic {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--saffron-dk);
+  margin: 0;
+}
+.answer-note {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+.ratings {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.btn-rate {
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 15px 4px;
+  cursor: pointer;
+}
+.btn-rate:active {
+  transform: translateY(1px);
+}
+.btn-rate.again {
+  background: var(--no);
+}
+.btn-rate.hard {
+  background: #d98324;
+}
+.btn-rate.good {
+  background: var(--ok);
+}
+.btn-rate.easy {
+  background: #3a7bd6;
+}
+
 /* ---------- buttons ---------- */
 .btn-primary {
   width: 100%;

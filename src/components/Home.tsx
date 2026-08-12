@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db, type LessonProgress } from '../db'
+import { db, type LessonProgress, type Progress } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
+import { poolStats, formatWhen } from '../reviews'
 
 // How far through a single lesson (0–1).
 function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
@@ -11,16 +12,20 @@ function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
 
 export default function Home({
   onStart,
+  onReview,
   onSettings,
 }: {
   onStart: (lessonId: string) => void
+  onReview: () => void
   onSettings: () => void
 }) {
   const progress = useLiveQuery(() => db.lessonProgress.toArray(), [], [] as LessonProgress[])
+  const reviewRows = useLiveQuery(() => db.progress.toArray(), [], [] as Progress[])
   const byId = new Map(progress.map((p) => [p.lessonId, p]))
 
   const totalLessons = CHAPTERS.reduce((n, c) => n + c.lessons.length, 0)
   const completed = progress.filter((p) => p.completed).length
+  const { poolSize, dueCount, nextDue } = poolStats(reviewRows)
 
   return (
     <main className="app">
@@ -35,6 +40,25 @@ export default function Home({
           {completed} of {totalLessons} lessons complete
         </p>
       </header>
+
+      {poolSize > 0 && (
+        <section className="card review-card">
+          {dueCount > 0 ? (
+            <>
+              <p className="due-count">
+                <strong>{dueCount}</strong> {dueCount === 1 ? 'review' : 'reviews'} due
+              </p>
+              <button className="btn-primary" onClick={onReview}>
+                Start review
+              </button>
+            </>
+          ) : (
+            <p className="review-idle muted">
+              Reviews up to date 🎉{nextDue ? ` · next ${formatWhen(nextDue)}` : ''}
+            </p>
+          )}
+        </section>
+      )}
 
       {CHAPTERS.map((ch) => {
         const lessons = ch.lessons.map((id) => LESSON_BY_ID[id])
