@@ -24,6 +24,13 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Buttons must inherit our ink colour — otherwise iOS Safari renders unstyled
+   button text in its system blue, while desktop browsers use black. */
+button {
+  color: inherit;
+  font-family: inherit;
+}
+
 .app {
   max-width: 480px;
   margin: 0 auto;
