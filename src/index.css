@@ -235,7 +235,7 @@ body {
 }
 /* lesson bars are thinner than the chapter bars above them */
 .lesson-row .pbar {
-  height: 4px;
+  height: 2px;
 }
 .lesson-icon {
   flex: none;
