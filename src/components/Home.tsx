@@ -3,6 +3,7 @@ import { db, type LessonProgress, type Progress, type Stats } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 import { poolStats, formatWhen } from '../reviews'
 import { viewStreak } from '../streak'
+import Wordmark from './Wordmark'
 
 // How far through a single lesson (0–1).
 function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
@@ -39,51 +40,47 @@ export default function Home({
         <button className="gear" onClick={onSettings} aria-label="Settings">
           ⚙
         </button>
-        <h1>
-          Odia <span className="brand-mark">in small bites</span>
-        </h1>
+        <Wordmark size="md" />
         <p className="muted">
           {completed} of {totalLessons} lessons complete
         </p>
       </header>
 
-      <section className="streak-card">
-        <div className="streak-flame">
-          <span className={`flame ${streak.streak > 0 ? 'lit' : ''}`}>🔥</span>
-          <span className="streak-num">{streak.streak}</span>
-          <span className="streak-label muted">day{streak.streak === 1 ? '' : 's'}</span>
-        </div>
-        <div className="goal">
-          <div className="goal-top">
-            <span>Today</span>
-            <span className="muted">
-              {streak.metToday ? 'Goal met ✓' : `${streak.count} / ${streak.goal}`}
-            </span>
+      <div className="tiles">
+        <div className="stat-tile">
+          <div className="stat-head">
+            <span className={`flame ${streak.streak > 0 ? 'lit' : ''}`}>🔥</span>
+            <span className="stat-num">{streak.streak}</span>
+            <span className="stat-cap">day{streak.streak === 1 ? '' : 's'}</span>
           </div>
-          <div className="pbar">
+          <div className="stat-sub muted">
+            {streak.metToday ? 'Goal met ✓' : `${streak.count}/${streak.goal} today`}
+          </div>
+          <div className="pbar mini">
             <i style={{ width: `${goalPct}%` }} />
           </div>
         </div>
-      </section>
 
-      {poolSize > 0 && (
-        <section className="card review-card">
-          {dueCount > 0 ? (
-            <>
-              <p className="due-count">
-                <strong>{dueCount}</strong> {dueCount === 1 ? 'review' : 'reviews'} due
-              </p>
-              <button className="btn-primary" onClick={onReview}>
-                Start review
-              </button>
-            </>
-          ) : (
-            <p className="review-idle muted">
-              Reviews up to date 🎉{nextDue ? ` · next ${formatWhen(nextDue)}` : ''}
-            </p>
-          )}
-        </section>
-      )}
+        {poolSize > 0 && (
+          <button
+            className="stat-tile stat-button"
+            onClick={onReview}
+            disabled={dueCount === 0}
+          >
+            <div className="stat-head">
+              <span className="stat-num review-num">{dueCount}</span>
+              <span className="stat-cap">due</span>
+            </div>
+            <div className="stat-sub muted">
+              {dueCount > 0
+                ? 'Tap to review'
+                : nextDue
+                  ? `Next ${formatWhen(nextDue)}`
+                  : 'Up to date'}
+            </div>
+          </button>
+        )}
+      </div>
 
       {CHAPTERS.map((ch) => {
         const lessons = ch.lessons.map((id) => LESSON_BY_ID[id])

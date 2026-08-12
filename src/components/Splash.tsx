@@ -1,4 +1,5 @@
 import splashArt from '../assets/splash-art.png'
+import Wordmark from './Wordmark'
 
 // Branded loading screen. Tap to skip; auto-dismisses after a moment.
 export default function Splash({
@@ -11,9 +12,7 @@ export default function Splash({
   return (
     <div className={`splash ${leaving ? 'splash-out' : ''}`} onClick={onDismiss}>
       <div className="splash-head">
-        <h1 className="splash-title">
-          Odia <em>in</em> Small Bites
-        </h1>
+        <Wordmark size="lg" />
         <p className="splash-tag">Learn to speak Odia, one bite at a time</p>
       </div>
 

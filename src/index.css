@@ -145,6 +145,114 @@ button {
   font-weight: 500;
   color: var(--saffron-dk);
 }
+
+/* ---------- wordmark lockup (splash + home) ---------- */
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+.wordmark-main {
+  font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 0.9;
+}
+.wordmark-lg .wordmark-main {
+  font-size: 3rem;
+}
+.wordmark-md .wordmark-main {
+  font-size: 2.1rem;
+}
+.wordmark-sub {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--saffron-dk);
+}
+.wordmark-sub > span {
+  padding-left: 0.28em; /* balance the trailing letter-spacing so it stays centred */
+}
+.wordmark-lg .wordmark-sub {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+}
+.wordmark-md .wordmark-sub {
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
+}
+.wm-rule {
+  display: block;
+  height: 1.5px;
+  width: 20px;
+  background: var(--saffron);
+  opacity: 0.55;
+}
+
+/* ---------- compact stat tiles (streak + reviews, side by side) ---------- */
+.tiles {
+  display: flex;
+  gap: 10px;
+}
+.stat-tile {
+  flex: 1;
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+.stat-button {
+  cursor: pointer;
+}
+.stat-button:disabled {
+  cursor: default;
+}
+.stat-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.stat-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.stat-head .flame {
+  font-size: 1.1rem;
+  filter: grayscale(1);
+  opacity: 0.45;
+  align-self: center;
+}
+.stat-head .flame.lit {
+  filter: none;
+  opacity: 1;
+}
+.stat-num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--saffron-dk);
+  line-height: 1;
+}
+.stat-cap {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 600;
+}
+.stat-sub {
+  font-size: 0.8rem;
+}
+.pbar.mini {
+  height: 4px;
+  margin-top: auto;
+}
 .gear {
   position: absolute;
   right: 0;
