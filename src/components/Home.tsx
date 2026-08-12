@@ -54,7 +54,7 @@ export default function Home({
             <span className="stat-cap">day{streak.streak === 1 ? '' : 's'}</span>
           </div>
           <div className="stat-sub muted">
-            {streak.metToday ? 'Goal met ✓' : `${streak.count}/${streak.goal} today`}
+            {streak.metToday ? 'Goal met ✓' : `${streak.count} / ${streak.goal} exercises today`}
           </div>
           <div className="pbar mini">
             <i style={{ width: `${goalPct}%` }} />
@@ -68,12 +68,12 @@ export default function Home({
             disabled={dueCount === 0}
           >
             <div className="stat-head">
-              <span className="stat-num review-num">{dueCount}</span>
-              <span className="stat-cap">due</span>
+              <span className="stat-num review-num">{dueCount > 0 ? dueCount : '✓'}</span>
+              <span className="stat-cap">{dueCount > 0 ? 'reviews due' : 'reviews'}</span>
             </div>
             <div className="stat-sub muted">
               {dueCount > 0
-                ? 'Tap to review'
+                ? 'Tap to begin'
                 : nextDue
                   ? `Next ${formatWhen(nextDue)}`
                   : 'Up to date'}
