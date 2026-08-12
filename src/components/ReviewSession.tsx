@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { db, type Progress } from '../db'
 import { dueItemsFrom, recordReview, type ReviewItem } from '../reviews'
+import { recordActivity } from '../streak'
 import { Rating, type Grade } from '../srs'
 
 export default function ReviewSession({ onExit }: { onExit: () => void }) {
@@ -42,6 +43,7 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
 
   async function rate(grade: Grade) {
     await recordReview(current!.id, grade)
+    void recordActivity() // count this review toward today's goal / streak
     setRevealed(false)
     setIndex((i) => i + 1)
   }

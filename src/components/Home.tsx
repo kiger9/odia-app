@@ -1,7 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db, type LessonProgress, type Progress } from '../db'
+import { db, type LessonProgress, type Progress, type Stats } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 import { poolStats, formatWhen } from '../reviews'
+import { viewStreak } from '../streak'
 
 // How far through a single lesson (0–1).
 function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
@@ -14,18 +15,23 @@ export default function Home({
   onStart,
   onReview,
   onSettings,
+  dailyGoal,
 }: {
   onStart: (lessonId: string) => void
   onReview: () => void
   onSettings: () => void
+  dailyGoal: number
 }) {
   const progress = useLiveQuery(() => db.lessonProgress.toArray(), [], [] as LessonProgress[])
   const reviewRows = useLiveQuery(() => db.progress.toArray(), [], [] as Progress[])
+  const statsRec = useLiveQuery(() => db.stats.get('main'), [], undefined as Stats | undefined)
   const byId = new Map(progress.map((p) => [p.lessonId, p]))
 
   const totalLessons = CHAPTERS.reduce((n, c) => n + c.lessons.length, 0)
   const completed = progress.filter((p) => p.completed).length
   const { poolSize, dueCount, nextDue } = poolStats(reviewRows)
+  const streak = viewStreak(statsRec, dailyGoal)
+  const goalPct = Math.min((streak.count / streak.goal) * 100, 100)
 
   return (
     <main className="app">
@@ -40,6 +46,25 @@ export default function Home({
           {completed} of {totalLessons} lessons complete
         </p>
       </header>
+
+      <section className="streak-card">
+        <div className="streak-flame">
+          <span className={`flame ${streak.streak > 0 ? 'lit' : ''}`}>🔥</span>
+          <span className="streak-num">{streak.streak}</span>
+          <span className="streak-label muted">day{streak.streak === 1 ? '' : 's'}</span>
+        </div>
+        <div className="goal">
+          <div className="goal-top">
+            <span>Today</span>
+            <span className="muted">
+              {streak.metToday ? 'Goal met ✓' : `${streak.count} / ${streak.goal}`}
+            </span>
+          </div>
+          <div className="pbar">
+            <i style={{ width: `${goalPct}%` }} />
+          </div>
+        </div>
+      </section>
 
       {poolSize > 0 && (
         <section className="card review-card">

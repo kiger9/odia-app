@@ -17,3 +17,26 @@ export function getShowScript(): boolean {
 export function setShowScript(value: boolean): void {
   localStorage.setItem(SHOW_SCRIPT_KEY, String(value))
 }
+
+// --- daily goal: how many exercises/reviews count as "done" for the day ---
+const DAILY_GOAL_KEY = 'odia:dailyGoal'
+const DEFAULT_GOAL = 15
+
+export interface GoalOption {
+  value: number
+  label: string
+}
+export const GOAL_OPTIONS: GoalOption[] = [
+  { value: 5, label: 'Casual' },
+  { value: 15, label: 'Regular' },
+  { value: 30, label: 'Serious' },
+]
+
+export function getDailyGoal(): number {
+  const raw = Number(localStorage.getItem(DAILY_GOAL_KEY))
+  return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_GOAL
+}
+
+export function setDailyGoal(value: number): void {
+  localStorage.setItem(DAILY_GOAL_KEY, String(value))
+}

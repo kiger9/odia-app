@@ -21,9 +21,19 @@ export interface LessonProgress {
   updatedAt: number
 }
 
+// --- streak / daily-goal tracking (single row, id = 'main') ---
+export interface Stats {
+  id: string
+  day: string // today's local date, YYYY-MM-DD
+  count: number // activities done today
+  streak: number // consecutive days the goal was met
+  lastGoalMetDate: string | null // local date the goal was last met
+}
+
 class OdiaDB extends Dexie {
   progress!: Table<Progress, string>
   lessonProgress!: Table<LessonProgress, string>
+  stats!: Table<Stats, string>
 
   constructor() {
     super('odia-app')
@@ -31,6 +41,11 @@ class OdiaDB extends Dexie {
     this.version(2).stores({
       progress: 'lexemeId, due',
       lessonProgress: 'lessonId, completed',
+    })
+    this.version(3).stores({
+      progress: 'lexemeId, due',
+      lessonProgress: 'lessonId, completed',
+      stats: 'id',
     })
   }
 }

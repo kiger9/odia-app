@@ -641,6 +641,84 @@ button {
   line-height: 1.45;
 }
 
+/* ---------- streak / daily goal ---------- */
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 18px;
+}
+.streak-flame {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex: none;
+}
+.streak-flame .flame {
+  font-size: 1.4rem;
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+.streak-flame .flame.lit {
+  filter: none;
+  opacity: 1;
+}
+.streak-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--saffron-dk);
+}
+.streak-label {
+  font-size: 0.85rem;
+}
+.goal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.goal-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.goal-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.goal-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 4px;
+  cursor: pointer;
+  background: var(--card);
+}
+.goal-option b {
+  font-size: 1.2rem;
+}
+.goal-option small {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.goal-option.active {
+  border-color: var(--saffron);
+  background: #fff6ec;
+}
+.goal-option.active small {
+  color: var(--saffron-dk);
+}
+
 /* settings */
 .setting-card {
   text-align: left;

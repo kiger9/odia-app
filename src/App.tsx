@@ -5,7 +5,12 @@ import Settings from './components/Settings'
 import LessonPlayer from './components/LessonPlayer'
 import ReviewSession from './components/ReviewSession'
 import { LESSON_BY_ID } from './data/lessons'
-import { getShowScript, setShowScript as persistShowScript } from './settings'
+import {
+  getShowScript,
+  setShowScript as persistShowScript,
+  getDailyGoal,
+  setDailyGoal as persistDailyGoal,
+} from './settings'
 
 type Screen =
   | { name: 'home' }
@@ -17,6 +22,7 @@ export default function App() {
   const [splash, setSplash] = useState<'showing' | 'leaving' | 'gone'>('showing')
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
   const [showScript, setShowScript] = useState(getShowScript())
+  const [dailyGoal, setDailyGoal] = useState(getDailyGoal())
 
   useEffect(() => {
     const t1 = setTimeout(() => setSplash('leaving'), 2600)
@@ -37,11 +43,17 @@ export default function App() {
     persistShowScript(v)
   }
 
+  function changeGoal(v: number) {
+    setDailyGoal(v)
+    persistDailyGoal(v)
+  }
+
   const home = (
     <Home
       onStart={(id) => setScreen({ name: 'lesson', id })}
       onReview={() => setScreen({ name: 'review' })}
       onSettings={() => setScreen({ name: 'settings' })}
+      dailyGoal={dailyGoal}
     />
   )
 
@@ -64,6 +76,8 @@ export default function App() {
       <Settings
         showScript={showScript}
         onToggleScript={toggleScript}
+        dailyGoal={dailyGoal}
+        onSetGoal={changeGoal}
         onBack={() => setScreen({ name: 'home' })}
       />
     )
