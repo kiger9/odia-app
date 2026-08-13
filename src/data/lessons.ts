@@ -708,6 +708,72 @@ export const LESSONS: Lesson[] = [
      opts:[{a:'What’s his name?'},{a:'What’s your name?'},{a:'What’s my name?'}], ans:0},
     {t:'type', q:'Type in Odia: “name”', ans:'na', alts:['nam']}
   ]
+},
+{
+  id:'past', title:'Past Tense — I did', sub:'Talking about yesterday · 12 steps',
+  items:[
+    {t:'intro', odia:'Mu asili', gloss:'I came', note:'To put a verb in the <b>past</b>, add <b>-ili</b> to its root. <b>Asiba</b> (to come) → <b>Mu asili</b> = I came.'},
+    {t:'intro', odia:'Mu khaili', gloss:'I ate', note:'<b>Khaiba</b> (to eat) → <b>Mu khaili</b>. The "I did" ending is always <b>-ili</b>.'},
+    {t:'choice', q:'How do you say "I did"?', opts:[{a:'Mu karili'},{a:'Mu karuchi'},{a:'Mu karibi'}], ans:0, why:'<b>-ili</b> = past (did). <b>-uchi</b> = present (am doing), <b>-ibi</b> = future (will do).'},
+    {t:'intro', odia:'Mu dekhili', gloss:'I saw', note:'<b>Dekhiba</b> (to see) → <b>Mu dekhili</b> = I saw.'},
+    {t:'match', pairs:[['Mu asili','I came'],['Mu khaili','I ate'],['Mu dekhili','I saw'],['Mu karili','I did']]},
+    {t:'cloze', q:'Complete: "I ate rice"', pre:'Mu bhata', post:'', opts:['khaili','khauchi','khaibi'], ans:0, why:'<b>bhata</b> = rice. Past "ate" = <b>khaili</b>.'},
+    {t:'intro', odia:'Se asila', gloss:'He / She came', note:'For <b>he / she</b>, the past ends in <b>-ila</b>: <b>Se asila</b> = he/she came.'},
+    {t:'choice', q:'Which means "I saw"?', opts:[{a:'Mu dekhili'},{a:'Mu dekhibi'},{a:'Mu dekhuchi'}], ans:0, why:'<b>-ili</b> = past, so <b>dekhili</b> = saw.'},
+    {t:'assemble', q:'Build in Odia: "I saw the elephant"', gloss:'hati = elephant', ans:['Mu','hati','dekhili'], dist:['dekhibi','Se']},
+    {t:'cloze', q:'Complete: "I went home"', pre:'Mu ghare', post:'', opts:['gali','jauchi','jibi'], ans:0, why:'"Go" is irregular in the past — not "jili" but <b>gali</b> = went.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu ghare asili', ans:['I','came','home'], dist:['will','went']},
+    {t:'type', q:'Type in Odia: "I came"', ans:'Mu asili', alts:['mu asili']}
+  ]
+},
+{
+  id:'future', title:'Future Tense — I will', sub:'Talking about tomorrow · 12 steps',
+  items:[
+    {t:'intro', odia:'Mu asibi', gloss:'I will come', note:'For the <b>future</b>, add <b>-ibi</b> to the root. <b>Asiba</b> → <b>Mu asibi</b> = I will come.'},
+    {t:'intro', odia:'Mu khaibi', gloss:'I will eat', note:'<b>Khaiba</b> → <b>Mu khaibi</b> = I will eat.'},
+    {t:'choice', q:'How do you say "I will do"?', opts:[{a:'Mu karibi'},{a:'Mu karili'},{a:'Mu karuchi'}], ans:0, why:'<b>-ibi</b> = future (will). <b>-ili</b> = past, <b>-uchi</b> = present.'},
+    {t:'intro', odia:'Mu jibi', gloss:'I will go', note:'<b>Jiba</b> (to go) → <b>Mu jibi</b> = I will go.'},
+    {t:'match', pairs:[['Mu asibi','I will come'],['Mu khaibi','I will eat'],['Mu jibi','I will go'],['Mu dekhibi','I will see']]},
+    {t:'cloze', q:'Complete: "I will drink water"', pre:'Mu pani', post:'', opts:['pibi','piili','piuchi'], ans:0, why:'<b>pani</b> = water. Future "will drink" = <b>pibi</b>.'},
+    {t:'intro', odia:'Se asiba', gloss:'He / She will come', note:'For <b>he / she</b>, the future ends <b>-iba</b>: <b>Se asiba</b>.'},
+    {t:'choice', q:'Which means "I will go"?', opts:[{a:'Mu jibi'},{a:'Mu gali'},{a:'Mu jauchi'}], ans:0, why:'<b>-ibi</b> = future. <b>jibi</b> = will go. (gali = went, jauchi = am going.)'},
+    {t:'assemble', q:'Build in Odia: "I will go to the market"', gloss:'bajar = market', ans:['Mu','bajar','jibi'], dist:['gali','Se']},
+    {t:'cloze', q:'Complete: "I will eat rice"', pre:'Mu bhata', post:'', opts:['khaibi','khaili','khauchi'], ans:0, why:'Future "will eat" = <b>khaibi</b>.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asibi', ans:['I','will','come'], dist:['came','go']},
+    {t:'type', q:'Type in Odia: "I will come"', ans:'Mu asibi', alts:['mu asibi']}
+  ]
+},
+{
+  id:'pastprog', title:'Past Progressive — I was doing', sub:'I was ...-ing · 11 steps',
+  items:[
+    {t:'intro', odia:'Mu asuthili', gloss:'I was coming', note:'For "I <b>was</b> doing" something, use the root + <b>-uthili</b>. <b>Asiba</b> → <b>Mu asuthili</b> = I was coming.'},
+    {t:'intro', odia:'Mu khauthili', gloss:'I was eating', note:'<b>Khaiba</b> → <b>Mu khauthili</b> = I was eating.'},
+    {t:'choice', q:'How do you say "I was doing"?', opts:[{a:'Mu karuthili'},{a:'Mu karili'},{a:'Mu karibi'}], ans:0, why:'<b>-uthili</b> = was doing (ongoing past). <b>-ili</b> = did, <b>-ibi</b> = will do.'},
+    {t:'intro', odia:'Mu jauthili', gloss:'I was going', note:'<b>Jiba</b> → <b>Mu jauthili</b> = I was going.'},
+    {t:'match', pairs:[['Mu asuthili','I was coming'],['Mu khauthili','I was eating'],['Mu jauthili','I was going'],['Mu dekhuthili','I was watching']]},
+    {t:'choice', q:'Which means "I was eating"?', opts:[{a:'Mu khauthili'},{a:'Mu khaili'},{a:'Mu khaibi'}], ans:0, why:'<b>khauthili</b> = was eating. (khaili = ate, khaibi = will eat.)'},
+    {t:'cloze', q:'Complete: "I was going to the market"', pre:'Mu bajar', post:'', opts:['jauthili','gali','jibi'], ans:0, why:'"Was going" = <b>jauthili</b>.'},
+    {t:'assemble', q:'Build in Odia: "I was eating rice"', gloss:'bhata = rice', ans:['Mu','bhata','khauthili'], dist:['khaili','Se']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asuthili', ans:['I','was','coming'], dist:['came','will']},
+    {t:'cloze', q:'Ongoing vs done: "I was watching"', pre:'Mu', post:'', opts:['dekhuthili','dekhili','dekhibi'], ans:0, why:'<b>dekhuthili</b> = was watching. <b>dekhili</b> = saw.'},
+    {t:'type', q:'Type in Odia: "I was coming"', ans:'Mu asuthili', alts:['mu asuthili']}
+  ]
+},
+{
+  id:'pastperf', title:'Past Perfect — I had done', sub:'I had already ...-ed · 11 steps',
+  items:[
+    {t:'intro', odia:'Mu asithili', gloss:'I had come', note:'For "I <b>had</b> done" something before another past moment, use the root + <b>-ithili</b>. <b>Asiba</b> → <b>Mu asithili</b> = I had come.'},
+    {t:'intro', odia:'Mu khaithili', gloss:'I had eaten', note:'<b>Khaiba</b> → <b>Mu khaithili</b> = I had eaten.'},
+    {t:'choice', q:'How do you say "I had done"?', opts:[{a:'Mu karithili'},{a:'Mu karuthili'},{a:'Mu karili'}], ans:0, why:'<b>-ithili</b> = had done. Compare <b>-uthili</b> = was doing, <b>-ili</b> = did.'},
+    {t:'intro', odia:'Mu jaithili', gloss:'I had gone', note:'<b>Jiba</b> → <b>Mu jaithili</b> = I had gone.'},
+    {t:'match', pairs:[['Mu asithili','I had come'],['Mu khaithili','I had eaten'],['Mu jaithili','I had gone'],['Mu dekhithili','I had seen']]},
+    {t:'choice', q:'Which is "I had eaten"?', opts:[{a:'Mu khaithili'},{a:'Mu khauthili'},{a:'Mu khaili'}], ans:0, why:'<b>-ithili</b> (had) vs <b>-uthili</b> (was ...-ing). So <b>khaithili</b> = had eaten.'},
+    {t:'cloze', q:'Complete: "I had gone home"', pre:'Mu ghare', post:'', opts:['jaithili','gali','jauthili'], ans:0, why:'"Had gone" = <b>jaithili</b>. (gali = went, jauthili = was going.)'},
+    {t:'assemble', q:'Build in Odia: "I had seen the elephant"', gloss:'hati = elephant', ans:['Mu','hati','dekhithili'], dist:['dekhili','Se']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asithili', ans:['I','had','come'], dist:['was','came']},
+    {t:'cloze', q:'Complete: "I had done the work"', pre:'Mu kama', post:'', opts:['karithili','karuthili','karili'], ans:0, why:'<b>kama</b> = work. "Had done" = <b>karithili</b>.'},
+    {t:'type', q:'Type in Odia: "I had come"', ans:'Mu asithili', alts:['mu asithili']}
+  ]
 }]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
@@ -719,7 +785,8 @@ export const CHAPTERS: Chapter[] = [
   { key:'things', title:'Pointing & Plurals',     blurb:'One & many, this/that, here/there',lessons:['plural','this','deixis'] },
   { key:'around', title:'Getting Around',         blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
   { key:'doing',  title:'Doing & the Market',     blurb:'Verbs, saying no, needs, buying',lessons:['verbs1','neg','need','market'] },
-  { key:'cmd',    title:'Simple Commands',        blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },]
+  { key:'cmd',    title:'Simple Commands',        blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
+  { key:'tenses', title:'Verb Tenses',           blurb:'Past, future & the tricky ones',  lessons:['past','future','pastprog','pastperf'] }]
   .map((c) => ({ ...c, lessons: c.lessons.filter((id) => LESSON_IDS.has(id)) }))
   .filter((c) => c.lessons.length)
 
