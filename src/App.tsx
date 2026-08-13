@@ -5,6 +5,7 @@ import Profile from './components/Profile'
 import LessonPlayer from './components/LessonPlayer'
 import ReviewSession from './components/ReviewSession'
 import PopQuiz from './components/PopQuiz'
+import Dictionary from './components/Dictionary'
 import Modal from './components/Modal'
 import { LESSON_BY_ID } from './data/lessons'
 import { getShowScript } from './settings'
@@ -16,6 +17,7 @@ type Screen =
   | { name: 'review' }
   | { name: 'quiz' }
   | { name: 'profile' }
+  | { name: 'dictionary' }
 
 export default function App() {
   const [splash, setSplash] = useState<'showing' | 'leaving' | 'gone'>('showing')
@@ -53,6 +55,7 @@ export default function App() {
       onReview={() => setScreen({ name: 'review' })}
       onQuiz={() => setScreen({ name: 'quiz' })}
       onProfile={() => setScreen({ name: 'profile' })}
+      onDictionary={() => setScreen({ name: 'dictionary' })}
     />
   )
 
@@ -75,6 +78,8 @@ export default function App() {
     view = <PopQuiz onExit={() => setScreen({ name: 'home' })} />
   } else if (screen.name === 'profile') {
     view = <Profile onBack={() => setScreen({ name: 'home' })} />
+  } else if (screen.name === 'dictionary') {
+    view = <Dictionary onBack={() => setScreen({ name: 'home' })} />
   } else {
     view = home
   }

@@ -21,11 +21,13 @@ export default function Home({
   onReview,
   onQuiz,
   onProfile,
+  onDictionary,
 }: {
   onStart: (lessonId: string, startStep: number) => void
   onReview: () => void
   onQuiz: () => void
   onProfile: () => void
+  onDictionary: () => void
 }) {
   const progress = useLiveQuery(() => db.lessonProgress.toArray(), [], [] as LessonProgress[])
   const reviewRows = useLiveQuery(() => db.progress.toArray(), [], [] as Progress[])
@@ -71,6 +73,9 @@ export default function Home({
   return (
     <main className="app">
       <header className="brand">
+        <button className="book-btn" onClick={onDictionary} aria-label="Dictionary">
+          📖
+        </button>
         <button className="gear" onClick={onProfile} aria-label="Profile">
           👤
         </button>
