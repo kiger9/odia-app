@@ -3,7 +3,7 @@ import type { Lesson, Step } from '../data/lessons'
 import { saveLessonProgress } from '../db'
 import { enqueueLessonItems } from '../reviews'
 import { markPracticedToday } from '../streak'
-import { recordLessonCompleted, encouragement } from '../profile'
+import { recordLessonCompleted, encouragement, getName } from '../profile'
 import { answerMatches } from '../lib/normalize'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
 import Modal from './Modal'
@@ -18,6 +18,19 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const optText = (o: string | { a: string }) => (typeof o === 'string' ? o : o.a)
+
+// Replace the {name} placeholder (used in the "your name" lesson) with the
+// learner's own name, everywhere it appears in a step (strings + token arrays).
+function personalize<T>(value: T, name: string): T {
+  if (typeof value === 'string') return value.replace(/\{name\}/g, name) as unknown as T
+  if (Array.isArray(value)) return value.map((v) => personalize(v, name)) as unknown as T
+  if (value && typeof value === 'object') {
+    const out: Record<string, unknown> = {}
+    for (const k in value) out[k] = personalize((value as Record<string, unknown>)[k], name)
+    return out as T
+  }
+  return value
+}
 
 // The core teaching display: phonetic spelling large, Odia script small beneath.
 function Phrase({
@@ -127,6 +140,7 @@ function ClozeStep({ step, onNext }: StepProps) {
   return (
     <div className="step">
       <p className="q">{step.q}</p>
+      {step.gloss && <p className="hint">{step.gloss}</p>}
       <p className="cloze-line">
         {step.pre} <span className="blank">{picked !== null ? opts[picked] : ' '}</span>{' '}
         {step.post}
@@ -385,6 +399,7 @@ export default function LessonPlayer({
   const total = lesson.items.length
   const finished = index >= total
   const praise = useMemo(() => encouragement(), [])
+  const learnerName = useMemo(() => getName() || 'Suresh', [])
 
   function next() {
     const nextIndex = index + 1
@@ -393,8 +408,12 @@ export default function LessonPlayer({
     // On completion, add this lesson's phrases to the review pool and count the day.
     if (done) {
       void enqueueLessonItems(lesson.id)
-      void markPracticedToday()
-      void recordLessonCompleted()
+      // Sequence the two stats writes — running them concurrently races and the
+      // streak update gets clobbered by the lesson-count write.
+      void (async () => {
+        await markPracticedToday()
+        await recordLessonCompleted()
+      })()
     }
     setIndex(nextIndex)
   }
@@ -424,7 +443,12 @@ export default function LessonPlayer({
           <div className="progress-fill" style={{ width: `${(index / total) * 100}%` }} />
         </div>
       </div>
-      <StepView key={index} step={lesson.items[index]} showScript={showScript} onNext={next} />
+      <StepView
+        key={index}
+        step={personalize(lesson.items[index], learnerName)}
+        showScript={showScript}
+        onNext={next}
+      />
 
       {confirmQuit && (
         <Modal

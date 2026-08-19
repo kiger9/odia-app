@@ -21,8 +21,11 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
 
   useEffect(() => {
     if (finished) {
-      void markPracticedToday() // doing a Pop Quiz counts for the day
-      void recordQuizResult(pct)
+      // Sequence the two stats writes so the streak update isn't clobbered.
+      void (async () => {
+        await markPracticedToday() // doing a Pop Quiz counts for the day
+        await recordQuizResult(pct)
+      })()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished])
