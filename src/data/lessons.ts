@@ -326,20 +326,20 @@ export const LESSONS: Lesson[] = [
     {t:'type', q:'Type in Odia: “here”', ans:'eithi', alts:['eithi']}
   ]},
 { id:'greetings', title:'Greetings', sub:'Hello, goodbye, good morning · 14 steps', items:[
-    {t:'intro', odia:'Namaskår', gloss:'Hello', note:'<b>Namaskår</b> (palms together) is the all-purpose polite greeting — hello <i>and</i> goodbye, any time of day, with anyone you’d address respectfully.'},
+    {t:'intro', odia:'Namaskar', gloss:'Hello', note:'<b>Namaskar</b> (palms together) is the all-purpose polite greeting — hello <i>and</i> goodbye, any time of day, with anyone you’d address respectfully.'},
     {t:'intro', odia:'Subha såkalå', gloss:'Good morning', note:'<b>Subha</b> = good / auspicious; <b>såkalå</b> = morning.'},
     {t:'intro', odia:'Subha såndhya', gloss:'Good evening', note:'<b>såndhya</b> = evening.'},
     {t:'intro', odia:'Subha ratri', gloss:'Good night', note:'<b>ratri</b> = night (casually, <b>rati</b>).'},
-    {t:'match', q:'Match the pairs', pairs:[['Namaskår','Hello'],['Subha såkalå','Good morning'],['Subha såndhya','Good evening'],['Subha ratri','Good night']]},
+    {t:'match', q:'Match the pairs', pairs:[['Namaskar','Hello'],['Subha såkalå','Good morning'],['Subha såndhya','Good evening'],['Subha ratri','Good night']]},
     {t:'choice', q:'What does this mean?', show:'Subha såkalå', opts:[{a:'Good morning'},{a:'Good evening'},{a:'Good night'}], ans:0},
-    {t:'choice', q:'How do you greet someone politely, any time of day?', opts:[{a:'Namaskår'},{a:'Subha ratri'},{a:'Dhånyåvad'}], ans:0, why:'<b>Namaskår</b> works any time — hello or goodbye. (Dhånyåvad = thank you.)'},
-    {t:'intro', odia:'Bidåy namaskår', gloss:'Goodbye', note:'For a clear “goodbye,” <b>Bidåy namaskår</b> (bidåy = farewell) — or just <b>Namaskår</b> again.'},
+    {t:'choice', q:'How do you greet someone politely, any time of day?', opts:[{a:'Namaskar'},{a:'Subha ratri'},{a:'Dhånyåvad'}], ans:0, why:'<b>Namaskar</b> works any time — hello or goodbye. (Dhånyåvad = thank you.)'},
+    {t:'intro', odia:'Bidåy namaskar', gloss:'Goodbye', note:'For a clear “goodbye,” <b>Bidåy namaskar</b> (bidåy = farewell) — or just <b>Namaskar</b> again.'},
     {t:'choice', q:'What does this mean?', show:'Subha ratri', opts:[{a:'Good night'},{a:'Good morning'},{a:'Goodbye'}], ans:0},
     {t:'intro', odia:'Mu jauchi! · Mu råhuchi!', gloss:'(casual) Bye! · Bye-bye!', note:'Casually, the one leaving says <b>Mu jauchi!</b> (“I’m going”); the one staying replies <b>Mu råhuchi!</b> (“I’m staying”). You met this in Simple Commands.'},
     {t:'assemble', q:'Build in Odia: “Good morning”', gloss:'Subha = good', ans:['Subha','såkalå'], dist:['såndhya','ratri']},
     {t:'choice', q:'What does this mean?', show:'Subha såndhya', opts:[{a:'Good evening'},{a:'Good morning'},{a:'Good night'}], ans:0},
     {t:'assemble', q:'Build in Odia: “Good night”', ans:['Subha','ratri'], dist:['såkalå','såndhya']},
-    {t:'type', q:'Type in Odia: “Hello”', ans:'Namaskår', alts:['namaskar','namaskår']}
+    {t:'type', q:'Type in Odia: “Hello”', ans:'Namaskar', alts:['namaskar','namaskar']}
   ]},
 { id:'names', title:'Names', sub:'Your name & asking others · 14 steps', items:[
     {t:'intro', odia:'namo', gloss:'name', note:'<b>namo</b> = name. Say <b>Morå namo</b> + your name — no verb needed.'},
