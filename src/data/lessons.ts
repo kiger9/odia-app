@@ -597,16 +597,6 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se dekhuchi', ans:['He/She','is','watching'], dist:['I','they']},
     {t:'type', q:'Type in Odia: "I am watching"', ans:'Mu dekhuchi', alts:['mu dekhuchi']}
   ]},
-{ id:'conjwork', title:'Working', sub:'Working — all persons · 8 steps', items:[
-    {t:'intro', odia:'Mu kamå kåruchi', gloss:'I am working', note:'<b>Kamå kåriba</b> (to work) → <b>Mu kamå kåruchi</b> = i am working. The <b>-i</b> ending = I.'},
-    {t:'intro', odia:'Tåme kamå kåruchå', gloss:'You are working', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kamå kåruchå</b>.'},
-    {t:'choice', q:'How do you say "He/She is working"?', opts:[{a:'Se kamå kåruchi'},{a:'Mu kamå kåruchi'},{a:'Semane kamå kåruchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kamå kåruchi.'},
-    {t:'match', pairs:[['Mu kamå kåruchi','I am working'],['Tåme kamå kåruchå','You are working'],['Se kamå kåruchi','He/She is working'],['Ame kamå kåruchu','We are working']]},
-    {t:'cloze', q:'Complete: "We are working"', pre:'Ame', post:'', opts:['kamå kåruchu','kamå kåruchi','kamå kåruchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: kamå kåruchu.'},
-    {t:'choice', q:'What does this mean?', show:'Semane kamå kåruchånti', opts:[{a:'They are working'},{a:'I am working'},{a:'We are working'}], ans:0, why:'<b>Semane</b> = they.'},
-    {t:'assemble', dir:'en', q:'Translate into English', show:'Se kamå kåruchi', ans:['He/She','is','working'], dist:['I','they']},
-    {t:'type', q:'Type in Odia: "I am working"', ans:'Mu kamå kåruchi', alts:['mu kama karuchi']}
-  ]},
 { id:'conjplay', title:'Playing', sub:'Playing — all persons · 8 steps', items:[
     {t:'intro', odia:'Mu kheluchi', gloss:'I am playing', note:'<b>Kheliba</b> (to play) → <b>Mu kheluchi</b> = i am playing. The <b>-i</b> ending = I.'},
     {t:'intro', odia:'Tåme kheluchå', gloss:'You are playing', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kheluchå</b>.'},
@@ -634,7 +624,7 @@ export const CHAPTERS: Chapter[] = [
   { key:'start', title:'Getting Started', blurb:'Being, greeting, having', lessons:['be','howru','have'] },
   { key:'meet', title:'Meeting People', blurb:'Hello, goodbye, and names', lessons:['greetings','names'] },
   { key:'num', title:'Numbers & Counting', blurb:'The numbers, and how to count', lessons:['num','count'] },
-  { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjeat','conjdrink','conjdo','conjsee','conjwork','conjplay','conjsleep'] },
+  { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjeat','conjdrink','conjdo','conjsee','conjplay','conjsleep'] },
   { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
   { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
   { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','neg','need','market'] },
