@@ -577,7 +577,7 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se piuchi', ans:['He/She','is','drinking'], dist:['I','they']},
     {t:'type', q:'Type in Odia: "I am drinking"', ans:'Mu piuchi', alts:['mu piuchi']}
   ]},
-{ id:'conjdo', title:'Doing', sub:'Doing — all persons · 8 steps', items:[
+{ id:'conjdo', title:'Doing', sub:'Doing, and "do + a word" · 13 steps', items:[
     {t:'intro', odia:'Mu kåruchi', gloss:'I am doing', note:'<b>Kåriba</b> (to do) → <b>Mu kåruchi</b> = i am doing. The <b>-uchi</b> ending = I.'},
     {t:'intro', odia:'Tåme kåruchå', gloss:'You are doing', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kåruchå</b>.'},
     {t:'choice', q:'How do you say "He/She is doing"?', opts:[{a:'Se kåruchi'},{a:'Mu kåruchi'},{a:'Semane kåruchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kåruchi.'},
@@ -585,6 +585,11 @@ export const LESSONS: Lesson[] = [
     {t:'cloze', q:'Complete: "We are doing"', pre:'Ame', post:'', opts:['kåruchu','kåruchi','kåruchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: kåruchu.'},
     {t:'choice', q:'What does this mean?', show:'Semane kåruchånti', opts:[{a:'They are doing'},{a:'I am doing'},{a:'We are doing'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se kåruchi', ans:['He/She','is','doing'], dist:['I','they']},
+    {t:'intro', odia:'Mu kamå kåruchi', gloss:'I am working', note:'<b>Kåriba</b> (do) teams up with a word to build new verbs. <b>kamå</b> (work) + <b>kåruchi</b> → <b>Mu kamå kåruchi</b> = I am working.'},
+    {t:'intro', odia:'Mu chesta kåruchi', gloss:'I am trying', note:'<b>chesta</b> (effort) + <b>kåruchi</b> = trying.'},
+    {t:'intro', odia:'Mu help kåruchi', gloss:'I am helping', note:'Even English words pair up: <b>help</b> + <b>kåruchi</b> = helping.'},
+    {t:'match', pairs:[['kamå kåruchi','working'],['chesta kåruchi','trying'],['help kåruchi','helping'],['kåruchi','doing']]},
+    {t:'choice', q:'How do you say "I am working"?', opts:[{a:'Mu kamå kåruchi'},{a:'Mu kåruchi'},{a:'Mu kheluchi'}], ans:0, why:'<b>kamå</b> (work) + <b>kåruchi</b> = working.'},
     {t:'type', q:'Type in Odia: "I am doing"', ans:'Mu kåruchi', alts:['mu karuchi']}
   ]},
 { id:'conjsee', title:'Watching', sub:'Watching — all persons · 8 steps', items:[
