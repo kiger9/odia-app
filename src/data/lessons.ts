@@ -557,16 +557,6 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', q:'Build in Odia: "They are going home"', gloss:'ghåre = at home', ans:['Semane','ghåre','jauchånti'], dist:['jauchu','Mu']},
     {t:'type', q:'Type in Odia: "I am going"', ans:'Mu jauchi', alts:['mu jauchi']}
   ]},
-{ id:'conjcome', title:'Coming', sub:'Coming — all persons · 8 steps', items:[
-    {t:'intro', odia:'Mu asuchi', gloss:'I am coming', note:'<b>Asiba</b> (to come) → <b>Mu asuchi</b> = i am coming. The <b>-uchi</b> ending = I.'},
-    {t:'intro', odia:'Tåme asuchå', gloss:'You are coming', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme asuchå</b>.'},
-    {t:'choice', q:'How do you say "He/She is coming"?', opts:[{a:'Se asuchi'},{a:'Mu asuchi'},{a:'Semane asuchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se asuchi.'},
-    {t:'match', pairs:[['Mu asuchi','I am coming'],['Tåme asuchå','You are coming'],['Se asuchi','He/She is coming'],['Ame asuchu','We are coming']]},
-    {t:'cloze', q:'Complete: "We are coming"', pre:'Ame', post:'', opts:['asuchu','asuchi','asuchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: asuchu.'},
-    {t:'choice', q:'What does this mean?', show:'Semane asuchånti', opts:[{a:'They are coming'},{a:'I am coming'},{a:'We are coming'}], ans:0, why:'<b>Semane</b> = they.'},
-    {t:'assemble', dir:'en', q:'Translate into English', show:'Se asuchi', ans:['He/She','is','coming'], dist:['I','they']},
-    {t:'type', q:'Type in Odia: "I am coming"', ans:'Mu asuchi', alts:['mu asuchi']}
-  ]},
 { id:'conjeat', title:'Eating', sub:'Eating — all persons · 8 steps', items:[
     {t:'intro', odia:'Mu khauchi', gloss:'I am eating', note:'<b>Khaiba</b> (to eat) → <b>Mu khauchi</b> = i am eating. The <b>-uchi</b> ending = I.'},
     {t:'intro', odia:'Tåme khauchå', gloss:'You are eating', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme khauchå</b>.'},
@@ -606,6 +596,36 @@ export const LESSONS: Lesson[] = [
     {t:'choice', q:'What does this mean?', show:'Semane dekhuchånti', opts:[{a:'They are watching'},{a:'I am watching'},{a:'We are watching'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se dekhuchi', ans:['He/She','is','watching'], dist:['I','they']},
     {t:'type', q:'Type in Odia: "I am watching"', ans:'Mu dekhuchi', alts:['mu dekhuchi']}
+  ]},
+{ id:'conjwork', title:'Working', sub:'Working — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu kamå kåruchi', gloss:'I am working', note:'<b>Kamå kåriba</b> (to work) → <b>Mu kamå kåruchi</b> = i am working. The <b>-i</b> ending = I.'},
+    {t:'intro', odia:'Tåme kamå kåruchå', gloss:'You are working', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kamå kåruchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is working"?', opts:[{a:'Se kamå kåruchi'},{a:'Mu kamå kåruchi'},{a:'Semane kamå kåruchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kamå kåruchi.'},
+    {t:'match', pairs:[['Mu kamå kåruchi','I am working'],['Tåme kamå kåruchå','You are working'],['Se kamå kåruchi','He/She is working'],['Ame kamå kåruchu','We are working']]},
+    {t:'cloze', q:'Complete: "We are working"', pre:'Ame', post:'', opts:['kamå kåruchu','kamå kåruchi','kamå kåruchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: kamå kåruchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane kamå kåruchånti', opts:[{a:'They are working'},{a:'I am working'},{a:'We are working'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se kamå kåruchi', ans:['He/She','is','working'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am working"', ans:'Mu kamå kåruchi', alts:['mu kama karuchi']}
+  ]},
+{ id:'conjplay', title:'Playing', sub:'Playing — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu kheluchi', gloss:'I am playing', note:'<b>Kheliba</b> (to play) → <b>Mu kheluchi</b> = i am playing. The <b>-i</b> ending = I.'},
+    {t:'intro', odia:'Tåme kheluchå', gloss:'You are playing', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kheluchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is playing"?', opts:[{a:'Se kheluchi'},{a:'Mu kheluchi'},{a:'Semane kheluchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kheluchi.'},
+    {t:'match', pairs:[['Mu kheluchi','I am playing'],['Tåme kheluchå','You are playing'],['Se kheluchi','He/She is playing'],['Ame kheluchu','We are playing']]},
+    {t:'cloze', q:'Complete: "We are playing"', pre:'Ame', post:'', opts:['kheluchu','kheluchi','kheluchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: kheluchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane kheluchånti', opts:[{a:'They are playing'},{a:'I am playing'},{a:'We are playing'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se kheluchi', ans:['He/She','is','playing'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am playing"', ans:'Mu kheluchi', alts:['mu kheluchi']}
+  ]},
+{ id:'conjsleep', title:'Sleeping', sub:'Sleeping — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu soichi', gloss:'I am sleeping', note:'<b>Soiba</b> (to sleep) → <b>Mu soichi</b> = i am sleeping. The <b>-i</b> ending = I.'},
+    {t:'intro', odia:'Tåme soichå', gloss:'You are sleeping', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme soichå</b>.'},
+    {t:'choice', q:'How do you say "He/She is sleeping"?', opts:[{a:'Se soichi'},{a:'Mu soichi'},{a:'Semane soichånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se soichi.'},
+    {t:'match', pairs:[['Mu soichi','I am sleeping'],['Tåme soichå','You are sleeping'],['Se soichi','He/She is sleeping'],['Ame soichu','We are sleeping']]},
+    {t:'cloze', q:'Complete: "We are sleeping"', pre:'Ame', post:'', opts:['soichu','soichi','soichå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: soichu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane soichånti', opts:[{a:'They are sleeping'},{a:'I am sleeping'},{a:'We are sleeping'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se soichi', ans:['He/She','is','sleeping'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am sleeping"', ans:'Mu soichi', alts:['mu soichi']}
   ]}]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
@@ -614,7 +634,7 @@ export const CHAPTERS: Chapter[] = [
   { key:'start', title:'Getting Started', blurb:'Being, greeting, having', lessons:['be','howru','have'] },
   { key:'meet', title:'Meeting People', blurb:'Hello, goodbye, and names', lessons:['greetings','names'] },
   { key:'num', title:'Numbers & Counting', blurb:'The numbers, and how to count', lessons:['num','count'] },
-  { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjcome','conjeat','conjdrink','conjdo','conjsee'] },
+  { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjeat','conjdrink','conjdo','conjsee','conjwork','conjplay','conjsleep'] },
   { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
   { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
   { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','neg','need','market'] },
