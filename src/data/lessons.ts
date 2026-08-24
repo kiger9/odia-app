@@ -357,40 +357,33 @@ export const LESSONS: Lesson[] = [
     {t:'choice', q:'What does this mean?', show:'Tarå namo kånå?', opts:[{a:'What’s his name?'},{a:'What’s your name?'},{a:'What’s my name?'}], ans:0},
     {t:'type', q:'Type in Odia: “name”', ans:'namo', alts:['nam','nama','na','namo']}
   ]},
-{ id:'past', title:'Past Tense — I did', sub:'Talking about yesterday · 16 steps', items:[
-    {t:'intro', odia:'Mu asili', gloss:'I came', note:'The past adds an ending to the root. For <b>I</b> it is <b>-ili</b>: <b>Asiba</b> (to come) → <b>Mu asili</b> = I came.'},
-    {t:'intro', odia:'Se asila', gloss:'He / She came', note:'For <b>he / she</b> the ending is <b>-ila</b>: <b>Se asila</b> = he/she came. (I = -il<b>i</b>, he/she = -il<b>a</b>.)'},
-    {t:'choice', q:'How do you say "He came"?', opts:[{a:'Se asila'},{a:'Mu asili'},{a:'Se asibå'}], ans:0, why:'he/she past = <b>-ila</b>. <b>Se asila</b> = he/she came.'},
-    {t:'intro', odia:'Mu khaili', gloss:'I ate', note:'<b>Khaiba</b> (to eat) → <b>Mu khaili</b> = I ate.'},
-    {t:'choice', q:'How do you say "She ate"?', opts:[{a:'Se khaila'},{a:'Mu khaili'},{a:'Se khaibå'}], ans:0, why:'Swap <b>-ili</b> (I) for <b>-ila</b> (he/she): <b>Se khaila</b> = he/she ate.'},
-    {t:'match', pairs:[['Mu asili','I came'],['Se asila','He/She came'],['Mu khaili','I ate'],['Se khaila','He/She ate']]},
-    {t:'intro', odia:'Mu dekhili', gloss:'I saw', note:'<b>Dekhiba</b> (to see) → <b>Mu dekhili</b> = I saw; <b>Se dekhila</b> = he/she saw.'},
-    {t:'cloze', q:'Complete: "He/She ate rice"', pre:'Se bhatå', post:'', opts:['khaila','khaili','khaibi'], ans:0, why:'he/she ate = <b>khaila</b>.'},
-    {t:'cloze', q:'Complete: "I ate rice"', pre:'Mu bhatå', post:'', opts:['khaili','khaila','khauchi'], ans:0, why:'I ate = <b>khaili</b> (he/she would be khaila).'},
-    {t:'assemble', q:'Build in Odia: "He/She saw the elephant"', gloss:'hati = elephant', ans:['Se','hati','dekhila'], dist:['dekhili','Mu']},
-    {t:'assemble', q:'Build in Odia: "I came home"', gloss:'ghåre = at home', ans:['Mu','ghåre','asili'], dist:['asila','Se']},
-    {t:'choice', q:'What does this mean?', show:'Se ghåre asila', opts:[{a:'He/She came home'},{a:'I came home'},{a:'He/She will come home'}], ans:0, why:'<b>Se … asila</b> = he/she came.'},
+{ id:'past', title:'Past Tense — I', sub:'Saying "I did" · 12 steps', items:[
+    {t:'intro', odia:'Mu asili', gloss:'I came', note:'The past adds an ending to the verb root. For <b>I</b> it is <b>-ili</b>: <b>Asiba</b> (to come) → <b>Mu asili</b> = I came.'},
+    {t:'intro', odia:'Mu khaili', gloss:'I ate', note:'<b>Khaiba</b> (to eat) → <b>Mu khaili</b>. The "I did" ending is always <b>-ili</b>.'},
+    {t:'choice', q:'How do you say "I did"?', opts:[{a:'Mu kårili'},{a:'Mu kåruchi'},{a:'Mu kåribi'}], ans:0, why:'<b>-ili</b> = past. (-uchi = present, -ibi = future.)'},
+    {t:'intro', odia:'Mu dekhili', gloss:'I saw', note:'<b>Dekhiba</b> (to see) → <b>Mu dekhili</b> = I saw.'},
+    {t:'match', pairs:[['Mu asili','I came'],['Mu khaili','I ate'],['Mu dekhili','I saw'],['Mu kårili','I did']]},
+    {t:'cloze', q:'Complete: "I ate rice"', pre:'Mu bhatå', post:'', opts:['khaili','khauchi','khaibi'], ans:0, why:'<b>bhatå</b> = rice. Past "ate" = <b>khaili</b>.'},
+    {t:'assemble', q:'Build in Odia: "I saw the elephant"', gloss:'hati = elephant', ans:['Mu','hati','dekhili'], dist:['dekhibi','khaili']},
     {t:'cloze', q:'Complete: "I went home"', pre:'Mu ghåre', post:'', opts:['gåli','jauchi','jibi'], ans:0, why:'"Go" is irregular in the past — not "jili" but <b>gåli</b> = went.'},
-    {t:'assemble', dir:'en', q:'Translate into English', show:'Se khaila', ans:['He/She','ate'], dist:['I','will','eat']},
+    {t:'choice', q:'Which means "I saw"?', opts:[{a:'Mu dekhili'},{a:'Mu dekhibi'},{a:'Mu dekhuchi'}], ans:0, why:'<b>-ili</b> = past, so <b>dekhili</b> = saw.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu ghåre asili', ans:['I','came','home'], dist:['will','went']},
     {t:'type', q:'Type in Odia: "I came"', ans:'Mu asili', alts:['mu asili']},
-    {t:'type', q:'Type in Odia: "He/She came"', ans:'Se asila', alts:['se asila']}
+    {t:'type', q:'Type in Odia: "I ate"', ans:'Mu khaili', alts:['mu khaili']}
   ]},
-{ id:'future', title:'Future Tense — I will', sub:'Talking about tomorrow · 15 steps', items:[
+{ id:'future', title:'Future Tense — I', sub:'Saying "I will" · 12 steps', items:[
     {t:'intro', odia:'Mu asibi', gloss:'I will come', note:'The future adds an ending to the root. For <b>I</b> it is <b>-ibi</b>: <b>Asiba</b> → <b>Mu asibi</b> = I will come.'},
-    {t:'intro', odia:'Se asibå', gloss:'He / She will come', note:'For <b>he / she</b> the ending is <b>-ibå</b>: <b>Se asibå</b> = he/she will come. (I = -ib<b>i</b>, he/she = -ib<b>å</b>.)'},
-    {t:'choice', q:'How do you say "He will come"?', opts:[{a:'Se asibå'},{a:'Mu asibi'},{a:'Se asila'}], ans:0, why:'he/she future = <b>-ibå</b>. <b>Se asibå</b> = he/she will come.'},
     {t:'intro', odia:'Mu khaibi', gloss:'I will eat', note:'<b>Khaiba</b> → <b>Mu khaibi</b> = I will eat.'},
-    {t:'choice', q:'How do you say "She will eat"?', opts:[{a:'Se khaibå'},{a:'Mu khaibi'},{a:'Se khaila'}], ans:0, why:'Swap <b>-ibi</b> (I) for <b>-ibå</b> (he/she): <b>Se khaibå</b> = he/she will eat.'},
-    {t:'match', pairs:[['Mu asibi','I will come'],['Se asibå','He/She will come'],['Mu khaibi','I will eat'],['Se khaibå','He/She will eat']]},
-    {t:'intro', odia:'Mu jibi', gloss:'I will go', note:'<b>Jiba</b> (to go) → <b>Mu jibi</b> = I will go; <b>Se jibå</b> = he/she will go.'},
-    {t:'cloze', q:'Complete: "He/She will eat rice"', pre:'Se bhatå', post:'', opts:['khaibå','khaibi','khaila'], ans:0, why:'he/she will eat = <b>khaibå</b>.'},
-    {t:'cloze', q:'Complete: "I will eat rice"', pre:'Mu bhatå', post:'', opts:['khaibi','khaibå','khauchi'], ans:0, why:'I will eat = <b>khaibi</b> (he/she would be khaibå).'},
-    {t:'assemble', q:'Build in Odia: "I will go to the market"', gloss:'bajår = market', ans:['Mu','bajår','jibi'], dist:['jibå','Se']},
-    {t:'assemble', q:'Build in Odia: "He/She will come home"', gloss:'ghåre = at home', ans:['Se','ghåre','asibå'], dist:['asibi','Mu']},
-    {t:'choice', q:'What does this mean?', show:'Se ghåre asibå', opts:[{a:'He/She will come home'},{a:'I will come home'},{a:'He/She came home'}], ans:0, why:'<b>Se … asibå</b> = he/she will come.'},
-    {t:'assemble', dir:'en', q:'Translate into English', show:'Se khaibå', ans:['He/She','will','eat'], dist:['I','ate']},
+    {t:'choice', q:'How do you say "I will do"?', opts:[{a:'Mu kåribi'},{a:'Mu kårili'},{a:'Mu kåruchi'}], ans:0, why:'<b>-ibi</b> = future. (-ili = past, -uchi = present.)'},
+    {t:'intro', odia:'Mu jibi', gloss:'I will go', note:'<b>Jiba</b> (to go) → <b>Mu jibi</b> = I will go.'},
+    {t:'match', pairs:[['Mu asibi','I will come'],['Mu khaibi','I will eat'],['Mu jibi','I will go'],['Mu dekhibi','I will see']]},
+    {t:'cloze', q:'Complete: "I will eat rice"', pre:'Mu bhatå', post:'', opts:['khaibi','khaili','khauchi'], ans:0, why:'Future "will eat" = <b>khaibi</b>.'},
+    {t:'assemble', q:'Build in Odia: "I will go to the market"', gloss:'bajår = market', ans:['Mu','bajår','jibi'], dist:['gåli','khaibi']},
+    {t:'choice', q:'Which means "I will go"?', opts:[{a:'Mu jibi'},{a:'Mu gåli'},{a:'Mu jauchi'}], ans:0, why:'<b>-ibi</b> = future. <b>jibi</b> = will go.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asibi', ans:['I','will','come'], dist:['came','go']},
+    {t:'cloze', q:'Complete: "I will see"', pre:'Mu', post:'', opts:['dekhibi','dekhili','dekhuchi'], ans:0, why:'Future "will see" = <b>dekhibi</b>.'},
     {t:'type', q:'Type in Odia: "I will come"', ans:'Mu asibi', alts:['mu asibi']},
-    {t:'type', q:'Type in Odia: "He/She will come"', ans:'Se asibå', alts:['se asiba','se asibå']}
+    {t:'type', q:'Type in Odia: "I will eat"', ans:'Mu khaibi', alts:['mu khaibi']}
   ]},
 { id:'pastprog', title:'Past Progressive — I was doing', sub:'I was ...-ing · 11 steps', items:[
     {t:'intro', odia:'Mu asuthili', gloss:'I was coming', note:'For "I <b>was</b> doing" something, use the root + <b>-uthili</b>. <b>Asiba</b> → <b>Mu asuthili</b> = I was coming.'},
@@ -461,6 +454,94 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu machå khaili', ans:['I','ate','fish'], dist:['will','rice']},
     {t:'choice', q:'What does this mean?', show:'bhojono', opts:[{a:'a meal'},{a:'breakfast'},{a:'rice'}], ans:0, why:'<b>bhojono</b> = a meal.'},
     {t:'type', q:'Type in Odia: "breakfast"', ans:'jolokia', alts:['jalakhia']}
+  ]},
+{ id:'pastyou', title:'Past: You (informal)', sub:'Tåme — past tense · 9 steps', items:[
+    {t:'intro', odia:'Tåme asilå', gloss:'You came', note:'Past tense for <b>you (informal)</b> uses <b>-ilå</b>: <b>Tåme asilå</b> = you came.'},
+    {t:'intro', odia:'Tåme khailå', gloss:'You ate', note:'Same <b>-ilå</b> ending on any verb: <b>Tåme khailå</b>.'},
+    {t:'choice', q:'How do you say "You saw"?', opts:[{a:'Tåme dekhilå'},{a:'Mu dekhili'},{a:'Tåme dekhibå'}], ans:0, why:'you (informal) = <b>-ilå</b>: <b>Tåme dekhilå</b>.'},
+    {t:'match', pairs:[['Tåme asilå','You came'],['Tåme khailå','You ate'],['Tåme dekhilå','You saw'],['Tåme kårilå','You did']]},
+    {t:'cloze', q:'Complete: "You ate rice"', pre:'Tåme bhatå', post:'', opts:['khailå','khaili','khaibå'], ans:0, why:'<b>khailå</b> = you ate.'},
+    {t:'assemble', q:'Build in Odia: "You came home"', gloss:'ghåre = at home', ans:['Tåme','ghåre','asilå'], dist:['asili','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Tåme asilå', opts:[{a:'You came'},{a:'I came'},{a:'You will come'}], ans:0, why:'<b>Tåme asilå</b> = You came. (<b>Mu asili</b> = I came.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Tåme khailå', ans:['You','ate'], dist:['I','will']},
+    {t:'type', q:'Type in Odia: "You came"', ans:'Tåme asilå', alts:['tame asila']}
+  ]},
+{ id:'pasthe', title:'Past: He / She', sub:'Se — past tense · 9 steps', items:[
+    {t:'intro', odia:'Se asila', gloss:'He/She came', note:'Past tense for <b>he / she</b> uses <b>-ila</b>: <b>Se asila</b> = he/she came.'},
+    {t:'intro', odia:'Se khaila', gloss:'He/She ate', note:'Same <b>-ila</b> ending on any verb: <b>Se khaila</b>.'},
+    {t:'choice', q:'How do you say "He/She saw"?', opts:[{a:'Se dekhila'},{a:'Mu dekhili'},{a:'Se dekhibå'}], ans:0, why:'he / she = <b>-ila</b>: <b>Se dekhila</b>.'},
+    {t:'match', pairs:[['Se asila','He/She came'],['Se khaila','He/She ate'],['Se dekhila','He/She saw'],['Se kårila','He/She did']]},
+    {t:'cloze', q:'Complete: "He/She ate rice"', pre:'Se bhatå', post:'', opts:['khaila','khaili','khaibå'], ans:0, why:'<b>khaila</b> = he/she ate.'},
+    {t:'assemble', q:'Build in Odia: "He/She came home"', gloss:'ghåre = at home', ans:['Se','ghåre','asila'], dist:['asili','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Se asila', opts:[{a:'He/She came'},{a:'I came'},{a:'He/She will come'}], ans:0, why:'<b>Se asila</b> = He/She came. (<b>Mu asili</b> = I came.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se khaila', ans:['He/She','ate'], dist:['I','will']},
+    {t:'type', q:'Type in Odia: "He/She came"', ans:'Se asila', alts:['se asila']}
+  ]},
+{ id:'pastresp', title:'Past: You (respectful)', sub:'Apånå — past tense · 9 steps', items:[
+    {t:'intro', odia:'Apånå asile', gloss:'You came', note:'Past tense for <b>you (respectful)</b> uses <b>-ile</b>: <b>Apånå asile</b> = you came. This form also covers <b>they</b>.'},
+    {t:'intro', odia:'Apånå khaile', gloss:'You ate', note:'Same <b>-ile</b> ending on any verb: <b>Apånå khaile</b>.'},
+    {t:'choice', q:'How do you say "You saw"?', opts:[{a:'Apånå dekhile'},{a:'Mu dekhili'},{a:'Apånå dekhibe'}], ans:0, why:'you (respectful) = <b>-ile</b>: <b>Apånå dekhile</b>.'},
+    {t:'match', pairs:[['Apånå asile','You came'],['Apånå khaile','You ate'],['Apånå dekhile','You saw'],['Apånå kårile','You did']]},
+    {t:'cloze', q:'Complete: "You ate rice"', pre:'Apånå bhatå', post:'', opts:['khaile','khaili','khaibe'], ans:0, why:'<b>khaile</b> = you ate.'},
+    {t:'assemble', q:'Build in Odia: "You came home"', gloss:'ghåre = at home', ans:['Apånå','ghåre','asile'], dist:['asili','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Apånå asile', opts:[{a:'You came'},{a:'I came'},{a:'You will come'}], ans:0, why:'<b>Apånå asile</b> = You came. (<b>Mu asili</b> = I came.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Apånå khaile', ans:['You','ate'], dist:['I','will']},
+    {t:'type', q:'Type in Odia: "You came"', ans:'Apånå asile', alts:['apana asile']}
+  ]},
+{ id:'pastwe', title:'Past: We', sub:'Ame — past tense · 9 steps', items:[
+    {t:'intro', odia:'Ame asilu', gloss:'We came', note:'Past tense for <b>we</b> uses <b>-ilu</b>: <b>Ame asilu</b> = we came.'},
+    {t:'intro', odia:'Ame khailu', gloss:'We ate', note:'Same <b>-ilu</b> ending on any verb: <b>Ame khailu</b>.'},
+    {t:'choice', q:'How do you say "We saw"?', opts:[{a:'Ame dekhilu'},{a:'Mu dekhili'},{a:'Ame dekhibu'}], ans:0, why:'we = <b>-ilu</b>: <b>Ame dekhilu</b>.'},
+    {t:'match', pairs:[['Ame asilu','We came'],['Ame khailu','We ate'],['Ame dekhilu','We saw'],['Ame kårilu','We did']]},
+    {t:'cloze', q:'Complete: "We ate rice"', pre:'Ame bhatå', post:'', opts:['khailu','khaili','khaibu'], ans:0, why:'<b>khailu</b> = we ate.'},
+    {t:'assemble', q:'Build in Odia: "We came home"', gloss:'ghåre = at home', ans:['Ame','ghåre','asilu'], dist:['asili','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Ame asilu', opts:[{a:'We came'},{a:'I came'},{a:'We will come'}], ans:0, why:'<b>Ame asilu</b> = We came. (<b>Mu asili</b> = I came.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Ame khailu', ans:['We','ate'], dist:['I','will']},
+    {t:'type', q:'Type in Odia: "We came"', ans:'Ame asilu', alts:['ame asilu']}
+  ]},
+{ id:'futureyou', title:'Future: You (informal)', sub:'Tåme — future tense · 9 steps', items:[
+    {t:'intro', odia:'Tåme asibå', gloss:'You will come', note:'Future tense for <b>you (informal)</b> uses <b>-ibå</b>: <b>Tåme asibå</b> = you will come.'},
+    {t:'intro', odia:'Tåme khaibå', gloss:'You will eat', note:'Same <b>-ibå</b> ending on any verb: <b>Tåme khaibå</b>.'},
+    {t:'choice', q:'How do you say "You will see"?', opts:[{a:'Tåme dekhibå'},{a:'Mu dekhibi'},{a:'Tåme dekhilå'}], ans:0, why:'you (informal) = <b>-ibå</b>: <b>Tåme dekhibå</b>.'},
+    {t:'match', pairs:[['Tåme asibå','You will come'],['Tåme khaibå','You will eat'],['Tåme dekhibå','You will see'],['Tåme kåribå','You will do']]},
+    {t:'cloze', q:'Complete: "You will eat rice"', pre:'Tåme bhatå', post:'', opts:['khaibå','khaibi','khailå'], ans:0, why:'<b>khaibå</b> = you will eat.'},
+    {t:'assemble', q:'Build in Odia: "You will come home"', gloss:'ghåre = at home', ans:['Tåme','ghåre','asibå'], dist:['asibi','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Tåme asibå', opts:[{a:'You will come'},{a:'I will come'},{a:'You came'}], ans:0, why:'<b>Tåme asibå</b> = You will come. (<b>Mu asibi</b> = I will come.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Tåme khaibå', ans:['You','will','eat'], dist:['I','ate']},
+    {t:'type', q:'Type in Odia: "You will come"', ans:'Tåme asibå', alts:['tame asiba']}
+  ]},
+{ id:'futurehe', title:'Future: He / She', sub:'Se — future tense · 9 steps', items:[
+    {t:'intro', odia:'Se asibå', gloss:'He/She will come', note:'Future tense for <b>he / she</b> uses <b>-ibå</b>: <b>Se asibå</b> = he/she will come. (This is the same <b>-ibå</b> ending as informal "you".)'},
+    {t:'intro', odia:'Se khaibå', gloss:'He/She will eat', note:'Same <b>-ibå</b> ending on any verb: <b>Se khaibå</b>.'},
+    {t:'choice', q:'How do you say "He/She will see"?', opts:[{a:'Se dekhibå'},{a:'Mu dekhibi'},{a:'Se dekhila'}], ans:0, why:'he / she = <b>-ibå</b>: <b>Se dekhibå</b>.'},
+    {t:'match', pairs:[['Se asibå','He/She will come'],['Se khaibå','He/She will eat'],['Se dekhibå','He/She will see'],['Se kåribå','He/She will do']]},
+    {t:'cloze', q:'Complete: "He/She will eat rice"', pre:'Se bhatå', post:'', opts:['khaibå','khaibi','khaila'], ans:0, why:'<b>khaibå</b> = he/she will eat.'},
+    {t:'assemble', q:'Build in Odia: "He/She will come home"', gloss:'ghåre = at home', ans:['Se','ghåre','asibå'], dist:['asibi','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Se asibå', opts:[{a:'He/She will come'},{a:'I will come'},{a:'He/She came'}], ans:0, why:'<b>Se asibå</b> = He/She will come. (<b>Mu asibi</b> = I will come.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se khaibå', ans:['He/She','will','eat'], dist:['I','ate']},
+    {t:'type', q:'Type in Odia: "He/She will come"', ans:'Se asibå', alts:['se asiba']}
+  ]},
+{ id:'futureresp', title:'Future: You (respectful)', sub:'Apånå — future tense · 9 steps', items:[
+    {t:'intro', odia:'Apånå asibe', gloss:'You will come', note:'Future tense for <b>you (respectful)</b> uses <b>-ibe</b>: <b>Apånå asibe</b> = you will come. This form also covers <b>they</b>.'},
+    {t:'intro', odia:'Apånå khaibe', gloss:'You will eat', note:'Same <b>-ibe</b> ending on any verb: <b>Apånå khaibe</b>.'},
+    {t:'choice', q:'How do you say "You will see"?', opts:[{a:'Apånå dekhibe'},{a:'Mu dekhibi'},{a:'Apånå dekhile'}], ans:0, why:'you (respectful) = <b>-ibe</b>: <b>Apånå dekhibe</b>.'},
+    {t:'match', pairs:[['Apånå asibe','You will come'],['Apånå khaibe','You will eat'],['Apånå dekhibe','You will see'],['Apånå kåribe','You will do']]},
+    {t:'cloze', q:'Complete: "You will eat rice"', pre:'Apånå bhatå', post:'', opts:['khaibe','khaibi','khaile'], ans:0, why:'<b>khaibe</b> = you will eat.'},
+    {t:'assemble', q:'Build in Odia: "You will come home"', gloss:'ghåre = at home', ans:['Apånå','ghåre','asibe'], dist:['asibi','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Apånå asibe', opts:[{a:'You will come'},{a:'I will come'},{a:'You came'}], ans:0, why:'<b>Apånå asibe</b> = You will come. (<b>Mu asibi</b> = I will come.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Apånå khaibe', ans:['You','will','eat'], dist:['I','ate']},
+    {t:'type', q:'Type in Odia: "You will come"', ans:'Apånå asibe', alts:['apana asibe']}
+  ]},
+{ id:'futurewe', title:'Future: We', sub:'Ame — future tense · 9 steps', items:[
+    {t:'intro', odia:'Ame asibu', gloss:'We will come', note:'Future tense for <b>we</b> uses <b>-ibu</b>: <b>Ame asibu</b> = we will come.'},
+    {t:'intro', odia:'Ame khaibu', gloss:'We will eat', note:'Same <b>-ibu</b> ending on any verb: <b>Ame khaibu</b>.'},
+    {t:'choice', q:'How do you say "We will see"?', opts:[{a:'Ame dekhibu'},{a:'Mu dekhibi'},{a:'Ame dekhilu'}], ans:0, why:'we = <b>-ibu</b>: <b>Ame dekhibu</b>.'},
+    {t:'match', pairs:[['Ame asibu','We will come'],['Ame khaibu','We will eat'],['Ame dekhibu','We will see'],['Ame kåribu','We will do']]},
+    {t:'cloze', q:'Complete: "We will eat rice"', pre:'Ame bhatå', post:'', opts:['khaibu','khaibi','khailu'], ans:0, why:'<b>khaibu</b> = we will eat.'},
+    {t:'assemble', q:'Build in Odia: "We will come home"', gloss:'ghåre = at home', ans:['Ame','ghåre','asibu'], dist:['asibi','Mu']},
+    {t:'choice', q:'What does this mean?', show:'Ame asibu', opts:[{a:'We will come'},{a:'I will come'},{a:'We came'}], ans:0, why:'<b>Ame asibu</b> = We will come. (<b>Mu asibi</b> = I will come.)'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Ame khaibu', ans:['We','will','eat'], dist:['I','ate']},
+    {t:'type', q:'Type in Odia: "We will come"', ans:'Ame asibu', alts:['ame asibu']}
   ]}]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
@@ -473,7 +554,8 @@ export const CHAPTERS: Chapter[] = [
   { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
   { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','neg','need','market'] },
   { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
-  { key:'tenses', title:'Verb Tenses', blurb:'Past, future & the tricky ones', lessons:['past','future','pastprog','pastperf'] },
+  { key:'pasttense', title:'Past Tense', blurb:'I did → you, he/she, we did', lessons:['past','pastyou','pasthe','pastresp','pastwe','pastprog','pastperf'] },
+  { key:'futuretense', title:'Future Tense', blurb:'I will → you, he/she, we will', lessons:['future','futureyou','futurehe','futureresp','futurewe'] },
   { key:'life', title:'Feelings & Meals', blurb:'How you feel, and eating', lessons:['feel1','feel2','meals'] }]
   .map((c) => ({ ...c, lessons: c.lessons.filter((id) => LESSON_IDS.has(id)) }))
   .filter((c) => c.lessons.length)
