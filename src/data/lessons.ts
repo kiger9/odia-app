@@ -621,6 +621,36 @@ export const LESSONS: Lesson[] = [
     {t:'choice', q:'What does this mean?', show:'Semane soichånti', opts:[{a:'They are sleeping'},{a:'I am sleeping'},{a:'We are sleeping'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se soichi', ans:['He/She','is','sleeping'], dist:['I','they']},
     {t:'type', q:'Type in Odia: "I am sleeping"', ans:'Mu soichi', alts:['mu soichi']}
+  ]},
+{ id:'possess', title:'Whose Is It? (Possessives)', sub:'My, your, our, grandma’s · 13 steps', items:[
+    {t:'intro', odia:'Morå ghårå', gloss:'my house', note:'<b>Morå</b> = my. <b>Morå ghårå</b> = my house. (<b>ghårå</b> = house.)'},
+    {t:'intro', odia:'Tåmårå ghårå', gloss:'your house', note:'<b>Tåmårå</b> = your (informal).'},
+    {t:'intro', odia:'Tarå ghårå', gloss:'his / her house', note:'<b>Tarå</b> = his / her.'},
+    {t:'intro', odia:'Amårå ghårå', gloss:'our house', note:'<b>Amårå</b> = our.'},
+    {t:'intro', odia:'Semanånkårå ghårå', gloss:'their house', note:'<b>Semanånkårå</b> = their.'},
+    {t:'match', pairs:[['Morå','my'],['Tåmårå','your'],['Amårå','our'],['Semanånkårå','their']]},
+    {t:'choice', q:'How do you say "our house"?', opts:[{a:'Amårå ghårå'},{a:'Morå ghårå'},{a:'Tarå ghårå'}], ans:0, why:'<b>Amårå</b> = our.'},
+    {t:'intro', odia:'ghårå-ku', gloss:'to the house', note:'Add <b>-ku</b> to say "to": <b>ghårå-ku</b> = to the house. So <b>Amårå ghårå-ku</b> = to our house.'},
+    {t:'intro', odia:'Aai-nkårå ghårå', gloss:'grandma\'s house', note:'For a <b>person\'s</b> possessive, add <b>-nkårå</b> (respectful): <b>aai</b> (grandma) → <b>Aai-nkårå ghårå</b> = grandma\'s house.'},
+    {t:'choice', q:'What does this mean?', show:'Semanånkårå ghårå', opts:[{a:'their house'},{a:'our house'},{a:'my house'}], ans:0, why:'<b>Semanånkårå</b> = their.'},
+    {t:'assemble', q:'Build in Odia: "We are going to grandma’s house"', gloss:'jauchu = we are going', ans:['Ame','Aai-nkårå','ghårå-ku','jauchu'], dist:['Morå','jauchi']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Amårå ghårå bådå', ans:['Our','house','is','big'], dist:['their','small']},
+    {t:'type', q:'Type in Odia: "my house"', ans:'Morå ghårå', alts:['mora ghara']}
+  ]},
+{ id:'withothers', title:'With Others', sub:'Doing things together · 13 steps', items:[
+    {t:'intro', odia:'Rahul-sangåre', gloss:'with Rahul', note:'To say "with" someone, add <b>-sangåre</b>: <b>Rahul-sangåre</b> = with Rahul.'},
+    {t:'intro', odia:'Mu Rahul-sangåre kheluchi', gloss:'I am playing with Rahul', note:'<b>kheluchi</b> = am playing. <b>Mu Rahul-sangåre kheluchi</b> = I am playing with Rahul.'},
+    {t:'intro', odia:'mo-sangåre', gloss:'with me', note:'<b>with me</b> = <b>mo-sangåre</b> (mo = me).'},
+    {t:'intro', odia:'bapa-nkå-sangåre', gloss:'with dad', note:'For <b>elders</b>, use <b>-nkå-sangåre</b> (respectful): <b>bapa</b> (dad) → <b>bapa-nkå-sangåre</b> = with dad.'},
+    {t:'intro', odia:'Mu bapa-nkå-sangåre khauchi', gloss:'I am eating with dad', note:'<b>khauchi</b> = am eating.'},
+    {t:'match', pairs:[['Rahul-sangåre','with Rahul'],['mo-sangåre','with me'],['tåmå-sangåre','with you'],['bapa-nkå-sangåre','with dad']]},
+    {t:'choice', q:'How do you say "I am playing with Rahul"?', opts:[{a:'Mu Rahul-sangåre kheluchi'},{a:'Mu Rahul-sangåre khauchi'},{a:'Mu mo-sangåre kheluchi'}], ans:0, why:'play = <b>kheluchi</b>; with Rahul = <b>Rahul-sangåre</b>.'},
+    {t:'intro', odia:'Tåme mo-sangåre khelibå-ki?', gloss:'Will you play with me?', note:'This is how you invite someone. <b>khelibå</b> = will you play, <b>mo-sangåre</b> = with me, <b>-ki</b> = the question. "Do you want to play with me?"'},
+    {t:'intro', odia:'Tåme mo-sangåre khaibå-ki?', gloss:'Will you eat with me?', note:'Same shape with eat: <b>khaibå</b> = will you eat.'},
+    {t:'choice', q:'What does this mean?', show:'Tåme mo-sangåre khaibå-ki?', opts:[{a:'Will you eat with me?'},{a:'I am eating with you'},{a:'Will you play with me?'}], ans:0, why:'<b>khaibå</b> = will you eat; <b>mo-sangåre</b> = with me.'},
+    {t:'assemble', q:'Build in Odia: "I am eating with dad"', gloss:'khauchi = am eating', ans:['Mu','bapa-nkå-sangåre','khauchi'], dist:['Rahul-sangåre','kheluchi']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Tåme mo-sangåre khelibå-ki?', ans:['Will','you','play','with','me?'], dist:['eat','I']},
+    {t:'type', q:'Type in Odia: "I am playing with Rahul"', ans:'Mu Rahul-sangåre kheluchi', alts:['mu rahul-sangare kheluchi','mu rahul sangare kheluchi']}
   ]}]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
@@ -631,8 +661,8 @@ export const CHAPTERS: Chapter[] = [
   { key:'num', title:'Numbers & Counting', blurb:'The numbers, and how to count', lessons:['num','count'] },
   { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjeat','conjdrink','conjdo','conjsee','conjplay','conjsleep'] },
   { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
-  { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
-  { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','neg','need','market'] },
+  { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','possess','inout','where'] },
+  { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','withothers','neg','need','market'] },
   { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
   { key:'pasttense', title:'Past Tense', blurb:'I did → you, he/she, we did', lessons:['past','pastyou','pasthe','pastresp','pastwe','pastprog','pastperf'] },
   { key:'futuretense', title:'Future Tense', blurb:'I will → you, he/she, we will', lessons:['future','futureyou','futurehe','futureresp','futurewe'] },
