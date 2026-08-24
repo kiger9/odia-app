@@ -542,6 +542,70 @@ export const LESSONS: Lesson[] = [
     {t:'choice', q:'What does this mean?', show:'Ame asibu', opts:[{a:'We will come'},{a:'I will come'},{a:'We came'}], ans:0, why:'<b>Ame asibu</b> = We will come. (<b>Mu asibi</b> = I will come.)'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Ame khaibu', ans:['We','will','eat'], dist:['I','ate']},
     {t:'type', q:'Type in Odia: "We will come"', ans:'Ame asibu', alts:['ame asibu']}
+  ]},
+{ id:'conjgo', title:'The -i / -å / -u Pattern', sub:'How verbs show who · 12 steps', items:[
+    {t:'intro', odia:'Mu jauchi', gloss:'I am going', note:'To say you are <b>doing</b> something right now, add <b>-uchi</b> to the root for <b>I</b>. <b>Jiba</b> (to go) → <b>Mu jauchi</b> = I am going.'},
+    {t:'intro', odia:'Tåme jauchå', gloss:'You are going', note:'For <b>you</b>, the ending shifts to an <b>-å</b> sound: <b>Tåme jauchå</b>.'},
+    {t:'intro', odia:'Se jauchi', gloss:'He / She is going', note:'<b>He / She</b> uses the same <b>-i</b> sound as "I": <b>Se jauchi</b>.'},
+    {t:'intro', odia:'Ame jauchu', gloss:'We are going', note:'For <b>we</b>, the ending is a <b>-u</b> sound: <b>Ame jauchu</b>.'},
+    {t:'intro', odia:'Semane jauchånti', gloss:'They are going', note:'For <b>they</b>, use <b>-uchånti</b> — it still ends in an <b>-i</b> sound: <b>Semane jauchånti</b>.'},
+    {t:'intro', odia:'-i  å  -u', gloss:'The pattern', note:'It is all in the last sound: <b>-i</b> = I, he/she, they · <b>-å</b> = you · <b>-u</b> = we. You already met this with <b>åchi / åchå / åchu</b> (to be)!'},
+    {t:'match', pairs:[['Mu jauchi','I am going'],['Tåme jauchå','You are going'],['Se jauchi','He/She is going'],['Ame jauchu','We are going']]},
+    {t:'choice', q:'How do you say "You are going"?', opts:[{a:'Tåme jauchå'},{a:'Mu jauchi'},{a:'Ame jauchu'}], ans:0, why:'<b>you</b> = the <b>-å</b> ending: jauchå.'},
+    {t:'cloze', q:'Complete: "We are going"', pre:'Ame', post:'', opts:['jauchu','jauchi','jauchå'], ans:0, why:'<b>we</b> = the <b>-u</b> ending: jauchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane jauchånti', opts:[{a:'They are going'},{a:'We are going'},{a:'You are going'}], ans:0, why:'<b>Semane</b> = they; <b>-uchånti</b> is the "they / respectful" ending.'},
+    {t:'assemble', q:'Build in Odia: "They are going home"', gloss:'ghåre = at home', ans:['Semane','ghåre','jauchånti'], dist:['jauchu','Mu']},
+    {t:'type', q:'Type in Odia: "I am going"', ans:'Mu jauchi', alts:['mu jauchi']}
+  ]},
+{ id:'conjcome', title:'Coming', sub:'Coming — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu asuchi', gloss:'I am coming', note:'<b>Asiba</b> (to come) → <b>Mu asuchi</b> = i am coming. The <b>-uchi</b> ending = I.'},
+    {t:'intro', odia:'Tåme asuchå', gloss:'You are coming', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme asuchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is coming"?', opts:[{a:'Se asuchi'},{a:'Mu asuchi'},{a:'Semane asuchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se asuchi.'},
+    {t:'match', pairs:[['Mu asuchi','I am coming'],['Tåme asuchå','You are coming'],['Se asuchi','He/She is coming'],['Ame asuchu','We are coming']]},
+    {t:'cloze', q:'Complete: "We are coming"', pre:'Ame', post:'', opts:['asuchu','asuchi','asuchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: asuchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane asuchånti', opts:[{a:'They are coming'},{a:'I am coming'},{a:'We are coming'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se asuchi', ans:['He/She','is','coming'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am coming"', ans:'Mu asuchi', alts:['mu asuchi']}
+  ]},
+{ id:'conjeat', title:'Eating', sub:'Eating — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu khauchi', gloss:'I am eating', note:'<b>Khaiba</b> (to eat) → <b>Mu khauchi</b> = i am eating. The <b>-uchi</b> ending = I.'},
+    {t:'intro', odia:'Tåme khauchå', gloss:'You are eating', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme khauchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is eating"?', opts:[{a:'Se khauchi'},{a:'Mu khauchi'},{a:'Semane khauchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se khauchi.'},
+    {t:'match', pairs:[['Mu khauchi','I am eating'],['Tåme khauchå','You are eating'],['Se khauchi','He/She is eating'],['Ame khauchu','We are eating']]},
+    {t:'cloze', q:'Complete: "We are eating"', pre:'Ame', post:'', opts:['khauchu','khauchi','khauchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: khauchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane khauchånti', opts:[{a:'They are eating'},{a:'I am eating'},{a:'We are eating'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se khauchi', ans:['He/She','is','eating'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am eating"', ans:'Mu khauchi', alts:['mu khauchi']}
+  ]},
+{ id:'conjdrink', title:'Drinking', sub:'Drinking — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu piuchi', gloss:'I am drinking', note:'<b>Piba</b> (to drink) → <b>Mu piuchi</b> = i am drinking. The <b>-uchi</b> ending = I.'},
+    {t:'intro', odia:'Tåme piuchå', gloss:'You are drinking', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme piuchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is drinking"?', opts:[{a:'Se piuchi'},{a:'Mu piuchi'},{a:'Semane piuchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se piuchi.'},
+    {t:'match', pairs:[['Mu piuchi','I am drinking'],['Tåme piuchå','You are drinking'],['Se piuchi','He/She is drinking'],['Ame piuchu','We are drinking']]},
+    {t:'cloze', q:'Complete: "We are drinking"', pre:'Ame', post:'', opts:['piuchu','piuchi','piuchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: piuchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane piuchånti', opts:[{a:'They are drinking'},{a:'I am drinking'},{a:'We are drinking'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se piuchi', ans:['He/She','is','drinking'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am drinking"', ans:'Mu piuchi', alts:['mu piuchi']}
+  ]},
+{ id:'conjdo', title:'Doing', sub:'Doing — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu kåruchi', gloss:'I am doing', note:'<b>Kåriba</b> (to do) → <b>Mu kåruchi</b> = i am doing. The <b>-uchi</b> ending = I.'},
+    {t:'intro', odia:'Tåme kåruchå', gloss:'You are doing', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kåruchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is doing"?', opts:[{a:'Se kåruchi'},{a:'Mu kåruchi'},{a:'Semane kåruchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kåruchi.'},
+    {t:'match', pairs:[['Mu kåruchi','I am doing'],['Tåme kåruchå','You are doing'],['Se kåruchi','He/She is doing'],['Ame kåruchu','We are doing']]},
+    {t:'cloze', q:'Complete: "We are doing"', pre:'Ame', post:'', opts:['kåruchu','kåruchi','kåruchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: kåruchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane kåruchånti', opts:[{a:'They are doing'},{a:'I am doing'},{a:'We are doing'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se kåruchi', ans:['He/She','is','doing'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am doing"', ans:'Mu kåruchi', alts:['mu karuchi']}
+  ]},
+{ id:'conjsee', title:'Watching', sub:'Watching — all persons · 8 steps', items:[
+    {t:'intro', odia:'Mu dekhuchi', gloss:'I am watching', note:'<b>Dekhiba</b> (to watch) → <b>Mu dekhuchi</b> = i am watching. The <b>-uchi</b> ending = I.'},
+    {t:'intro', odia:'Tåme dekhuchå', gloss:'You are watching', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme dekhuchå</b>.'},
+    {t:'choice', q:'How do you say "He/She is watching"?', opts:[{a:'Se dekhuchi'},{a:'Mu dekhuchi'},{a:'Semane dekhuchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se dekhuchi.'},
+    {t:'match', pairs:[['Mu dekhuchi','I am watching'],['Tåme dekhuchå','You are watching'],['Se dekhuchi','He/She is watching'],['Ame dekhuchu','We are watching']]},
+    {t:'cloze', q:'Complete: "We are watching"', pre:'Ame', post:'', opts:['dekhuchu','dekhuchi','dekhuchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: dekhuchu.'},
+    {t:'choice', q:'What does this mean?', show:'Semane dekhuchånti', opts:[{a:'They are watching'},{a:'I am watching'},{a:'We are watching'}], ans:0, why:'<b>Semane</b> = they.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Se dekhuchi', ans:['He/She','is','watching'], dist:['I','they']},
+    {t:'type', q:'Type in Odia: "I am watching"', ans:'Mu dekhuchi', alts:['mu dekhuchi']}
   ]}]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
@@ -550,6 +614,7 @@ export const CHAPTERS: Chapter[] = [
   { key:'start', title:'Getting Started', blurb:'Being, greeting, having', lessons:['be','howru','have'] },
   { key:'meet', title:'Meeting People', blurb:'Hello, goodbye, and names', lessons:['greetings','names'] },
   { key:'num', title:'Numbers & Counting', blurb:'The numbers, and how to count', lessons:['num','count'] },
+  { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjcome','conjeat','conjdrink','conjdo','conjsee'] },
   { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
   { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
   { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','neg','need','market'] },
