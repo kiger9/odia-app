@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { db, type Progress } from '../db'
 import { dueItemsFrom, recordReview, type ReviewItem } from '../reviews'
 import { markPracticedToday } from '../streak'
+import { fillName } from '../profile'
 import { Rating, type Grade } from '../srs'
 import Modal from './Modal'
 
@@ -67,13 +68,16 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
 
       <section className="card review-q">
         <p className="prompt-label muted">Say it in Odia</p>
-        <p className="prompt-en">{current.english}</p>
+        <p className="prompt-en">{fillName(current.english)}</p>
 
         {revealed ? (
           <div className="answer">
-            <p className="answer-phonetic">{current.phonetic}</p>
+            <p className="answer-phonetic">{fillName(current.phonetic)}</p>
             {current.note && (
-              <p className="answer-note muted" dangerouslySetInnerHTML={{ __html: current.note }} />
+              <p
+                className="answer-note muted"
+                dangerouslySetInnerHTML={{ __html: fillName(current.note) }}
+              />
             )}
           </div>
         ) : (

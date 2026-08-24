@@ -5,6 +5,7 @@
 
 import { db } from './db'
 import { REVIEW_ITEM_BY_ID, REVIEW_ITEMS, type ReviewItem } from './reviews'
+import { fillName } from './profile'
 
 export interface QuizQuestion {
   direction: 'toOdia' | 'toEnglish'
@@ -28,6 +29,7 @@ export async function getLearnedItems(): Promise<ReviewItem[]> {
   return rows
     .map((r) => REVIEW_ITEM_BY_ID.get(r.lexemeId))
     .filter((x): x is ReviewItem => !!x)
+    .map((i) => ({ ...i, phonetic: fillName(i.phonetic), english: fillName(i.english) }))
 }
 
 export function buildQuiz(learned: ReviewItem[], count = 10): QuizQuestion[] {

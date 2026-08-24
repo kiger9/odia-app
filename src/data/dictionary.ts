@@ -311,6 +311,9 @@ const WORDS: Array<{ english: string; phonetic: string }> = [
   { english: 'Yoghurt', phonetic: 'Dåhi' },
   { english: 'You (informal)', phonetic: 'Tåme' },
   { english: 'You (respect)', phonetic: 'Apånå' },
+  { english: 'Breakfast', phonetic: 'Jolokia' },
+  { english: 'Meal', phonetic: 'Bhojono' },
+  { english: 'Sad', phonetic: 'Dukhi' },
 ]
 
 // Appendix B — verbs (English meaning · Oriya infinitive). "To " prefix dropped

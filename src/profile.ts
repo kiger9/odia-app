@@ -63,6 +63,12 @@ export function encouragement(): string {
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
+// Replace the {name} placeholder with the learner's name (used by reviews & quiz,
+// which draw from lesson content that may contain {name}).
+export function fillName(s: string): string {
+  return typeof s === 'string' ? s.replace(/\{name\}/g, getName() || 'Suresh') : s
+}
+
 // Format a YYYY-MM-DD date as e.g. "Aug 8, 2026".
 export function formatDate(day: string | null | undefined): string {
   if (!day) return '—'

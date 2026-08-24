@@ -367,8 +367,9 @@ export const LESSONS: Lesson[] = [
     {t:'intro', odia:'Se asila', gloss:'He / She came', note:'For <b>he / she</b>, the past ends in <b>-ila</b>: <b>Se asila</b> = he/she came.'},
     {t:'choice', q:'Which means "I saw"?', opts:[{a:'Mu dekhili'},{a:'Mu dekhibi'},{a:'Mu dekhuchi'}], ans:0, why:'<b>-ili</b> = past, so <b>dekhili</b> = saw.'},
     {t:'assemble', q:'Build in Odia: "I saw the elephant"', gloss:'hati = elephant', ans:['Mu','hati','dekhili'], dist:['dekhibi','Se']},
-    {t:'cloze', q:'Complete: "I went home"', pre:'Mu ghare', post:'', opts:['gali','jauchi','jibi'], ans:0, why:'"Go" is irregular in the past — not "jili" but <b>gali</b> = went.'},
+    {t:'cloze', q:'Complete: "I went home"', pre:'Mu ghare', post:'', opts:['gåli','jauchi','jibi'], ans:0, why:'"Go" is irregular in the past — not "jili" but <b>gåli</b> = went.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu ghare asili', ans:['I','came','home'], dist:['will','went']},
+    {t:'choice', q:'How do you say "He/She came"?', opts:[{a:'Se asila'},{a:'Se asibå'},{a:'Se asuchi'}], ans:0, why:'For he/she, past ends in <b>-ila</b>: <b>Se asila</b> = he/she came.'},
     {t:'type', q:'Type in Odia: "I came"', ans:'Mu asili', alts:['mu asili']}
   ]},
 { id:'future', title:'Future Tense — I will', sub:'Talking about tomorrow · 12 steps', items:[
@@ -379,10 +380,11 @@ export const LESSONS: Lesson[] = [
     {t:'match', pairs:[['Mu asibi','I will come'],['Mu khaibi','I will eat'],['Mu jibi','I will go'],['Mu dekhibi','I will see']]},
     {t:'cloze', q:'Complete: "I will drink water"', pre:'Mu pani', post:'', opts:['pibi','piili','piuchi'], ans:0, why:'<b>pani</b> = water. Future "will drink" = <b>pibi</b>.'},
     {t:'intro', odia:'Se asiba', gloss:'He / She will come', note:'For <b>he / she</b>, the future ends <b>-iba</b>: <b>Se asiba</b>.'},
-    {t:'choice', q:'Which means "I will go"?', opts:[{a:'Mu jibi'},{a:'Mu gali'},{a:'Mu jauchi'}], ans:0, why:'<b>-ibi</b> = future. <b>jibi</b> = will go. (gali = went, jauchi = am going.)'},
-    {t:'assemble', q:'Build in Odia: "I will go to the market"', gloss:'bajar = market', ans:['Mu','bajar','jibi'], dist:['gali','Se']},
+    {t:'choice', q:'Which means "I will go"?', opts:[{a:'Mu jibi'},{a:'Mu gåli'},{a:'Mu jauchi'}], ans:0, why:'<b>-ibi</b> = future. <b>jibi</b> = will go. (gåli = went, jauchi = am going.)'},
+    {t:'assemble', q:'Build in Odia: "I will go to the market"', gloss:'bajar = market', ans:['Mu','bajar','jibi'], dist:['gåli','Se']},
     {t:'cloze', q:'Complete: "I will eat rice"', pre:'Mu bhata', post:'', opts:['khaibi','khaili','khauchi'], ans:0, why:'Future "will eat" = <b>khaibi</b>.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asibi', ans:['I','will','come'], dist:['came','go']},
+    {t:'choice', q:'How do you say "He/She will come"?', opts:[{a:'Se asibå'},{a:'Se asila'},{a:'Se asuchi'}], ans:0, why:'For he/she, future ends in <b>-ibå</b>: <b>Se asibå</b> = he/she will come.'},
     {t:'type', q:'Type in Odia: "I will come"', ans:'Mu asibi', alts:['mu asibi']}
   ]},
 { id:'pastprog', title:'Past Progressive — I was doing', sub:'I was ...-ing · 11 steps', items:[
@@ -392,7 +394,7 @@ export const LESSONS: Lesson[] = [
     {t:'intro', odia:'Mu jauthili', gloss:'I was going', note:'<b>Jiba</b> → <b>Mu jauthili</b> = I was going.'},
     {t:'match', pairs:[['Mu asuthili','I was coming'],['Mu khauthili','I was eating'],['Mu jauthili','I was going'],['Mu dekhuthili','I was watching']]},
     {t:'choice', q:'Which means "I was eating"?', opts:[{a:'Mu khauthili'},{a:'Mu khaili'},{a:'Mu khaibi'}], ans:0, why:'<b>khauthili</b> = was eating. (khaili = ate, khaibi = will eat.)'},
-    {t:'cloze', q:'Complete: "I was going to the market"', pre:'Mu bajar', post:'', opts:['jauthili','gali','jibi'], ans:0, why:'"Was going" = <b>jauthili</b>.'},
+    {t:'cloze', q:'Complete: "I was going to the market"', pre:'Mu bajar', post:'', opts:['jauthili','gåli','jibi'], ans:0, why:'"Was going" = <b>jauthili</b>.'},
     {t:'assemble', q:'Build in Odia: "I was eating rice"', gloss:'bhata = rice', ans:['Mu','bhata','khauthili'], dist:['khaili','Se']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asuthili', ans:['I','was','coming'], dist:['came','will']},
     {t:'cloze', q:'Ongoing vs done: "I was watching"', pre:'Mu', post:'', opts:['dekhuthili','dekhili','dekhibi'], ans:0, why:'<b>dekhuthili</b> = was watching. <b>dekhili</b> = saw.'},
@@ -405,24 +407,69 @@ export const LESSONS: Lesson[] = [
     {t:'intro', odia:'Mu jaithili', gloss:'I had gone', note:'<b>Jiba</b> → <b>Mu jaithili</b> = I had gone.'},
     {t:'match', pairs:[['Mu asithili','I had come'],['Mu khaithili','I had eaten'],['Mu jaithili','I had gone'],['Mu dekhithili','I had seen']]},
     {t:'choice', q:'Which is "I had eaten"?', opts:[{a:'Mu khaithili'},{a:'Mu khauthili'},{a:'Mu khaili'}], ans:0, why:'<b>-ithili</b> (had) vs <b>-uthili</b> (was ...-ing). So <b>khaithili</b> = had eaten.'},
-    {t:'cloze', q:'Complete: "I had gone home"', pre:'Mu ghare', post:'', opts:['jaithili','gali','jauthili'], ans:0, why:'"Had gone" = <b>jaithili</b>. (gali = went, jauthili = was going.)'},
+    {t:'cloze', q:'Complete: "I had gone home"', pre:'Mu ghare', post:'', opts:['jaithili','gåli','jauthili'], ans:0, why:'"Had gone" = <b>jaithili</b>. (gåli = went, jauthili = was going.)'},
     {t:'assemble', q:'Build in Odia: "I had seen the elephant"', gloss:'hati = elephant', ans:['Mu','hati','dekhithili'], dist:['dekhili','Se']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asithili', ans:['I','had','come'], dist:['was','came']},
     {t:'cloze', q:'Complete: "I had done the work"', pre:'Mu kama', post:'', opts:['karithili','karuthili','karili'], ans:0, why:'<b>kama</b> = work. "Had done" = <b>karithili</b>.', gloss:'kama = work'},
     {t:'type', q:'Type in Odia: "I had come"', ans:'Mu asithili', alts:['mu asithili']}
+  ]},
+{ id:'feel1', title:'How I Feel', sub:'Hungry, cold, happy · 14 steps', items:[
+    {t:'intro', odia:'Mote bhokå laguchi', gloss:'I feel hungry', note:'Odia does not say "I have hunger" — it says "to me, hunger feels." <b>Mote</b> = to me, <b>bhokå</b> = hunger, <b>laguchi</b> = feels. And <b>laguchi</b> never changes, whoever is feeling it.'},
+    {t:'intro', odia:'Mote soså laguchi', gloss:'I feel thirsty', note:'<b>soså</b> = thirst. Same shape: <b>Mote ___ laguchi</b>.'},
+    {t:'intro', odia:'Mote thånda laguchi', gloss:'I feel cold', note:'<b>thånda</b> = cold.'},
+    {t:'intro', odia:'Mote gåråm laguchi', gloss:'I feel hot', note:'<b>gåråm</b> = hot / warm.'},
+    {t:'choice', q:'What does this mean?', show:'Mote thånda laguchi', opts:[{a:'I feel cold'},{a:'I feel hot'},{a:'I am happy'}], ans:0, why:'<b>thånda</b> = cold.'},
+    {t:'match', q:'Match the pairs', pairs:[['Mote bhokå laguchi','I feel hungry'],['Mote soså laguchi','I feel thirsty'],['Mote thånda laguchi','I feel cold'],['Mote gåråm laguchi','I feel hot']]},
+    {t:'cloze', q:'Complete: "I feel hungry"', pre:'Mote', post:'laguchi', opts:['bhokå','soså','thånda'], ans:0, why:'hunger = <b>bhokå</b>.'},
+    {t:'intro', odia:'Mu khusi åchi', gloss:'I am happy', note:'For emotions, the "be" form is common: <b>Mu khusi åchi</b> = I am happy (<b>khusi</b> = happy).'},
+    {t:'intro', odia:'Mu dukhi åchi', gloss:'I am sad', note:'<b>dukhi</b> = sad. <b>Mu dukhi åchi</b> = I am sad.'},
+    {t:'choice', q:'What does this mean?', show:'Mu khusi åchi', opts:[{a:'I am happy'},{a:'I am sad'},{a:'I feel cold'}], ans:0, why:'<b>khusi</b> = happy.'},
+    {t:'assemble', q:'Build in Odia: "I feel hot"', gloss:'gåråm = hot', ans:['Mote','gåråm','laguchi'], dist:['bhokå','åchi']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu dukhi åchi', ans:['I','am','sad'], dist:['happy','feel']},
+    {t:'cloze', q:'Complete: "I am happy"', pre:'Mu', post:'åchi', opts:['khusi','dukhi','bhokå'], ans:0, why:'happy = <b>khusi</b>.'},
+    {t:'type', q:'Type in Odia: "I feel hungry"', ans:'Mote bhokå laguchi', alts:['mote bhoka laguchi']}
+  ]},
+{ id:'feel2', title:'How Do You Feel?', sub:'Asking about feelings · 11 steps', items:[
+    {t:'intro', odia:'Tåme kemiti åchå?', gloss:'How do you feel?  (informal)', note:'<b>kemiti</b> = how. <b>Tåme kemiti åchå?</b> asks how someone is feeling / doing.'},
+    {t:'intro', odia:'Tåmåku bhokå laguchi ki?', gloss:'Are you hungry?', note:'Add <b>ki</b> to make a yes/no question. <b>Tåmåku</b> = to you. "to-you hunger feels?" = Are you hungry?'},
+    {t:'intro', odia:'Tåme khusi åchå ki?', gloss:'Are you happy?', note:'For emotions: <b>Tåme khusi åchå ki?</b> = Are you happy?'},
+    {t:'choice', q:'How do you ask "Are you hungry?"', opts:[{a:'Tåmåku bhokå laguchi ki?'},{a:'Mote bhokå laguchi'},{a:'Tåme khusi åchå ki?'}], ans:0, why:'<b>ki</b> makes it a question; <b>Tåmåku</b> = to you.'},
+    {t:'match', q:'Match the pairs', pairs:[['Tåme kemiti åchå?','How do you feel?'],['Tåmåku bhokå laguchi ki?','Are you hungry?'],['Tåme khusi åchå ki?','Are you happy?']]},
+    {t:'intro', odia:'Hå, mote bhokå laguchi', gloss:'Yes, I feel hungry', note:'<b>Hå</b> = yes. Answer a "feeling" question the same way you say it about yourself.'},
+    {t:'choice', q:'What does this mean?', show:'Tåme khusi åchå ki?', opts:[{a:'Are you happy?'},{a:'I am happy'},{a:'Are you hungry?'}], ans:0, why:'khusi = happy, ki = the question marker.'},
+    {t:'assemble', q:'Build in Odia: "Are you hungry?"', gloss:'ki = the question marker', ans:['Tåmåku','bhokå','laguchi','ki?'], dist:['Mote','åchi']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Tåme kemiti åchå?', ans:['How','do','you','feel?'], dist:['are','hungry']},
+    {t:'cloze', q:'Complete: "Are you happy?"', pre:'Tåme khusi åchå', post:'', opts:['ki?','laguchi','mote'], ans:0, why:'<b>ki</b> turns it into a yes/no question.'},
+    {t:'type', q:'Type in Odia: "How do you feel?"  (informal)', ans:'Tåme kemiti åchå?', alts:['tame kemiti acha','tame kemiti acha?']}
+  ]},
+{ id:'meals', title:'Meal Time', sub:'Eating, breakfast, food · 13 steps', items:[
+    {t:'intro', odia:'jolokia', gloss:'breakfast', note:'<b>jolokia</b> = breakfast, the morning meal.'},
+    {t:'intro', odia:'bhojono', gloss:'a meal', note:'<b>bhojono</b> = a meal.'},
+    {t:'intro', odia:'Ame khaiba-ku jauchu', gloss:'We are going to eat', note:'<b>khaiba</b> = to eat, <b>-ku</b> = to, <b>jauchu</b> = we are going. So <b>khaiba-ku jauchu</b> = going to eat.'},
+    {t:'choice', q:'What does this mean?', show:'Ame khaiba-ku jauchu', opts:[{a:'We are going to eat'},{a:'We are eating'},{a:'We will eat'}], ans:0, why:'<b>khaiba-ku jauchu</b> = going to eat.'},
+    {t:'match', q:'Match the pairs', pairs:[['jolokia','breakfast'],['bhojono','a meal'],['bhata','rice'],['machå','fish']]},
+    {t:'intro', odia:'eita khai paribo', gloss:'You can eat this', note:'<b>khai paribo</b> = can eat. So <b>eita khai paribo</b> = you can eat this.'},
+    {t:'choice', q:'Which means "You can eat this"?', opts:[{a:'eita khai paribo'},{a:'eita khauchu'},{a:'Mu eita khaili'}], ans:0, why:'<b>khai paribo</b> = can eat.'},
+    {t:'cloze', q:'Complete: "I ate breakfast"', pre:'Mu jolokia', post:'', opts:['khaili','khaibi','khauchi'], ans:0, why:'Past "ate" = <b>khaili</b>.'},
+    {t:'assemble', q:'Build in Odia: "We are going to eat"', gloss:'khaiba-ku = to eat', ans:['Ame','khaiba-ku','jauchu'], dist:['khaili','Se']},
+    {t:'cloze', q:'Complete: "I will eat rice"', pre:'Mu bhata', post:'', opts:['khaibi','khaili','khauchi'], ans:0, why:'Future "will eat" = <b>khaibi</b>.'},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mu machå khaili', ans:['I','ate','fish'], dist:['will','rice']},
+    {t:'choice', q:'What does this mean?', show:'bhojono', opts:[{a:'a meal'},{a:'breakfast'},{a:'rice'}], ans:0, why:'<b>bhojono</b> = a meal.'},
+    {t:'type', q:'Type in Odia: "breakfast"', ans:'jolokia', alts:['jalakhia']}
   ]}]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
 
 export const CHAPTERS: Chapter[] = [
-  { key:'start',  title:'Getting Started',        blurb:'Being, greeting, having',        lessons:['be','howru','have'] },
-  { key:'meet',   title:'Meeting People',         blurb:'Hello, goodbye, and names',      lessons:['greetings','names'] },
-  { key:'num',    title:'Numbers & Counting',     blurb:'The numbers, and how to count',  lessons:['num','count'] },
-  { key:'things', title:'Pointing & Plurals',     blurb:'One & many, this/that, here/there',lessons:['plural','this','deixis'] },
-  { key:'around', title:'Getting Around',         blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
-  { key:'doing',  title:'Doing & the Market',     blurb:'Verbs, saying no, needs, buying',lessons:['verbs1','neg','need','market'] },
-  { key:'cmd',    title:'Simple Commands',        blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
-  { key:'tenses', title:'Verb Tenses',           blurb:'Past, future & the tricky ones',  lessons:['past','future','pastprog','pastperf'] }]
+  { key:'start', title:'Getting Started', blurb:'Being, greeting, having', lessons:['be','howru','have'] },
+  { key:'meet', title:'Meeting People', blurb:'Hello, goodbye, and names', lessons:['greetings','names'] },
+  { key:'num', title:'Numbers & Counting', blurb:'The numbers, and how to count', lessons:['num','count'] },
+  { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
+  { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','inout','where'] },
+  { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','neg','need','market'] },
+  { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
+  { key:'tenses', title:'Verb Tenses', blurb:'Past, future & the tricky ones', lessons:['past','future','pastprog','pastperf'] },
+  { key:'life', title:'Feelings & Meals', blurb:'How you feel, and eating', lessons:['feel1','feel2','meals'] }]
   .map((c) => ({ ...c, lessons: c.lessons.filter((id) => LESSON_IDS.has(id)) }))
   .filter((c) => c.lessons.length)
 
