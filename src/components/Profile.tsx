@@ -17,7 +17,13 @@ function StatLine({ label, value, sub }: { label: string; value: string; sub?: s
   )
 }
 
-export default function Profile({ onBack }: { onBack: () => void }) {
+export default function Profile({
+  onBack,
+  onSettings,
+}: {
+  onBack: () => void
+  onSettings: () => void
+}) {
   const stats = useLiveQuery(() => db.stats.get('main'), [], undefined as Stats | undefined)
   const [name, setNameState] = useState(getName())
   const [editing, setEditing] = useState(false)
@@ -77,6 +83,15 @@ export default function Profile({ onBack }: { onBack: () => void }) {
         <StatLine label="Pop quizzes taken" value={String(quizzes)} />
         <StatLine label="Average quiz score" value={avg === null ? '—' : `${avg}%`} />
       </section>
+
+      <button className="settings-link" onClick={onSettings}>
+        <span className="sl-icon">⚙️</span>
+        <span className="setting-text">
+          <b>Settings</b>
+          <small className="muted">Daily reminder and app options</small>
+        </span>
+        <span className="quiz-arrow">›</span>
+      </button>
 
       <button className="reset-btn" onClick={() => setResetStage(1)}>
         Reset all progress

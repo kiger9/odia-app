@@ -4,6 +4,7 @@
 // streak; a skipped day resets it.
 
 import { db, type Stats } from './db'
+import { syncNotificationState } from './notifications'
 
 // Local calendar date as YYYY-MM-DD (so streaks follow the learner's own midnight).
 function localDay(d = new Date()): string {
@@ -56,6 +57,9 @@ export async function markPracticedToday(): Promise<void> {
     longestStart,
     longestEnd,
   })
+
+  // Tonight's reminder should skip a day that already counts — tell the worker.
+  void syncNotificationState()
 }
 
 export interface StreakView {

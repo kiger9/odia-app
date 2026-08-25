@@ -14,6 +14,11 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon-180.png', 'icon-192.png', 'icon-512.png'],
+      workbox: {
+        // Pulls the evening-reminder handlers (periodicsync / notificationclick)
+        // into the generated service worker. See public/notify-sw.js.
+        importScripts: ['notify-sw.js'],
+      },
       manifest: {
         name: 'Odia in Small Bites',
         short_name: 'Odia',

@@ -1403,3 +1403,74 @@ button {
 .switch.on .knob {
   transform: translateX(20px);
 }
+
+/* daily reminder */
+.reminder-time {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.hour-picker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+.hour-option {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 2px;
+  cursor: pointer;
+  background: var(--card);
+}
+.hour-option b {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.hour-option.active {
+  border-color: var(--saffron);
+  background: #fff6ec;
+  color: var(--saffron-dk);
+}
+.test-btn {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 11px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+.test-btn:active {
+  transform: translateY(1px);
+}
+.switch.disabled {
+  opacity: 0.4;
+}
+
+/* settings entry on the profile screen */
+.settings-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px 18px;
+  cursor: pointer;
+}
+.settings-link .sl-icon {
+  font-size: 1.3rem;
+}
+.settings-link .setting-text {
+  flex: 1;
+}
+.settings-link:active {
+  transform: translateY(1px);
+}
