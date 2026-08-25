@@ -5,10 +5,11 @@
  * never throw at load time — if it did, the whole service worker would fail to
  * install and the app would lose offline support.
  *
- * There is no server behind this app, so the reminder is produced on the device:
- * the browser wakes this worker up (Periodic Background Sync) and we decide, from
- * a small blob of state the page leaves in the Cache API, whether tonight's
- * reminder is still owed. The page half lives in src/notifications.ts.
+ * Two things wake this worker: a knock from the reminder service (`push` — the
+ * only route that reaches a closed iPhone), and Periodic Background Sync, which
+ * Android offers and Apple doesn't. Either way the wording is written here, from
+ * a small blob of state the page leaves in the Cache API — which is why the
+ * service can know nothing about the learner. Page half: src/notifications.ts.
  */
 (function () {
   'use strict'
