@@ -1,21 +1,37 @@
 // Evening practice reminders — the page half. (The service-worker half, which is
 // what actually fires when the app is closed, lives in public/notify-sw.js.)
 //
-// The app has no server, so a reminder can't be pushed to the phone. Instead it is
-// produced on the device itself, two ways:
-//   • the service worker is woken by Periodic Background Sync and posts the
-//     reminder if it's evening and the learner hasn't practised — this is the one
-//     that works with the app closed (Android/Chrome, once installed);
-//   • if the app is open or sitting in the background at reminder time, a plain
-//     timer in here posts it instead.
-// A woken service worker can't read React state, so everything it needs (the name,
-// the streak, whether today counts already) is mirrored into the Cache API.
+// A reminder can arrive by three routes, tried in that order of dependability:
+//   • the reminder service knocks (see reminder-server/) and the service worker
+//     wakes to post it — the only route that works on a closed iPhone;
+//   • Periodic Background Sync wakes the service worker on its own, which
+//     Android does but Apple doesn't;
+//   • if the app is open or parked in the background at the time, a plain timer
+//     in here posts it instead.
+// All three write the same "already nudged today" mark, so they never double up.
+//
+// Wherever it comes from, the wording is composed on the phone — a woken service
+// worker can't read React state, so the name, the streak and whether today
+// already counts are mirrored into the Cache API for it. That is also why the
+// service can stay ignorant of all three.
 
 import { db } from './db'
+import { subscribe as pushSubscribe, unsubscribe as pushUnsubscribe, serializeSubscription } from '@mmmike/web-push'
 
 const ENABLED_KEY = 'odia:notifyEnabled'
 const HOUR_KEY = 'odia:notifyHour'
 const ASKED_KEY = 'odia:notifyAsked'
+const ENDPOINT_KEY = 'odia:notifyEndpoint'
+const REPORTED_KEY = 'odia:notifyReportedDay'
+
+// The one piece of this app that isn't a static file: a small service that wakes
+// hourly and knocks on phones whose evening it is. An iPhone gives a closed web
+// app no way to wake itself, so on iOS this is the only thing that can deliver a
+// reminder. See reminder-server/ for what it does — which is very little: it
+// knows an address, an hour and a timezone, and nothing about the learner.
+const REMINDER_SERVER = 'https://odia-reminder.neel-upadhye.workers.dev'
+const VAPID_PUBLIC_KEY =
+  'BME-bRW2AZa85mlOvVUORbC7VdTrKeXXLWxdV0-YOOswF6NnLDav8YML4lgMbZveHOd_xm_hMb13Vg1gJaHy9EI'
 
 const CACHE = 'odia-notify'
 const TAG = 'odia-reminder'
@@ -41,6 +57,8 @@ export function getReminderHour(): number {
 export async function setReminderHour(hour: number): Promise<void> {
   localStorage.setItem(HOUR_KEY, String(hour))
   await syncNotificationState()
+  // The service decides when to knock, so it needs to hear about the new hour.
+  if (remindersOn()) void registerWithServer()
 }
 
 // --- what this device is capable of ---
@@ -128,14 +146,16 @@ export async function syncNotificationState(): Promise<void> {
   if (!('caches' in window)) return
   try {
     const [existing, stats] = await Promise.all([readState(), db.stats.get('main')])
+    const lastPracticedDay = stats?.lastPracticedDate ?? stats?.lastGoalMetDate ?? null
     await putState({
       ...existing,
       enabled: remindersOn(),
       hour: getReminderHour(),
       name: (localStorage.getItem('odia:name') ?? '').trim(),
       streak: stats?.streak ?? 0,
-      lastPracticedDay: stats?.lastPracticedDate ?? stats?.lastGoalMetDate ?? null,
+      lastPracticedDay,
     })
+    void reportPracticed(lastPracticedDay)
   } catch {
     // Never let a reminder detail break the lesson the learner is doing.
   }
@@ -187,6 +207,77 @@ async function unregisterBackgroundSync(): Promise<void> {
   }
 }
 
+// --- registering this phone with the reminder service ---
+// Every call here is best-effort and silent. A reminder that doesn't arrive is a
+// disappointment; an error message in the middle of a lesson is worse.
+
+async function post(path: string, body: unknown): Promise<Response | null> {
+  try {
+    return await fetch(`${REMINDER_SERVER}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+  } catch {
+    return null
+  }
+}
+
+function timezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+  } catch {
+    return 'UTC'
+  }
+}
+
+// Hand this phone's push address to the service, along with when to knock.
+// Safe to call repeatedly — the service keys on the address, so re-registering
+// updates the existing row rather than adding another.
+async function registerWithServer(): Promise<boolean> {
+  try {
+    const result = await pushSubscribe(VAPID_PUBLIC_KEY)
+    if (result.status !== 'subscribed') return false
+    const subscription = serializeSubscription(result.subscription)
+    const stats = await db.stats.get('main')
+    const res = await post('/subscribe', {
+      subscription,
+      hour: getReminderHour(),
+      tz: timezone(),
+      lastPracticedDay: stats?.lastPracticedDate ?? stats?.lastGoalMetDate ?? null,
+    })
+    if (!res?.ok) return false
+    localStorage.setItem(ENDPOINT_KEY, subscription.endpoint)
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function unregisterFromServer(): Promise<void> {
+  const endpoint = localStorage.getItem(ENDPOINT_KEY)
+  localStorage.removeItem(ENDPOINT_KEY)
+  localStorage.removeItem(REPORTED_KEY)
+  try {
+    const removed = await pushUnsubscribe()
+    if (removed ?? endpoint) await post('/unsubscribe', { endpoint: removed ?? endpoint })
+  } catch {
+    /* the switch is already off locally; the address expires on its own */
+  }
+}
+
+// Tell the service today already counts, so it stays quiet this evening. Only
+// fires when the practised day has actually moved on, and remembers what it
+// last reported — so a failed attempt is simply retried next time the app opens.
+async function reportPracticed(day: string | null): Promise<void> {
+  if (!day || !remindersOn()) return
+  if (localStorage.getItem(REPORTED_KEY) === day) return
+  const endpoint = localStorage.getItem(ENDPOINT_KEY)
+  if (!endpoint) return
+  const res = await post('/practiced', { endpoint, lastPracticedDay: day })
+  if (res?.ok) localStorage.setItem(REPORTED_KEY, day)
+}
+
 // --- turning reminders on and off ---
 export type EnableResult = 'granted' | 'denied' | 'unsupported'
 
@@ -211,6 +302,7 @@ export async function enableReminders(): Promise<EnableResult> {
   await syncNotificationState()
   // Housekeeping — not awaited, so the switch flips the moment permission lands.
   void registerBackgroundSync()
+  void registerWithServer()
   return 'granted'
 }
 
@@ -218,6 +310,19 @@ export async function disableReminders(): Promise<void> {
   localStorage.setItem(ENABLED_KEY, 'false')
   await syncNotificationState()
   void unregisterBackgroundSync()
+  void unregisterFromServer()
+}
+
+// Push addresses go stale — delete and reinstall the app, or leave it alone for
+// months, and the phone's push service hands out a new one. Re-registering once
+// a day quietly repairs that, and costs one request.
+const REFRESH_KEY = 'odia:notifyRefreshedDay'
+
+export async function refreshReminderRegistration(): Promise<void> {
+  if (!remindersOn()) return
+  const today = todayKey()
+  if (localStorage.getItem(REFRESH_KEY) === today) return
+  if (await registerWithServer()) localStorage.setItem(REFRESH_KEY, today)
 }
 
 /* Reminder wording. Kept in step with `compose()` in public/notify-sw.js — if you

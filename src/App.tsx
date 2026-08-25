@@ -17,6 +17,7 @@ import {
   markNotificationsAsked,
   notificationPermission,
   notificationSupport,
+  refreshReminderRegistration,
   startReminderTimer,
   syncNotificationState,
 } from './notifications'
@@ -60,6 +61,7 @@ export default function App() {
   // the app is open when the evening reminder falls due.
   useEffect(() => {
     void syncNotificationState()
+    void refreshReminderRegistration()
     return startReminderTimer()
   }, [])
 

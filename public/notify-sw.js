@@ -71,6 +71,21 @@
     }
   }
 
+  /* When the reminder service knocks on a day that already counts. The knock has
+     to produce something visible — the browser insists, and posts its own generic
+     "site updated in the background" notice if we stay silent — so it may as well
+     be good news rather than a nag. This only happens when the learner practised
+     while offline, or in the last minutes before their reminder hour. */
+  function composePraise(state) {
+    var name = (state.name || '').trim()
+    var streak = state.streak || 0
+    var hi = name ? name + ', ' : ''
+    if (streak > 1) {
+      return { title: 'Done for today ✓', body: hi + streak + ' days in a row.' }
+    }
+    return { title: 'Done for today ✓', body: hi + 'nicely done.' }
+  }
+
   function showReminder(state) {
     var text = compose(state)
     return self.registration.showNotification(text.title, {
@@ -100,6 +115,41 @@
       })
     })
   }
+
+  /* A knock from the reminder service. This is the path that works on an iPhone
+     with the app fully closed — the only one Apple allows.
+
+     The knock is deliberately wordless: the service knows nothing about the
+     learner, so the reminder is written here, on the phone, from the name and
+     streak already stored locally. */
+  function onKnock() {
+    return readState().then(function (state) {
+      var s = state || {}
+      var now = new Date()
+      var today = localDay(now)
+      // Already nudged today by the in-app timer — don't say it twice.
+      if (s.lastNotifiedDay === today) return
+      s.lastNotifiedDay = today
+      return writeState(s).then(function () {
+        return s.lastPracticedDay === today ? showPraise(s) : showReminder(s)
+      })
+    })
+  }
+
+  function showPraise(state) {
+    var text = composePraise(state)
+    return self.registration.showNotification(text.title, {
+      body: text.body,
+      icon: new URL('icon-192.png', self.registration.scope).href,
+      badge: new URL('icon-192.png', self.registration.scope).href,
+      tag: TAG,
+      data: { url: self.registration.scope },
+    })
+  }
+
+  self.addEventListener('push', function (event) {
+    event.waitUntil(onKnock())
+  })
 
   self.addEventListener('periodicsync', function (event) {
     if (event.tag === TAG) event.waitUntil(maybeRemind())
