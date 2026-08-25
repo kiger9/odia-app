@@ -11,6 +11,7 @@ import Modal from './components/Modal'
 import { LESSON_BY_ID } from './data/lessons'
 import { getShowScript, setShowScript } from './settings'
 import { getName, setName, hasBeenAskedName, markNameAsked } from './profile'
+import { backupIfStale } from './backup'
 import {
   enableReminders,
   hasBeenAskedNotifications,
@@ -62,6 +63,8 @@ export default function App() {
   useEffect(() => {
     void syncNotificationState()
     void refreshReminderRegistration()
+    // Catches a device that was offline when its last practice finished.
+    void backupIfStale()
     return startReminderTimer()
   }, [])
 

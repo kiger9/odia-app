@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import Modal from './Modal'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
+import { backupNow, formatCode, getLastBackup, getSyncCode, restoreFrom } from '../backup'
 import {
   HOUR_OPTIONS,
   disableReminders,
@@ -14,6 +16,25 @@ import {
   showReminderNow,
   type RegStatus,
 } from '../notifications'
+
+const RESTORE_ERROR: Record<string, string> = {
+  'bad-code': 'A sync code is 12 characters. Check for a missing one.',
+  'not-found': "No backup found for that code. Check it character by character — it's easy to read a 5 as an S.",
+  'rate-limited': 'Too many tries from here. Wait an hour.',
+  offline: "Couldn't reach the service. Check your connection.",
+  failed: 'Something went wrong reading that backup.',
+}
+
+// "3 minutes ago" reads better than a timestamp for something checked at a glance.
+function describeWhen(at: number): string {
+  const mins = Math.round((Date.now() - at) / 60000)
+  if (mins < 1) return 'just now'
+  if (mins < 60) return `${mins} minute${mins === 1 ? '' : 's'} ago`
+  const hours = Math.round(mins / 60)
+  if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`
+  const days = Math.round(hours / 24)
+  return `${days} day${days === 1 ? '' : 's'} ago`
+}
 
 // Said plainly, because this is what someone reads when a reminder didn't arrive.
 const REG_MESSAGE: Record<RegStatus, string> = {
@@ -41,6 +62,15 @@ export default function Settings({
   const [tested, setTested] = useState(false)
   const [reg, setReg] = useState(getRegistrationState())
   const [retrying, setRetrying] = useState(false)
+
+  const [copied, setCopied] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [savedMsg, setSavedMsg] = useState('')
+  const [lastBackup, setLastBackup] = useState(getLastBackup())
+  const [restoring, setRestoring] = useState(false)
+  const [codeDraft, setCodeDraft] = useState('')
+  const [restoreBusy, setRestoreBusy] = useState(false)
+  const [restoreError, setRestoreError] = useState('')
 
   // Registration happens in the background when the switch goes on, so watch for
   // it to land rather than showing a stale "not registered" underneath.
@@ -79,6 +109,45 @@ export default function Settings({
       setTested(true)
       setTimeout(() => setTested(false), 3000)
     }
+  }
+
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(formatCode(getSyncCode()))
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Some browsers refuse the clipboard; the code is on screen to read anyway.
+    }
+  }
+
+  async function saveNow() {
+    setSaving(true)
+    const result = await backupNow()
+    setSaving(false)
+    setLastBackup(getLastBackup())
+    setSavedMsg(
+      result === 'saved'
+        ? 'Saved'
+        : result === 'offline'
+          ? "Couldn't reach the service — it'll try again later"
+          : 'The service refused the copy',
+    )
+    setTimeout(() => setSavedMsg(''), 4000)
+  }
+
+  async function doRestore() {
+    setRestoreBusy(true)
+    const result = await restoreFrom(codeDraft)
+    setRestoreBusy(false)
+    if (result.status === 'restored') {
+      setRestoring(false)
+      // Everything on screen was read from the database at load, so the honest
+      // way to show restored progress is to start again from it.
+      location.reload()
+      return
+    }
+    setRestoreError(RESTORE_ERROR[result.status])
   }
 
   return (
@@ -170,6 +239,36 @@ export default function Settings({
         </p>
       )}
 
+      {/* Progress backup */}
+      <section className="card setting-card">
+        <span className="setting-text">
+          <b>Your progress, saved</b>
+          <small className="muted">
+            Your streak and lessons are copied off this phone after each practice, so
+            losing the phone doesn't lose them.
+          </small>
+        </span>
+
+        <div className="sync-code" onClick={copyCode} role="button" tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') void copyCode() }}>
+          <code>{formatCode(getSyncCode())}</code>
+          <span className="sync-copy">{copied ? 'Copied' : 'Copy'}</span>
+        </div>
+
+        <small className="muted sync-note">
+          Keep this code somewhere safe — a note, a password manager, anywhere but this
+          phone. It's the only way back to your progress, and nobody can look it up for
+          you. {lastBackup ? `Last saved ${describeWhen(lastBackup)}.` : 'Not saved yet.'}
+        </small>
+
+        <button className="test-btn" onClick={() => void saveNow()} disabled={saving}>
+          {saving ? 'Saving…' : savedMsg || 'Save a copy now'}
+        </button>
+        <button className="test-btn" onClick={() => setRestoring(true)}>
+          Restore from a code
+        </button>
+      </section>
+
       {/* Odia-script toggle — hidden until the script content layer is ready. */}
       {SHOW_SCRIPT_FEATURE && (
         <>
@@ -201,6 +300,46 @@ export default function Settings({
             available.
           </p>
         </>
+      )}
+
+      {restoring && (
+        <Modal
+          title="Restore from a code"
+          message="This replaces everything on this phone — streak, lessons, reviews — with whatever was saved under that code. It can't be undone."
+          actions={[
+            {
+              label: 'Cancel',
+              variant: 'ghost',
+              onClick: () => {
+                setRestoring(false)
+                setRestoreError('')
+                setCodeDraft('')
+              },
+            },
+            {
+              label: restoreBusy ? 'Restoring…' : 'Restore',
+              variant: 'danger',
+              onClick: () => void doRestore(),
+              disabled: restoreBusy || codeDraft.replace(/[^A-Za-z0-9]/g, '').length !== 12,
+            },
+          ]}
+        >
+          <input
+            className="name-input code-input"
+            value={codeDraft}
+            autoFocus
+            autoCapitalize="characters"
+            autoCorrect="off"
+            spellCheck={false}
+            maxLength={17}
+            onChange={(e) => {
+              setCodeDraft(e.target.value)
+              setRestoreError('')
+            }}
+            placeholder="XXXX-XXXX-XXXX"
+          />
+          {restoreError && <p className="restore-error">{restoreError}</p>}
+        </Modal>
       )}
 
       <footer className="credit muted">

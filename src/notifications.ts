@@ -29,7 +29,7 @@ const REPORTED_KEY = 'odia:notifyReportedDay'
 // app no way to wake itself, so on iOS this is the only thing that can deliver a
 // reminder. See reminder-server/ for what it does — which is very little: it
 // knows an address, an hour and a timezone, and nothing about the learner.
-const REMINDER_SERVER = 'https://odia-reminder.neel-upadhye.workers.dev'
+export const REMINDER_SERVER = 'https://odia-reminder.neel-upadhye.workers.dev'
 const VAPID_PUBLIC_KEY =
   'BME-bRW2AZa85mlOvVUORbC7VdTrKeXXLWxdV0-YOOswF6NnLDav8YML4lgMbZveHOd_xm_hMb13Vg1gJaHy9EI'
 

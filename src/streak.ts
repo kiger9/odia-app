@@ -5,6 +5,7 @@
 
 import { db, type Stats } from './db'
 import { syncNotificationState } from './notifications'
+import { scheduleBackup } from './backup'
 
 // Local calendar date as YYYY-MM-DD (so streaks follow the learner's own midnight).
 function localDay(d = new Date()): string {
@@ -60,6 +61,8 @@ export async function markPracticedToday(): Promise<void> {
 
   // Tonight's reminder should skip a day that already counts — tell the worker.
   void syncNotificationState()
+  // Progress just moved; get a copy off this device.
+  scheduleBackup()
 }
 
 export interface StreakView {
