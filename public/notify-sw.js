@@ -154,7 +154,7 @@
     var kind = ''
     try {
       kind = ((event.data && event.data.json()) || {}).kind || ''
-    } catch (e) {
+    } catch {
       /* a knock with no readable payload is still a knock */
     }
     event.waitUntil(onKnock(kind === 'test-knock'))

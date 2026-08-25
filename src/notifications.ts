@@ -231,13 +231,49 @@ function timezone(): string {
   }
 }
 
+// What happened the last time this phone tried to join the reminder list. Every
+// step used to fail silently, which meant a reminder that never arrived left
+// nobody — learner or maintainer — anything to go on. Settings shows this.
+export type RegStatus = 'never' | 'ok' | 'no-push' | 'refused' | 'unreachable' | 'rejected'
+
+export interface RegState {
+  status: RegStatus
+  detail?: string
+  at?: number
+}
+
+const REG_STATE_KEY = 'odia:notifyRegState'
+
+export function getRegistrationState(): RegState {
+  try {
+    const raw = localStorage.getItem(REG_STATE_KEY)
+    return raw ? (JSON.parse(raw) as RegState) : { status: 'never' }
+  } catch {
+    return { status: 'never' }
+  }
+}
+
+function setRegistrationState(status: RegStatus, detail?: string): boolean {
+  localStorage.setItem(REG_STATE_KEY, JSON.stringify({ status, detail, at: Date.now() }))
+  return status === 'ok'
+}
+
 // Hand this phone's push address to the service, along with when to knock.
 // Safe to call repeatedly — the service keys on the address, so re-registering
 // updates the existing row rather than adding another.
-async function registerWithServer(): Promise<boolean> {
+export async function registerWithServer(): Promise<boolean> {
+  let result
   try {
-    const result = await pushSubscribe(VAPID_PUBLIC_KEY)
-    if (result.status !== 'subscribed') return false
+    result = await pushSubscribe(VAPID_PUBLIC_KEY)
+  } catch (e) {
+    // The phone wouldn't hand out a push address at all.
+    return setRegistrationState('no-push', String((e as Error)?.message ?? e).slice(0, 140))
+  }
+  if (result.status !== 'subscribed') {
+    return setRegistrationState(result.status === 'denied' ? 'refused' : 'no-push', result.status)
+  }
+
+  try {
     const subscription = serializeSubscription(result.subscription)
     const stats = await db.stats.get('main')
     const res = await post('/subscribe', {
@@ -246,11 +282,16 @@ async function registerWithServer(): Promise<boolean> {
       tz: timezone(),
       lastPracticedDay: stats?.lastPracticedDate ?? stats?.lastGoalMetDate ?? null,
     })
-    if (!res?.ok) return false
+    // `post` resolves to null only when the request never completed at all.
+    if (!res) return setRegistrationState('unreachable', 'no response from the reminder service')
+    if (!res.ok) {
+      const body = await res.text().catch(() => '')
+      return setRegistrationState('rejected', `${res.status} ${body.slice(0, 100)}`)
+    }
     localStorage.setItem(ENDPOINT_KEY, subscription.endpoint)
-    return true
-  } catch {
-    return false
+    return setRegistrationState('ok')
+  } catch (e) {
+    return setRegistrationState('unreachable', String((e as Error)?.message ?? e).slice(0, 140))
   }
 }
 

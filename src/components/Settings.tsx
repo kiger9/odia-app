@@ -1,16 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
 import {
   HOUR_OPTIONS,
   disableReminders,
   enableReminders,
+  getRegistrationState,
   getReminderHour,
   notificationPermission,
   notificationSupport,
+  registerWithServer,
   remindersOn,
   setReminderHour,
   showReminderNow,
+  type RegStatus,
 } from '../notifications'
+
+// Said plainly, because this is what someone reads when a reminder didn't arrive.
+const REG_MESSAGE: Record<RegStatus, string> = {
+  ok: 'Set up — reminders arrive even when the app is closed',
+  never: 'Not set up for reminders while the app is closed',
+  'no-push': "This phone wouldn't set up push — reminders only work while the app is open",
+  refused: 'Your phone is blocking notifications for this app',
+  unreachable: "Couldn't reach the reminder service — reminders only work while the app is open",
+  rejected: 'The reminder service turned this phone away',
+}
 
 export default function Settings({
   showScript,
@@ -26,6 +39,16 @@ export default function Settings({
   const [hour, setHour] = useState(getReminderHour())
   const [blocked, setBlocked] = useState(notificationPermission() === 'denied')
   const [tested, setTested] = useState(false)
+  const [reg, setReg] = useState(getRegistrationState())
+  const [retrying, setRetrying] = useState(false)
+
+  // Registration happens in the background when the switch goes on, so watch for
+  // it to land rather than showing a stale "not registered" underneath.
+  useEffect(() => {
+    if (!remind || reg.status === 'ok') return
+    const t = setInterval(() => setReg(getRegistrationState()), 700)
+    return () => clearInterval(t)
+  }, [remind, reg.status])
 
   async function toggleRemind(on: boolean) {
     if (!on) {
@@ -36,6 +59,14 @@ export default function Settings({
     const result = await enableReminders()
     setRemind(result === 'granted')
     setBlocked(result === 'denied' && notificationPermission() === 'denied')
+    setReg(getRegistrationState())
+  }
+
+  async function retry() {
+    setRetrying(true)
+    await registerWithServer()
+    setReg(getRegistrationState())
+    setRetrying(false)
   }
 
   async function pickHour(value: number) {
@@ -100,6 +131,18 @@ export default function Settings({
             <button className="test-btn" onClick={() => void sendTest()}>
               {tested ? 'Sent — check your notifications' : 'Send a test reminder'}
             </button>
+
+            <div className={`reg-status ${reg.status === 'ok' ? 'good' : 'bad'}`}>
+              <span>{REG_MESSAGE[reg.status]}</span>
+              {reg.status !== 'ok' && (
+                <button className="reg-retry" onClick={() => void retry()} disabled={retrying}>
+                  {retrying ? 'Trying…' : 'Try again'}
+                </button>
+              )}
+            </div>
+            {reg.status !== 'ok' && reg.detail && (
+              <small className="muted reg-detail">{reg.detail}</small>
+            )}
           </div>
         )}
       </section>
@@ -121,8 +164,9 @@ export default function Settings({
       )}
       {support === 'ok' && !blocked && (
         <p className="muted setting-note">
-          Reminders are sent by your phone, not by us — nothing leaves the device. You'll
-          only be nudged on days you haven't practised yet.
+          Your name and streak never leave the phone — the reminder is written here. The
+          service is told only where to knock and when, and stays quiet on days you've
+          already practised.
         </p>
       )}
 
@@ -162,6 +206,8 @@ export default function Settings({
       <footer className="credit muted">
         Curriculum from <em>Oriya in Small Bites — a Self-study Language Guide</em> by Niels
         Erik Wegge (The Modern Book Depot, Bhubaneswar, 2000).
+        <br />
+        <span className="build-id">Version {__BUILD_ID__}</span>
       </footer>
     </main>
   )

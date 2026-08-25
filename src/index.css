@@ -1474,3 +1474,45 @@ button {
 .settings-link:active {
   transform: translateY(1px);
 }
+
+/* reminder registration status */
+.reg-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.84rem;
+  padding: 10px 12px;
+  border-radius: 12px;
+  line-height: 1.35;
+}
+.reg-status.good {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+.reg-status.bad {
+  background: var(--no-bg);
+  color: var(--no);
+}
+.reg-retry {
+  flex: none;
+  border: 1.5px solid currentColor;
+  background: none;
+  color: inherit;
+  border-radius: 9px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.reg-retry:disabled {
+  opacity: 0.5;
+}
+.reg-detail {
+  font-size: 0.75rem;
+  word-break: break-word;
+}
+.build-id {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}

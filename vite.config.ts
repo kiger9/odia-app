@@ -7,6 +7,11 @@ export default defineConfig({
   // GitHub Pages serves this project at https://<user>.github.io/odia-app/,
   // so the app must know it lives under the /odia-app/ subfolder.
   base: '/odia-app/',
+  // Stamped into the build so a phone can say which version it is running — the
+  // difference between "the feature is broken" and "this phone has an old copy".
+  define: {
+    __BUILD_ID__: JSON.stringify(new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC'),
+  },
   plugins: [
     react(),
     // Makes the app installable to the phone's home screen and work offline,
