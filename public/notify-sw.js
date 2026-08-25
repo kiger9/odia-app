@@ -86,16 +86,22 @@
     return { title: 'Done for today ✓', body: hi + 'nicely done.' }
   }
 
-  function showReminder(state) {
-    var text = compose(state)
+  /* One shared tag throughout, so a later notification replaces the earlier one
+     rather than stacking. `renotify` is what decides whether replacing it also
+     buzzes the phone again. */
+  function notify(text, renotify) {
     return self.registration.showNotification(text.title, {
       body: text.body,
       icon: new URL('icon-192.png', self.registration.scope).href,
       badge: new URL('icon-192.png', self.registration.scope).href,
       tag: TAG,
-      renotify: true,
+      renotify: !!renotify,
       data: { url: self.registration.scope },
     })
+  }
+
+  function showReminder(state) {
+    return notify(compose(state), true)
   }
 
   /* Is tonight's reminder still owed? Called whenever the browser gives us a tick. */
@@ -122,33 +128,36 @@
      The knock is deliberately wordless: the service knows nothing about the
      learner, so the reminder is written here, on the phone, from the name and
      streak already stored locally. */
-  function onKnock() {
+  function onKnock(isTest) {
     return readState().then(function (state) {
       var s = state || {}
-      var now = new Date()
-      var today = localDay(now)
-      // Already nudged today by the in-app timer — don't say it twice.
-      if (s.lastNotifiedDay === today) return
+      var today = localDay(new Date())
+
+      /* Every branch below MUST end in a visible notification. A push that shows
+         nothing is not silence — the browser posts its own "this site was updated
+         in the background" notice in our place, and doing that repeatedly costs
+         the app its push subscription. Where we've already spoken today, we show
+         the same thing again under the shared tag: that replaces the banner
+         already on screen instead of buzzing a second time. */
+      if (isTest) return notify(compose(s), true)
+      if (s.lastPracticedDay === today) return notify(composePraise(s), true)
+      if (s.lastNotifiedDay === today) return notify(compose(s), false)
+
       s.lastNotifiedDay = today
       return writeState(s).then(function () {
-        return s.lastPracticedDay === today ? showPraise(s) : showReminder(s)
+        return notify(compose(s), true)
       })
     })
   }
 
-  function showPraise(state) {
-    var text = composePraise(state)
-    return self.registration.showNotification(text.title, {
-      body: text.body,
-      icon: new URL('icon-192.png', self.registration.scope).href,
-      badge: new URL('icon-192.png', self.registration.scope).href,
-      tag: TAG,
-      data: { url: self.registration.scope },
-    })
-  }
-
   self.addEventListener('push', function (event) {
-    event.waitUntil(onKnock())
+    var kind = ''
+    try {
+      kind = ((event.data && event.data.json()) || {}).kind || ''
+    } catch (e) {
+      /* a knock with no readable payload is still a knock */
+    }
+    event.waitUntil(onKnock(kind === 'test-knock'))
   })
 
   self.addEventListener('periodicsync', function (event) {
