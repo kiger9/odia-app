@@ -1,3 +1,19 @@
+# Odia in Small Bites
+
+Learn spoken Odia in short lessons. A React + TypeScript app, installable to a
+phone's home screen, that keeps everything a learner does on the device.
+
+Two pieces:
+
+- **the app** — this directory, deployed to GitHub Pages by
+  `.github/workflows/deploy.yml`.
+- **the reminder service** — `reminder-server/`, a small Cloudflare Worker that
+  knocks on phones in the evening. On an iPhone it is the only thing that can
+  deliver a reminder while the app is closed, so if reminders are not arriving,
+  start with its [README](reminder-server/README.md) and `/health`.
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.

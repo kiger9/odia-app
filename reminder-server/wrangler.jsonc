@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "odia-reminder",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "observability": { "enabled": true },
+
+  // Every quarter hour, not every hour. India runs at UTC+05:30 and Nepal at
+  // +05:45, so an hourly tick on the hour lands half an hour into everybody's
+  // evening — a 7:00 pm reminder arriving at 7:30. Four ticks an hour puts the
+  // worst case back to fifteen minutes.
+  "triggers": { "crons": ["*/15 * * * *"] },
+
+  "vars": {
+    // The push key pair: this half is public by definition and must match
+    // VAPID_PUBLIC_KEY in src/notifications.ts. The private half is a secret —
+    // `wrangler secret put VAPID_PRIVATE_KEY`. See README.md.
+    "VAPID_PUBLIC_KEY": "BME-bRW2AZa85mlOvVUORbC7VdTrKeXXLWxdV0-YOOswF6NnLDav8YML4lgMbZveHOd_xm_hMb13Vg1gJaHy9EI",
+    // Where a push service should complain if this app misbehaves. Point it at
+    // an address somebody reads.
+    "VAPID_SUBJECT": "mailto:kiger9@users.noreply.github.com",
+    "ALLOWED_ORIGINS": "https://kiger9.github.io,http://localhost:5173,http://localhost:4173"
+  },
+
+  // Created with `wrangler d1 create odia-reminder`; paste the id it prints here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "odia-reminder",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+    }
+  ]
+}

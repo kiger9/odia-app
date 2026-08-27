@@ -1,0 +1,49 @@
+name: Deploy the reminder service
+
+# The Worker that knocks on phones in the evening (reminder-server/). Kept apart
+# from the Pages deploy because it needs a Cloudflare token, and because the app
+# and the service are perfectly happy to ship at different times.
+on:
+  push:
+    branches: [main]
+    paths: ['reminder-server/**', '.github/workflows/deploy-worker.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: reminder-server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reminder-server/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+
+      # A fork, or a repository whose owner hasn't set the token up, should get a
+      # green run that says why it stopped — not a red one that looks like the
+      # Worker is broken.
+      - id: token
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "No CLOUDFLARE_API_TOKEN secret — typechecked only, nothing deployed."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.token.outputs.present == 'true'
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
