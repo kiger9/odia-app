@@ -14,9 +14,20 @@
 // worker can't read React state, so the name, the streak and whether today
 // already counts are mirrored into the Cache API for it. That is also why the
 // service can stay ignorant of all three.
+//
+// One rule runs through everything below, learned the hard way: the switch in
+// Settings is a *picture* of two things the phone owns — the notification
+// permission and the push subscription — and never the other way round. Anything
+// we keep in localStorage is a cache of that picture, and Safari is entitled to
+// throw it away between sessions. So we read the phone on every launch and put
+// the picture back, rather than believing our own notes.
 
 import { db } from './db'
-import { subscribe as pushSubscribe, unsubscribe as pushUnsubscribe, serializeSubscription } from '@mmmike/web-push'
+import {
+  unsubscribe as pushUnsubscribe,
+  serializeSubscription,
+  urlBase64ToUint8Array,
+} from '@mmmike/web-push'
 
 const ENABLED_KEY = 'odia:notifyEnabled'
 const HOUR_KEY = 'odia:notifyHour'
@@ -109,9 +120,17 @@ export function markNotificationsAsked(): void {
 }
 
 // --- the state blob the service worker reads ---
+// It carries the address of the service and the push key as well as the wording
+// ingredients, because a woken worker whose subscription has just been rotated
+// has to be able to register the new one on its own — see `pushsubscriptionchange`
+// in public/notify-sw.js. Nothing here is secret: the VAPID public key is public
+// by definition, and the rest never leaves the phone.
 interface NotifyState {
   enabled: boolean
   hour: number
+  tz: string
+  server: string
+  vapidKey: string
   name: string
   streak: number
   lastPracticedDay: string | null
@@ -151,6 +170,9 @@ export async function syncNotificationState(): Promise<void> {
       ...existing,
       enabled: remindersOn(),
       hour: getReminderHour(),
+      tz: timezone(),
+      server: REMINDER_SERVER,
+      vapidKey: VAPID_PUBLIC_KEY,
       name: (localStorage.getItem('odia:name') ?? '').trim(),
       streak: stats?.streak ?? 0,
       lastPracticedDay,
@@ -165,7 +187,12 @@ export async function syncNotificationState(): Promise<void> {
 // `navigator.serviceWorker.ready` simply never settles when there is no worker
 // (private windows, a failed registration, browsers with it switched off), so it
 // is always raced against a timer — nothing here may leave the UI waiting.
-function swReady(timeoutMs = 4000): Promise<ServiceWorkerRegistration | null> {
+//
+// The default is generous because the short one was a lie: on a cold start an
+// iPhone can take longer than a few seconds to hand the worker over, and giving
+// up early made a perfectly healthy phone report that it couldn't do push.
+// Callers with a person waiting on them pass something shorter.
+function swReady(timeoutMs = 15000): Promise<ServiceWorkerRegistration | null> {
   if (!('serviceWorker' in navigator)) return Promise.resolve(null)
   return Promise.race([
     navigator.serviceWorker.ready,
@@ -207,6 +234,89 @@ async function unregisterBackgroundSync(): Promise<void> {
   }
 }
 
+// --- this phone's push address ---
+// We drive the PushManager here rather than using the library's `subscribe()`,
+// which calls `Notification.requestPermission()` on every call. WebKit answers
+// that with "denied" whenever it isn't running inside a tap — so the daily
+// re-registration on launch reported a blocked phone every single time the app
+// was opened, which is what made reminders look like they switched themselves
+// off overnight. Permission is only ever *asked for* from a tap; the rest of the
+// time we work with the answer the phone already gave us.
+
+export type PushOutcome =
+  | { status: 'subscribed'; subscription: PushSubscription; isNew: boolean }
+  | { status: 'unsupported' }
+  | { status: 'needs-permission' }
+  | { status: 'refused' }
+  | { status: 'no-push'; detail: string }
+
+function pushSupported(): boolean {
+  return notificationSupport() === 'ok' && 'PushManager' in window
+}
+
+// Is this subscription one the reminder service can actually push to? A
+// subscription made with a different VAPID key would be rejected by the push
+// service, so it may as well not exist.
+function boundToOurKey(subscription: PushSubscription, key: Uint8Array): boolean {
+  const bound = subscription.options.applicationServerKey
+  if (!bound) return true
+  const bytes = new Uint8Array(bound)
+  return bytes.length === key.length && bytes.every((b, i) => b === key[i])
+}
+
+/** The live subscription, if this phone already has one for our key. */
+export async function currentSubscription(): Promise<PushSubscription | null> {
+  if (!pushSupported() || notificationPermission() !== 'granted') return null
+  try {
+    const reg = await swReady()
+    const existing = (await reg?.pushManager?.getSubscription()) ?? null
+    if (!existing) return null
+    return boundToOurKey(existing, urlBase64ToUint8Array(VAPID_PUBLIC_KEY)) ? existing : null
+  } catch {
+    return null
+  }
+}
+
+async function obtainSubscription(allowPrompt: boolean): Promise<PushOutcome> {
+  if (!pushSupported()) return { status: 'unsupported' }
+
+  let permission = Notification.permission
+  if (permission === 'default') {
+    // Only a tap may open the prompt. Asking here from a background refresh is
+    // what produced the phantom "denied".
+    if (!allowPrompt) return { status: 'needs-permission' }
+    try {
+      permission = await Notification.requestPermission()
+    } catch {
+      return { status: 'refused' }
+    }
+  }
+  if (permission !== 'granted') return { status: 'refused' }
+
+  const reg = await swReady()
+  if (!reg?.pushManager) return { status: 'no-push', detail: 'the service worker never came up' }
+
+  try {
+    const key = urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    const existing = await reg.pushManager.getSubscription()
+    if (existing) {
+      if (boundToOurKey(existing, key)) {
+        return { status: 'subscribed', subscription: existing, isNew: false }
+      }
+      // Made against a key we no longer use — the push service would turn it
+      // away, so replace it rather than keeping a dead address on file.
+      await existing.unsubscribe().catch(() => {})
+    }
+    const subscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: key as BufferSource,
+    })
+    return { status: 'subscribed', subscription, isNew: true }
+  } catch (e) {
+    return { status: 'no-push', detail: String((e as Error)?.message ?? e).slice(0, 140) }
+  }
+}
+
 // --- registering this phone with the reminder service ---
 // Every call here is best-effort and silent. A reminder that doesn't arrive is a
 // disappointment; an error message in the middle of a lesson is worse.
@@ -234,12 +344,17 @@ function timezone(): string {
 // What happened the last time this phone tried to join the reminder list. Every
 // step used to fail silently, which meant a reminder that never arrived left
 // nobody — learner or maintainer — anything to go on. Settings shows this.
+//
+// `confirmed` is the part that matters when something goes wrong later: it says
+// the service has acknowledged *this* address at least once, so a failure now is
+// an outage to retry rather than a phone that was never signed up.
 export type RegStatus = 'never' | 'ok' | 'no-push' | 'refused' | 'unreachable' | 'rejected'
 
 export interface RegState {
   status: RegStatus
   detail?: string
   at?: number
+  confirmed?: boolean
 }
 
 const REG_STATE_KEY = 'odia:notifyRegState'
@@ -253,40 +368,69 @@ export function getRegistrationState(): RegState {
   }
 }
 
-function setRegistrationState(status: RegStatus, detail?: string): boolean {
-  localStorage.setItem(REG_STATE_KEY, JSON.stringify({ status, detail, at: Date.now() }))
+function setRegistrationState(status: RegStatus, detail?: string, confirmed?: boolean): boolean {
+  const previous = getRegistrationState()
+  const state: RegState = {
+    status,
+    detail,
+    at: Date.now(),
+    confirmed: confirmed ?? (status === 'ok' ? true : (previous.confirmed ?? false)),
+  }
+  localStorage.setItem(REG_STATE_KEY, JSON.stringify(state))
   return status === 'ok'
 }
 
 // Hand this phone's push address to the service, along with when to knock.
 // Safe to call repeatedly — the service keys on the address, so re-registering
 // updates the existing row rather than adding another.
-export async function registerWithServer(): Promise<boolean> {
-  let result
-  try {
-    result = await pushSubscribe(VAPID_PUBLIC_KEY)
-  } catch (e) {
-    // The phone wouldn't hand out a push address at all.
-    return setRegistrationState('no-push', String((e as Error)?.message ?? e).slice(0, 140))
+//
+// `allowPrompt` must only be true when this is running inside a tap. `replaces`
+// carries the address the service should forget, for the case where the phone
+// handed us a new one.
+export async function registerWithServer(
+  opts: { allowPrompt?: boolean; replaces?: string } = {},
+): Promise<boolean> {
+  const outcome = await obtainSubscription(opts.allowPrompt === true)
+
+  if (outcome.status === 'unsupported') {
+    return setRegistrationState('no-push', "this browser doesn't do push", false)
   }
-  if (result.status !== 'subscribed') {
-    return setRegistrationState(result.status === 'denied' ? 'refused' : 'no-push', result.status)
+  if (outcome.status === 'needs-permission') {
+    // Nothing has gone wrong — nobody has said yes yet.
+    return setRegistrationState('never', undefined, false)
+  }
+  if (outcome.status === 'refused') {
+    return setRegistrationState('refused', 'notifications are switched off for this app', false)
+  }
+  if (outcome.status === 'no-push') {
+    return setRegistrationState('no-push', outcome.detail, false)
   }
 
   try {
-    const subscription = serializeSubscription(result.subscription)
+    const subscription = serializeSubscription(outcome.subscription)
+    const known = localStorage.getItem(ENDPOINT_KEY)
     const stats = await db.stats.get('main')
     const res = await post('/subscribe', {
       subscription,
       hour: getReminderHour(),
       tz: timezone(),
       lastPracticedDay: stats?.lastPracticedDate ?? stats?.lastGoalMetDate ?? null,
+      // Rotated addresses would otherwise pile up as dead rows the service keeps
+      // knocking on.
+      replaces: opts.replaces ?? (known && known !== subscription.endpoint ? known : undefined),
     })
     // `post` resolves to null only when the request never completed at all.
     if (!res) return setRegistrationState('unreachable', 'no response from the reminder service')
     if (!res.ok) {
       const body = await res.text().catch(() => '')
       return setRegistrationState('rejected', `${res.status} ${body.slice(0, 100)}`)
+    }
+    // A service running a different VAPID key can hold this address all it likes
+    // — every push it sends will be turned away by the push service. Say so here
+    // rather than leaving a silent evening to explain it.
+    const ack = (await res.json().catch(() => null)) as { vapidPublicKey?: string } | null
+    if (ack?.vapidPublicKey && ack.vapidPublicKey !== VAPID_PUBLIC_KEY) {
+      return setRegistrationState('rejected', 'the service is using a different push key', false)
     }
     localStorage.setItem(ENDPOINT_KEY, subscription.endpoint)
     return setRegistrationState('ok')
@@ -299,6 +443,7 @@ async function unregisterFromServer(): Promise<void> {
   const endpoint = localStorage.getItem(ENDPOINT_KEY)
   localStorage.removeItem(ENDPOINT_KEY)
   localStorage.removeItem(REPORTED_KEY)
+  localStorage.removeItem(REFRESH_KEY)
   try {
     const removed = await pushUnsubscribe()
     if (removed ?? endpoint) await post('/unsubscribe', { endpoint: removed ?? endpoint })
@@ -316,54 +461,147 @@ async function reportPracticed(day: string | null): Promise<void> {
   const endpoint = localStorage.getItem(ENDPOINT_KEY)
   if (!endpoint) return
   const res = await post('/practiced', { endpoint, lastPracticedDay: day })
-  if (res?.ok) localStorage.setItem(REPORTED_KEY, day)
+  if (res?.ok) {
+    localStorage.setItem(REPORTED_KEY, day)
+    return
+  }
+  // A 404 here is the service saying it has never heard of this phone — the
+  // address was pruned, or this build is talking to a service that was rebuilt
+  // underneath it. Either way we are not on the list and nobody would have told
+  // us; the only symptom would have been an evening that stayed quiet.
+  if (res?.status === 404) {
+    localStorage.removeItem(ENDPOINT_KEY)
+    void registerWithServer()
+  }
 }
 
 // --- turning reminders on and off ---
 export type EnableResult = 'granted' | 'denied' | 'unsupported'
 
 // Must be called straight from a tap: browsers only show the permission prompt
-// while a user gesture is still in play.
+// while a user gesture is still in play, and Safari wants the push subscription
+// taken out inside the same gesture too. So the phone is dealt with first and
+// our own bookkeeping — the Cache API blob, the service — waits until after.
 export async function enableReminders(): Promise<EnableResult> {
   if (notificationSupport() !== 'ok') return 'unsupported'
-  let permission = Notification.permission
-  if (permission === 'default') {
-    try {
-      permission = await Notification.requestPermission()
-    } catch {
-      return 'denied'
-    }
-  }
-  if (permission !== 'granted') {
+
+  const outcome = await obtainSubscription(true)
+  if (outcome.status === 'unsupported') {
     localStorage.setItem(ENABLED_KEY, 'false')
+    return 'unsupported'
+  }
+  if (outcome.status === 'refused' || outcome.status === 'needs-permission') {
+    localStorage.setItem(ENABLED_KEY, 'false')
+    setRegistrationState('refused', 'notifications are switched off for this app', false)
     await syncNotificationState()
     return 'denied'
   }
+
+  // Permission is granted from here on, whether or not push itself worked out:
+  // the in-app timer can still deliver, so the switch belongs on.
   localStorage.setItem(ENABLED_KEY, 'true')
   await syncNotificationState()
-  // Housekeeping — not awaited, so the switch flips the moment permission lands.
+
+  if (outcome.status === 'no-push') {
+    setRegistrationState('no-push', outcome.detail, false)
+  } else {
+    // Not awaited: the switch should flip the moment permission lands.
+    void registerWithServer()
+  }
   void registerBackgroundSync()
-  void registerWithServer()
   return 'granted'
 }
 
 export async function disableReminders(): Promise<void> {
   localStorage.setItem(ENABLED_KEY, 'false')
+  setRegistrationState('never', undefined, false)
   await syncNotificationState()
   void unregisterBackgroundSync()
   void unregisterFromServer()
 }
 
-// Push addresses go stale — delete and reinstall the app, or leave it alone for
-// months, and the phone's push service hands out a new one. Re-registering once
-// a day quietly repairs that, and costs one request.
+// --- putting the switch back where the learner left it ---
+// Two things go wrong while the app is closed, and both used to read as "the
+// reminders turned themselves off":
+//
+//   • Safari clears a web app's storage after a stretch of not being opened, and
+//     everything about the reminder lived in localStorage. The push subscription
+//     survives that, so it — not our notes — says whether this phone is signed up.
+//   • The browser rotates or drops the subscription. The service worker repairs
+//     that when it's awake to see it happen (`pushsubscriptionchange`); this
+//     catches the times it wasn't.
+//
+// Runs on every launch and whenever the app is brought back to the front. It
+// never prompts, so it is safe outside a tap.
 const REFRESH_KEY = 'odia:notifyRefreshedDay'
+const RETRY_AFTER_MS = 5 * 60 * 1000
 
-export async function refreshReminderRegistration(): Promise<void> {
-  if (!remindersOn()) return
+export async function reconcileReminders(): Promise<void> {
+  if (notificationSupport() !== 'ok') return
+  const permission = notificationPermission()
+
+  if (permission === 'denied') {
+    // Revoked in the phone's own settings. Record it once, honestly.
+    if (reminderPreference()) {
+      localStorage.setItem(ENABLED_KEY, 'false')
+      setRegistrationState('refused', 'notifications are switched off for this app', false)
+      await syncNotificationState()
+    }
+    return
+  }
+  if (permission !== 'granted') return
+
+  const live = await currentSubscription()
+
+  if (live && !reminderPreference()) {
+    // Storage was wiped but the phone is still subscribed: the learner never
+    // turned this off, the browser just forgot we knew. Turning reminders off
+    // unsubscribes, so a live subscription can only mean they were on.
+    localStorage.setItem(ENABLED_KEY, 'true')
+    await recoverSettingsFromServer(live.endpoint)
+    await syncNotificationState()
+  }
+
+  if (!reminderPreference()) return
+
+  if (!live) {
+    // Subscribed once, no subscription now — rebuild it. Permission is already
+    // granted, so this needs no tap and shows no prompt.
+    await registerWithServer()
+    await syncNotificationState()
+    return
+  }
+
+  // Push addresses also go stale quietly. Re-registering once a day repairs that
+  // and keeps the service's copy of the hour and timezone current, at the cost of
+  // one request.
   const today = todayKey()
-  if (localStorage.getItem(REFRESH_KEY) === today) return
+  const reg = getRegistrationState()
+  if (localStorage.getItem(REFRESH_KEY) === today && reg.status === 'ok') return
+  // While something is actually wrong we retry on the way back into the app, but
+  // not every single time: an app flipped in and out of ten times in a minute
+  // should not be ten calls to a service that is plainly having trouble.
+  if (reg.status !== 'ok' && reg.at && Date.now() - reg.at < RETRY_AFTER_MS) return
   if (await registerWithServer()) localStorage.setItem(REFRESH_KEY, today)
+}
+
+// After a storage wipe the reminder hour is gone too, and defaulting a 9pm
+// learner back to 7pm is exactly the kind of small betrayal that gets an app's
+// notifications switched off for good. The service still has it.
+async function recoverSettingsFromServer(endpoint: string): Promise<void> {
+  if (localStorage.getItem(HOUR_KEY)) return
+  const res = await post('/status', { endpoint })
+  if (!res?.ok) return
+  try {
+    const row = (await res.json()) as { known?: boolean; hour?: number }
+    if (row.known && HOUR_OPTIONS.some((o) => o.value === row.hour)) {
+      localStorage.setItem(HOUR_KEY, String(row.hour))
+      localStorage.setItem(ENDPOINT_KEY, endpoint)
+      setRegistrationState('ok')
+    }
+  } catch {
+    /* the hour stays at its default; not worth a failure */
+  }
 }
 
 /* Reminder wording. Kept in step with `compose()` in public/notify-sw.js — if you
@@ -382,12 +620,11 @@ function compose(name: string, streak: number): { title: string; body: string } 
   }
 }
 
-// Post the reminder right now, from the page. Used by the in-app timer and by the
-// "send a test" button in Settings.
+// Post the reminder right now, from the page.
 export async function showReminderNow(): Promise<boolean> {
   if (notificationPermission() !== 'granted') return false
   try {
-    const reg = await swReady()
+    const reg = await swReady(5000)
     if (!reg) return false
     const stats = await db.stats.get('main')
     const name = (localStorage.getItem('odia:name') ?? '').trim()
@@ -403,6 +640,31 @@ export async function showReminderNow(): Promise<boolean> {
   } catch {
     return false
   }
+}
+
+// The "send a test" button in Settings. A notification the page posts to itself
+// proves only that the app is open, which was never in doubt — the question is
+// whether a knock from the service reaches this phone. So the test goes the long
+// way round, through the service, and only falls back to posting it here when
+// that can't be arranged. The caller says which happened.
+export type TestResult = 'knocked' | 'local' | 'failed'
+
+export async function sendTestReminder(): Promise<TestResult> {
+  if (notificationPermission() !== 'granted') return 'failed'
+  const endpoint = (await currentSubscription())?.endpoint
+  if (endpoint) {
+    const res = await post('/test', { endpoint })
+    if (res?.ok) return 'knocked'
+    // A service that no longer knows this address is worth repairing while
+    // someone is standing here waiting to see whether it works.
+    if (res?.status === 404) {
+      if (await registerWithServer()) {
+        const retry = await post('/test', { endpoint })
+        if (retry?.ok) return 'knocked'
+      }
+    }
+  }
+  return (await showReminderNow()) ? 'local' : 'failed'
 }
 
 // --- the in-app fallback timer ---
@@ -445,13 +707,14 @@ export function startReminderTimer(): () => void {
 
   schedule()
 
-  // Coming back to the app is also a good moment to re-arm the timer and let the
-  // worker re-check — a phone asleep at reminder time may still owe tonight's nudge.
+  // Coming back to the app is also a good moment to re-arm the timer, check the
+  // reminder is still actually set up, and let the worker re-check — a phone
+  // asleep at reminder time may still owe tonight's nudge.
   function onVisible() {
     if (document.visibilityState !== 'visible') return
     clearTimeout(timer)
     schedule()
-    void syncNotificationState()
+    void syncNotificationState().then(() => reconcileReminders())
     void swReady().then((reg) => reg?.active?.postMessage({ type: 'odia-notify-check' }))
   }
   document.addEventListener('visibilitychange', onVisible)

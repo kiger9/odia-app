@@ -10,11 +10,12 @@ import {
   getReminderHour,
   notificationPermission,
   notificationSupport,
+  reconcileReminders,
   registerWithServer,
   remindersOn,
+  sendTestReminder,
   setReminderHour,
-  showReminderNow,
-  type RegStatus,
+  type RegState,
 } from '../notifications'
 
 const RESTORE_ERROR: Record<string, string> = {
@@ -37,13 +38,35 @@ function describeWhen(at: number): string {
 }
 
 // Said plainly, because this is what someone reads when a reminder didn't arrive.
-const REG_MESSAGE: Record<RegStatus, string> = {
-  ok: 'Set up — reminders arrive even when the app is closed',
-  never: 'Not set up for reminders while the app is closed',
-  'no-push': "This phone wouldn't set up push — reminders only work while the app is open",
-  refused: 'Your phone is blocking notifications for this app',
-  unreachable: "Couldn't reach the reminder service — reminders only work while the app is open",
-  rejected: 'The reminder service turned this phone away',
+//
+// The two "couldn't reach it" cases depend on whether this phone was ever signed
+// up: a service that already holds this address and is briefly unreachable is a
+// blip we retry, not a phone that gets no reminders. Reporting every hiccup as
+// "your phone is blocking notifications" is how a working setup came to look
+// broken every time the app was reopened.
+function regMessage(reg: RegState): string {
+  switch (reg.status) {
+    case 'ok':
+      return 'Set up — reminders arrive even when the app is closed'
+    case 'never':
+      return 'Not set up for reminders while the app is closed'
+    case 'no-push':
+      return "This phone wouldn't set up push — reminders only work while the app is open"
+    case 'refused':
+      return 'Your phone is blocking notifications for this app'
+    case 'unreachable':
+      return reg.confirmed
+        ? "Set up — the reminder service was unreachable just now, we'll try again"
+        : "Couldn't reach the reminder service — reminders only work while the app is open"
+    case 'rejected':
+      return 'The reminder service turned this phone away'
+  }
+}
+
+const TEST_MESSAGE: Record<string, string> = {
+  knocked: 'Sent from the service — check your notifications',
+  local: "Shown from the app — the service couldn't be reached",
+  failed: "Couldn't show a notification",
 }
 
 export default function Settings({
@@ -59,7 +82,7 @@ export default function Settings({
   const [remind, setRemind] = useState(remindersOn())
   const [hour, setHour] = useState(getReminderHour())
   const [blocked, setBlocked] = useState(notificationPermission() === 'denied')
-  const [tested, setTested] = useState(false)
+  const [tested, setTested] = useState('')
   const [reg, setReg] = useState(getRegistrationState())
   const [retrying, setRetrying] = useState(false)
 
@@ -71,6 +94,23 @@ export default function Settings({
   const [codeDraft, setCodeDraft] = useState('')
   const [restoreBusy, setRestoreBusy] = useState(false)
   const [restoreError, setRestoreError] = useState('')
+
+  // What is on screen was read from localStorage, which the browser is entitled
+  // to have cleared while the app was closed. Check the phone itself before
+  // showing anyone a verdict about it.
+  useEffect(() => {
+    let live = true
+    void reconcileReminders().then(() => {
+      if (!live) return
+      setRemind(remindersOn())
+      setHour(getReminderHour())
+      setBlocked(notificationPermission() === 'denied')
+      setReg(getRegistrationState())
+    })
+    return () => {
+      live = false
+    }
+  }, [])
 
   // Registration happens in the background when the switch goes on, so watch for
   // it to land rather than showing a stale "not registered" underneath.
@@ -94,7 +134,8 @@ export default function Settings({
 
   async function retry() {
     setRetrying(true)
-    await registerWithServer()
+    // Straight from a tap, so this one is allowed to open the permission prompt.
+    await registerWithServer({ allowPrompt: true })
     setReg(getRegistrationState())
     setRetrying(false)
   }
@@ -104,11 +145,14 @@ export default function Settings({
     await setReminderHour(value)
   }
 
+  // The point of a test is the route that breaks — the service knocking on a
+  // phone that isn't looking — so it goes the long way round and says which way
+  // the reminder actually arrived.
   async function sendTest() {
-    if (await showReminderNow()) {
-      setTested(true)
-      setTimeout(() => setTested(false), 3000)
-    }
+    const result = await sendTestReminder()
+    setTested(result)
+    setReg(getRegistrationState())
+    setTimeout(() => setTested(''), 5000)
   }
 
   async function copyCode() {
@@ -198,11 +242,11 @@ export default function Settings({
               ))}
             </div>
             <button className="test-btn" onClick={() => void sendTest()}>
-              {tested ? 'Sent — check your notifications' : 'Send a test reminder'}
+              {tested ? TEST_MESSAGE[tested] : 'Send a test reminder'}
             </button>
 
             <div className={`reg-status ${reg.status === 'ok' ? 'good' : 'bad'}`}>
-              <span>{REG_MESSAGE[reg.status]}</span>
+              <span>{regMessage(reg)}</span>
               {reg.status !== 'ok' && (
                 <button className="reg-retry" onClick={() => void retry()} disabled={retrying}>
                   {retrying ? 'Trying…' : 'Try again'}

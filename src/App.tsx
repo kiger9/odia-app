@@ -18,7 +18,7 @@ import {
   markNotificationsAsked,
   notificationPermission,
   notificationSupport,
-  refreshReminderRegistration,
+  reconcileReminders,
   startReminderTimer,
   syncNotificationState,
 } from './notifications'
@@ -58,11 +58,13 @@ export default function App() {
     }
   }, [])
 
-  // Keep the reminder's copy of the name/streak fresh, and cover the case where
-  // the app is open when the evening reminder falls due.
+  // Keep the reminder's copy of the name/streak fresh, put the reminder switch
+  // back where the learner left it (the browser may have cleared our note of it
+  // while the app was closed), and cover the case where the app is open when the
+  // evening reminder falls due.
   useEffect(() => {
     void syncNotificationState()
-    void refreshReminderRegistration()
+    void reconcileReminders()
     // Catches a device that was offline when its last practice finished.
     void backupIfStale()
     return startReminderTimer()

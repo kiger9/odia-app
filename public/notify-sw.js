@@ -5,11 +5,18 @@
  * never throw at load time — if it did, the whole service worker would fail to
  * install and the app would lose offline support.
  *
- * Two things wake this worker: a knock from the reminder service (`push` — the
- * only route that reaches a closed iPhone), and Periodic Background Sync, which
- * Android offers and Apple doesn't. Either way the wording is written here, from
- * a small blob of state the page leaves in the Cache API — which is why the
- * service can know nothing about the learner. Page half: src/notifications.ts.
+ * Three things wake this worker: a knock from the reminder service (`push` — the
+ * only route that reaches a closed iPhone), Periodic Background Sync, which
+ * Android offers and Apple doesn't, and `pushsubscriptionchange`, which is the
+ * browser telling us it has thrown this phone's push address away. The first two
+ * post a reminder; the third has to go and get a new address, because nobody
+ * else will: the page may not be opened for days, and until it is, every knock
+ * the service sends goes to an address that no longer exists. That is the whole
+ * of "reminders stopped arriving once I closed the app".
+ *
+ * Either way the wording is written here, from a small blob of state the page
+ * leaves in the Cache API — which is why the service can know nothing about the
+ * learner. Page half: src/notifications.ts.
  */
 (function () {
   'use strict'
@@ -150,6 +157,106 @@
       })
     })
   }
+
+  /* --- keeping the push address alive ---------------------------------------
+     The address a push service hands out is not permanent: it is rotated, and it
+     is dropped outright when a browser decides an app has been idle. The page
+     repairs that when it is next opened, but "next opened" is precisely what a
+     reminder exists to bring about, so the worker has to be able to do it alone.
+
+     Everything needed is in the state blob the page leaves behind: where the
+     service lives, and the public key to subscribe against. */
+
+  function urlBase64ToBytes(base64) {
+    var padded = (base64 + '='.repeat((4 - (base64.length % 4)) % 4))
+      .replace(/-/g, '+')
+      .replace(/_/g, '/')
+    var raw = self.atob(padded)
+    var bytes = new Uint8Array(raw.length)
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i)
+    return bytes
+  }
+
+  function postJson(url, body) {
+    return fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }).catch(function () {
+      return null
+    })
+  }
+
+  function serialize(subscription) {
+    function b64(name) {
+      var key = subscription.getKey(name)
+      if (!key) return null
+      var bytes = new Uint8Array(key)
+      var binary = ''
+      for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
+      return self.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    }
+    var p256dh = b64('p256dh')
+    var auth = b64('auth')
+    if (!p256dh || !auth) return null
+    return { endpoint: subscription.endpoint, keys: { p256dh: p256dh, auth: auth } }
+  }
+
+  /* Take out a fresh subscription and tell the service to swap it for the old
+     one. `oldEndpoint` may be absent — a subscription the browser dropped while
+     we weren't looking leaves nothing to name — and `ready` may already hold the
+     replacement, which some browsers hand over with the event rather than making
+     us ask for one. */
+  function resubscribe(oldEndpoint, ready) {
+    return readState().then(function (state) {
+      var s = state || {}
+      if (!s.enabled || !s.server || !s.vapidKey) return
+      if (!ready && !self.registration.pushManager) return
+      return Promise.resolve(
+        ready ||
+          self.registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToBytes(s.vapidKey),
+          }),
+      )
+        .then(function (subscription) {
+          var body = serialize(subscription)
+          if (!body) return
+          return postJson(s.server + '/subscribe', {
+            subscription: body,
+            hour: s.hour || 19,
+            tz: s.tz || 'UTC',
+            lastPracticedDay: s.lastPracticedDay || null,
+            replaces: oldEndpoint || undefined,
+          })
+        })
+        .catch(function () {
+          /* The page tries again on its next launch — see reconcileReminders(). */
+        })
+    })
+  }
+
+  /* The subscription can also be gone without the event ever firing: some
+     browsers drop it during an update, and Safari has been known to lose it
+     across a restart. An activation is a cheap moment to look. */
+  function ensureSubscribed() {
+    return readState().then(function (state) {
+      if (!state || !state.enabled || !self.registration.pushManager) return
+      return self.registration.pushManager.getSubscription().then(function (existing) {
+        if (existing) return
+        return resubscribe(null, null)
+      })
+    })
+  }
+
+  self.addEventListener('pushsubscriptionchange', function (event) {
+    var old = event.oldSubscription && event.oldSubscription.endpoint
+    event.waitUntil(resubscribe(old, event.newSubscription || null))
+  })
+
+  self.addEventListener('activate', function (event) {
+    event.waitUntil(ensureSubscribed())
+  })
 
   self.addEventListener('push', function (event) {
     var kind = ''
