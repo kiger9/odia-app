@@ -388,11 +388,11 @@ export const LESSONS: Lesson[] = [
 { id:'pastprog', title:'Past Progressive — I was doing', sub:'I was ...-ing · 11 steps', items:[
     {t:'intro', odia:'Mu asuthili', gloss:'I was coming', note:'For "I <b>was</b> doing" something, use the root + <b>-uthili</b>. <b>Asiba</b> → <b>Mu asuthili</b> = I was coming.'},
     {t:'intro', odia:'Mu khauthili', gloss:'I was eating', note:'<b>Khaiba</b> → <b>Mu khauthili</b> = I was eating.'},
-    {t:'choice', q:'How do you say "I was doing"?', opts:[{a:'Mu karuthili'},{a:'Mu karili'},{a:'Mu karibi'}], ans:0, why:'<b>-uthili</b> = was doing (ongoing past). <b>-ili</b> = did, <b>-ibi</b> = will do.'},
+    {t:'choice', q:'How do you say "I was doing"?', opts:[{a:'Mu kåruthili'},{a:'Mu kårili'},{a:'Mu kåribi'}], ans:0, why:'<b>-uthili</b> = was doing (ongoing past). <b>-ili</b> = did, <b>-ibi</b> = will do.'},
     {t:'intro', odia:'Mu jauthili', gloss:'I was going', note:'<b>Jiba</b> → <b>Mu jauthili</b> = I was going.'},
     {t:'match', pairs:[['Mu asuthili','I was coming'],['Mu khauthili','I was eating'],['Mu jauthili','I was going'],['Mu dekhuthili','I was watching']]},
     {t:'choice', q:'Which means "I was eating"?', opts:[{a:'Mu khauthili'},{a:'Mu khaili'},{a:'Mu khaibi'}], ans:0, why:'<b>khauthili</b> = was eating. (khaili = ate, khaibi = will eat.)'},
-    {t:'cloze', q:'Complete: "I was going to the market"', pre:'Mu bajar', post:'', opts:['jauthili','gåli','jibi'], ans:0, why:'"Was going" = <b>jauthili</b>.'},
+    {t:'cloze', q:'Complete: "I was going to the market"', pre:'Mu bajår', post:'', opts:['jauthili','gåli','jibi'], ans:0, why:'"Was going" = <b>jauthili</b>.'},
     {t:'assemble', q:'Build in Odia: "I was eating rice"', gloss:'bhatå = rice', ans:['Mu','bhatå','khauthili'], dist:['khaili','Se']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asuthili', ans:['I','was','coming'], dist:['came','will']},
     {t:'cloze', q:'Ongoing vs done: "I was watching"', pre:'Mu', post:'', opts:['dekhuthili','dekhili','dekhibi'], ans:0, why:'<b>dekhuthili</b> = was watching. <b>dekhili</b> = saw.'},
@@ -401,14 +401,14 @@ export const LESSONS: Lesson[] = [
 { id:'pastperf', title:'Past Perfect — I had done', sub:'I had already ...-ed · 11 steps', items:[
     {t:'intro', odia:'Mu asithili', gloss:'I had come', note:'For "I <b>had</b> done" something before another past moment, use the root + <b>-ithili</b>. <b>Asiba</b> → <b>Mu asithili</b> = I had come.'},
     {t:'intro', odia:'Mu khaithili', gloss:'I had eaten', note:'<b>Khaiba</b> → <b>Mu khaithili</b> = I had eaten.'},
-    {t:'choice', q:'How do you say "I had done"?', opts:[{a:'Mu karithili'},{a:'Mu karuthili'},{a:'Mu karili'}], ans:0, why:'<b>-ithili</b> = had done. Compare <b>-uthili</b> = was doing, <b>-ili</b> = did.'},
+    {t:'choice', q:'How do you say "I had done"?', opts:[{a:'Mu kårithili'},{a:'Mu kåruthili'},{a:'Mu kårili'}], ans:0, why:'<b>-ithili</b> = had done. Compare <b>-uthili</b> = was doing, <b>-ili</b> = did.'},
     {t:'intro', odia:'Mu jaithili', gloss:'I had gone', note:'<b>Jiba</b> → <b>Mu jaithili</b> = I had gone.'},
     {t:'match', pairs:[['Mu asithili','I had come'],['Mu khaithili','I had eaten'],['Mu jaithili','I had gone'],['Mu dekhithili','I had seen']]},
     {t:'choice', q:'Which is "I had eaten"?', opts:[{a:'Mu khaithili'},{a:'Mu khauthili'},{a:'Mu khaili'}], ans:0, why:'<b>-ithili</b> (had) vs <b>-uthili</b> (was ...-ing). So <b>khaithili</b> = had eaten.'},
-    {t:'cloze', q:'Complete: "I had gone home"', pre:'Mu ghare', post:'', opts:['jaithili','gåli','jauthili'], ans:0, why:'"Had gone" = <b>jaithili</b>. (gåli = went, jauthili = was going.)'},
+    {t:'cloze', q:'Complete: "I had gone home"', pre:'Mu ghåre', post:'', opts:['jaithili','gåli','jauthili'], ans:0, why:'"Had gone" = <b>jaithili</b>. (gåli = went, jauthili = was going.)'},
     {t:'assemble', q:'Build in Odia: "I had seen the elephant"', gloss:'hati = elephant', ans:['Mu','hati','dekhithili'], dist:['dekhili','Se']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu asithili', ans:['I','had','come'], dist:['was','came']},
-    {t:'cloze', q:'Complete: "I had done the work"', pre:'Mu kama', post:'', opts:['karithili','karuthili','karili'], ans:0, why:'<b>kama</b> = work. "Had done" = <b>karithili</b>.', gloss:'kama = work'},
+    {t:'cloze', q:'Complete: "I had done the work"', pre:'Mu kamå', post:'', opts:['kårithili','kåruthili','kårili'], ans:0, why:'<b>kamå</b> = work. "Had done" = <b>kårithili</b>.', gloss:'kamå = work'},
     {t:'type', q:'Type in Odia: "I had come"', ans:'Mu asithili', alts:['mu asithili']}
   ]},
 { id:'feel1', title:'How I Feel', sub:'Hungry, cold, happy · 14 steps', items:[

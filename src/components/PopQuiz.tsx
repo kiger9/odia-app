@@ -1,19 +1,31 @@
 import { useEffect, useMemo, useState } from 'react'
-import { buildQuiz, getLearnedItems, type QuizQuestion } from '../quiz'
+import { db } from '../db'
+import { buildQuiz, rememberSeen, type PStep } from '../gen/exercises'
 import { markPracticedToday } from '../streak'
-import { recordQuizResult, encouragement } from '../profile'
+import { recordQuizResult, encouragement, getName } from '../profile'
+import { StepView } from './Steps'
+import { personalize } from '../lib/personalize'
 import Modal from './Modal'
 
+// A Pop Quiz: ten questions, freshly generated from everything the learner has
+// finished — new sentences in every exercise type, steering clear of questions
+// they saw recently.
 export default function PopQuiz({ onExit }: { onExit: () => void }) {
-  const [questions, setQuestions] = useState<QuizQuestion[] | null>(null)
+  const [questions, setQuestions] = useState<PStep[] | null>(null)
   const [index, setIndex] = useState(0)
-  const [picked, setPicked] = useState<string | null>(null)
+  const [answered, setAnswered] = useState(false)
   const [score, setScore] = useState(0)
   const [confirmQuit, setConfirmQuit] = useState(false)
   const praise = useMemo(() => encouragement(), [])
+  const learnerName = useMemo(() => getName() || 'Suresh', [])
 
   useEffect(() => {
-    getLearnedItems().then((items) => setQuestions(buildQuiz(items, 10)))
+    void db.lessonProgress.toArray().then((rows) => {
+      const done = new Set(rows.filter((r) => r.completed).map((r) => r.lessonId))
+      const qs = buildQuiz(done, 10)
+      rememberSeen(qs)
+      setQuestions(qs)
+    })
   }, [])
 
   const finished = !!questions && index >= questions.length
@@ -71,16 +83,14 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
     )
   }
 
-  const q = questions[index]
-
-  function pick(opt: string) {
-    if (picked) return
-    setPicked(opt)
-    if (opt === q.answer) setScore((s) => s + 1)
+  function result(correct: boolean) {
+    if (answered) return
+    setAnswered(true)
+    if (correct) setScore((s) => s + 1)
   }
 
   function next() {
-    setPicked(null)
+    setAnswered(false)
     setIndex((i) => i + 1)
   }
 
@@ -101,35 +111,13 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
         </span>
       </div>
 
-      <section className="card review-q">
-        <p className="prompt-label muted">
-          {q.direction === 'toOdia' ? 'Which is the Odia?' : 'What does this mean?'}
-        </p>
-        <p className="prompt-en">{q.prompt}</p>
-      </section>
-
-      <div className="opts">
-        {q.options.map((opt) => {
-          const state =
-            picked === null ? '' : opt === q.answer ? 'right' : opt === picked ? 'wrong' : 'dim'
-          return (
-            <button
-              key={opt}
-              className={`opt ${state}`}
-              disabled={picked !== null}
-              onClick={() => pick(opt)}
-            >
-              {opt}
-            </button>
-          )
-        })}
-      </div>
-
-      {picked !== null && (
-        <button className="btn-primary" onClick={next}>
-          Continue
-        </button>
-      )}
+      <StepView
+        key={index}
+        step={personalize(questions[index], learnerName)}
+        showScript={false}
+        onNext={next}
+        onResult={result}
+      />
 
       {confirmQuit && (
         <Modal

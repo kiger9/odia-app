@@ -5,15 +5,16 @@ import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 import { poolStats, formatWhen } from '../reviews'
 import { viewStreak, todayString, getCelebratedDay, setCelebratedDay } from '../streak'
 import { encouragement } from '../profile'
+import { lessonRunLength } from '../gen/exercises'
 import Wordmark from './Wordmark'
 import Celebration from './Celebration'
 import Modal from './Modal'
 
 // How far through a single lesson (0–1).
-function lessonFrac(lesson: { items: unknown[] }, p?: LessonProgress): number {
+function lessonFrac(lesson: { id: string }, p?: LessonProgress): number {
   if (p?.completed) return 1
   if (!p) return 0
-  return Math.min(p.step / lesson.items.length, 1)
+  return Math.min(p.step / lessonRunLength(lesson.id), 1)
 }
 
 export default function Home({
@@ -171,7 +172,7 @@ export default function Home({
                         <small>
                           {state === 'progress'
                             ? `In progress · ${Math.round(frac * 100)}%`
-                            : lesson.sub}
+                            : lesson.sub?.replace(/ · \d+ steps$/, '')}
                         </small>
                       </span>
                     </div>

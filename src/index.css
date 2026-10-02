@@ -1038,6 +1038,18 @@ button {
   margin: 0;
 }
 
+/* marks a generated (not curated) practice question at the end of a lesson */
+.fresh-chip {
+  align-self: flex-start;
+  margin: 0 0 -4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fff1e0;
+  color: #9a4f00;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 /* the core teaching display: phonetic large, script small beneath */
 .teach {
   text-align: center;
