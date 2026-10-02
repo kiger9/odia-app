@@ -651,6 +651,85 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', q:'Build in Odia: "I am eating with dad"', gloss:'khauchi = am eating', ans:['Mu','bapa-nkå-sangåre','khauchi'], dist:['Rahul-sangåre','kheluchi']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Tåme mo-sangåre khelibå-ki?', ans:['Will','you','play','with','me?'], dist:['eat','I']},
     {t:'type', q:'Type in Odia: "I am playing with Rahul"', ans:'Mu Rahul-sangåre kheluchi', alts:['mu rahul-sangare kheluchi','mu rahul sangare kheluchi']}
+  ]},
+{ id:'smallwords', title:'Little Linking Words', sub:'-rå, -ku, -ru, -re, be, -sange · 15 steps', items:[
+    {t:'intro', odia:'Kirsten-rå ghårå', gloss:'Kirsten\'s house', note:'Add <b>-rå</b> to a name to say whose it is. It sounds like “ro” — the same <b>-rå</b> you know from <b>morå</b> (my) and <b>tarå</b> (his/her). For elders, use the respectful <b>-nkårå</b>: Aai-nkårå ghårå.'},
+    {t:'intro', odia:'Rahul-rå båhi', gloss:'Rahul\'s book', note:'Whose comes first, then the thing: <b>Rahul-rå</b> (Rahul’s) <b>båhi</b> (book).'},
+    {t:'choice', q:'What does this mean?', show:'Mitu-rå gadi', opts:[{a:'Mitu\'s car'},{a:'Mitu is going by car'},{a:'to Mitu’s car'}], ans:0, why:'<b>-rå</b> = ’s (whose). <b>gadi</b> = car.'},
+    {t:'intro', odia:'-ku · -ru · -re', gloss:'to · from · in', note:'You met these in Coming & Going: <b>ghårå-ku</b> (to the house), <b>ghårå-ru</b> (from the house), <b>Puri-re</b> (in Puri).'},
+    {t:'intro', odia:'Mu Kirsten-rå ghårå-ku jauchi', gloss:'I am going to Kirsten\'s house', note:'Little words stack up: <b>Kirsten-rå</b> (Kirsten’s) <b>ghårå-ku</b> (to the house) <b>jauchi</b> (am going).'},
+    {t:'cloze', q:'Complete: “Rabi is coming from the temple”', pre:'Rabi', post:'asuchi', opts:['måndirå-ru','måndirå-ku','måndirå-rå'], ans:0, why:'<b>-ru</b> = from. (<b>-ku</b> = to, <b>-rå</b> = whose.)', gloss:'måndirå = temple'},
+    {t:'intro', odia:'Mu be jauchi!', gloss:'I\'m going too!', note:'<b>be</b> = also / too. Put it right after the word it’s about: <b>Mu be</b> = me too. (Written Odia spells it <b>bi</b>.)'},
+    {t:'intro', odia:'Mote be bhokå laguchi', gloss:'I\'m hungry too', note:'<b>be</b> works with feelings too: <b>Mote be</b> bhokå laguchi = to-me-also hunger feels.'},
+    {t:'intro', odia:'Rahul-sange', gloss:'with Rahul', note:'In quick speech, <b>-sangåre</b> (with) shortens to <b>-sange</b>. <b>Rahul-sange</b> = with Rahul, <b>mo-sange</b> = with me. Both are right.'},
+    {t:'match', q:'Match the pairs', pairs:[['-rå','\'s (whose)'],['be','also / too'],['-sange','with'],['-ru','from']]},
+    {t:'choice', q:'How do you say “Rahul is coming too”?', opts:[{a:'Rahul be asuchi'},{a:'Rahul-rå asuchi'},{a:'Rahul-sange asuchi'}], ans:0, why:'<b>be</b> = too, right after <b>Rahul</b>.'},
+    {t:'assemble', q:'Build in Odia: “I am also going to Puri”', gloss:'a named city drops -ku', ans:['Mu','be','Puri','jauchi'], dist:['asuchi','jauchu']},
+    {t:'assemble', q:'Build in Odia: “I am eating with Rahul”', gloss:'khauchi = am eating', ans:['Mu','Rahul-sange','khauchi'], dist:['Rahul-rå','kheluchi']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mitu be Kirsten-rå ghårå-ku jauchi', ans:['Mitu','is','also','going','to','Kirsten\'s','house'], dist:['from','coming']},
+    {t:'type', q:'Type in Odia: “Kirsten’s house”', ans:'Kirsten-rå ghårå', alts:['kirsten ra ghara','kirstenra ghara','kirsten ro ghoro','kirsten-ro ghoro']}
+  ]},
+{ id:'likeit', title:'Do You Like It?', sub:'bhålå laguchi-ki? · 14 steps', items:[
+    {t:'intro', odia:'Bhålå laguchi-ki?', gloss:'Do you like it?', note:'<b>bhålå</b> = good, <b>laguchi</b> = feels (like <b>Mote bhokå laguchi</b>), <b>-ki</b> = the question. Literally: “Is it feeling good?”'},
+    {t:'intro', odia:'Mote bhålå laguchi', gloss:'I like it', note:'Same shape as your feelings: <b>Mote</b> (to me) <b>bhålå laguchi</b> (it feels good).'},
+    {t:'choice', q:'What does this mean?', show:'Mote bhålå laguchi', opts:[{a:'I like it'},{a:'I feel hungry'},{a:'I am fine'}], ans:0, why:'<b>bhålå laguchi</b> = feels good → I like it. (I am fine = Mu bhålå åchi.)'},
+    {t:'intro', odia:'Pizza bhålå laguchi-ki?', gloss:'Do you like pizza?', note:'Put the thing first. The full form is <b>Tåmåku</b> pizza bhålå laguchi-ki? but people often drop Tåmåku.'},
+    {t:'intro', odia:'Mote ambå bhålå laguchi', gloss:'I like mango', note:'The book’s own example: “mango feels good to me.” (<b>ambå</b> = mango.)'},
+    {t:'intro', odia:'Mote bhålå laguni', gloss:'I don\'t like it', note:'Same <b>-ni</b> trick from Saying No (jauchi → jauni): <b>laguchi → laguni</b>.'},
+    {t:'intro', odia:'Pizza khaibå-ki?', gloss:'Will you eat pizza?', note:'<b>khaibå</b> = you will eat (Future Tense). A friendly offer: “Want some pizza?”'},
+    {t:'match', q:'Match the pairs', pairs:[['Bhålå laguchi-ki?','Do you like it?'],['Mote bhålå laguchi','I like it'],['Mote bhålå laguni','I don\'t like it'],['Pizza khaibå-ki?','Will you eat pizza?']]},
+    {t:'choice', q:'Grandma offers you chili. How do you say “I don’t like it”?', opts:[{a:'Mote bhålå laguni'},{a:'Mote bhålå laguchi'},{a:'Mu bhålå åchi'}], ans:0, why:'<b>laguni</b> = doesn’t feel (good).'},
+    {t:'cloze', q:'Complete: “Do you like bananas?”', pre:'Kådåli bhålå', post:'', opts:['laguchi-ki?','laguni','khaibå'], ans:0, why:'<b>laguchi-ki?</b> = does it feel good? → do you like it?', gloss:'kådåli = banana'},
+    {t:'assemble', q:'Build in Odia: “I like rice”', gloss:'bhatå = rice', ans:['Mote','bhatå','bhålå','laguchi'], dist:['Mu','laguni']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Hå, mote pizza bhålå laguchi', ans:['Yes,','I','like','pizza'], dist:['don\'t','eat']},
+    {t:'choice', q:'What does this mean?', show:'Mitu, tåme kådåli khaibå-ki?', opts:[{a:'Mitu, will you eat a banana?'},{a:'Mitu is eating a banana'},{a:'Mitu likes bananas'}], ans:0, why:'<b>khaibå-ki?</b> = will you eat?'},
+    {t:'type', q:'Type in Odia: “Do you like it?”', ans:'Bhålå laguchi-ki?', alts:['bhala laguchi ki','bhalo laguchi ki']}
+  ]},
+{ id:'didit', title:'You Did It!', sub:'Praise: kåri delå, båhut badhiya · 10 steps', items:[
+    {t:'intro', odia:'Tåme kåri delå!', gloss:'You did it!', note:'<b>kåri</b> (doing) + <b>delå</b> (gave) = “got it done!” <b>delå</b> has the past ending for informal you, like <b>asilå</b> and <b>khailå</b>.'},
+    {t:'intro', odia:'Båhut badhiya!', gloss:'Great job! (very good)', note:'<b>båhut</b> = very (as in Mu båhut bhålå åchi), <b>badhiya</b> = great / excellent.'},
+    {t:'choice', q:'Your child finishes a puzzle. What do you say?', opts:[{a:'Tåme kåri delå!'},{a:'Ruhå!'},{a:'Mote bhålå laguni'}], ans:0, why:'<b>Tåme kåri delå!</b> = You did it! (<b>Ruhå!</b> = Stop!)'},
+    {t:'intro', odia:'Mu kåri deli!', gloss:'I did it!', note:'For “I”, the past ending is <b>-i</b>: <b>deli</b>, like <b>asili</b>, <b>khaili</b>.'},
+    {t:'match', q:'Match the pairs', pairs:[['Tåme kåri delå!','You did it!'],['Mu kåri deli!','I did it!'],['Båhut badhiya!','Great job!'],['Dhånyåvad!','Thank you!']]},
+    {t:'choice', q:'What does this mean?', show:'Båhut badhiya!', opts:[{a:'Great job!'},{a:'Very hungry!'},{a:'Goodbye!'}], ans:0, why:'<b>båhut</b> = very, <b>badhiya</b> = great.'},
+    {t:'cloze', q:'Complete: “Rahul did it!”', pre:'Rahul kåri', post:'', opts:['dela!','delå!','deli!'], ans:0, why:'He/she past ends in <b>-la</b>, like <b>Se asila</b>. So <b>Rahul kåri dela!</b>'},
+    {t:'assemble', q:'Build in Odia: “You did it! Great job!”', gloss:'badhiya = great', ans:['Tåme','kåri','delå!','Båhut','badhiya!'], dist:['deli!','Mu']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Mitu, tåme kåri delå!', ans:['Mitu,','you','did','it!'], dist:['I','will']},
+    {t:'type', q:'Type in Odia: “You did it!”', ans:'Tåme kåri delå!', alts:['tame kari dela','tome kari dela','tume kari dela']}
+  ]},
+{ id:'days', title:'Yesterday, Today, Tomorrow', sub:'Aji · Kali · Gåtå kali — in all three tenses · 16 steps', items:[
+    {t:'intro', odia:'Aji', gloss:'today', note:'<b>Aji</b> = today. The book: <i>Aji Ram morå ghåre råhuchi</i> = Ram is staying at my house today.'},
+    {t:'intro', odia:'Kali', gloss:'tomorrow', note:'<b>Kali</b> = tomorrow. The book: <i>Se kali jibå</i> = she will go tomorrow. (Long form: <b>asånta kali</b>, “the coming kali”.)'},
+    {t:'intro', odia:'Gåtå kali', gloss:'yesterday', note:'<b>gåtå</b> = gone / last (like <b>gåtå mas</b> = last month). So <b>gåtå kali</b> = “the kali that’s gone” = yesterday.'},
+    {t:'match', q:'Match the pairs', pairs:[['Aji','today'],['Kali','tomorrow'],['Gåtå kali','yesterday']]},
+    {t:'intro', odia:'Mu gåtå kali asili', gloss:'I came yesterday', note:'Yesterday → past tense: <b>asili</b> (-ili = I did).'},
+    {t:'intro', odia:'Mu aji asuchi', gloss:'I am coming today', note:'Today → present: <b>asuchi</b> (-uchi = I am ___ing).'},
+    {t:'intro', odia:'Mu kali asibi', gloss:'I will come tomorrow', note:'Tomorrow → future: <b>asibi</b> (-ibi = I will). Same verb, three days, three endings!'},
+    {t:'choice', q:'Which means “I will eat tomorrow”?', opts:[{a:'Mu kali khaibi'},{a:'Mu gåtå kali khaili'},{a:'Mu aji khauchi'}], ans:0, why:'<b>kali</b> + future <b>khaibi</b>.'},
+    {t:'cloze', q:'Complete: “I went to the temple yesterday”', pre:'Mu gåtå kali måndirå-ku', post:'', opts:['gåli','jauchi','jibi'], ans:0, why:'Yesterday → past. “Went” is irregular: <b>gåli</b>.', gloss:'gåli = I went'},
+    {t:'cloze', q:'Complete: “Today Rahul is eating fish”', pre:'Aji Rahul machå', post:'', opts:['khauchi','khaila','khaibå'], ans:0, why:'Today → present: <b>khauchi</b>.'},
+    {t:'cloze', q:'Complete: “Tomorrow we will go to Puri”', pre:'Kali ame Puri', post:'', opts:['jibu','jauchu','asilu'], ans:0, why:'We + future = <b>-ibu</b>: <b>jibu</b>.', gloss:'jibu = we will go'},
+    {t:'choice', q:'Spoken “kali” can mean yesterday OR tomorrow — the verb tells you which! What does this mean?', show:'Mu kali asili', opts:[{a:'I came yesterday'},{a:'I will come tomorrow'},{a:'I am coming today'}], ans:0, why:'<b>asili</b> is past, so here <b>kali</b> = yesterday. Saying <b>gåtå kali</b> makes it extra clear.'},
+    {t:'assemble', q:'Build in Odia: “Grandma came yesterday”  (respectful)', gloss:'asile = came (respectful)', ans:['Aai','gåtå','kali','asile'], dist:['asila','aji']},
+    {t:'assemble', dir:'en', q:'Translate into English', show:'Bapa aji ghårå-ku asuchånti', ans:['Dad','is','coming','home','today'], dist:['tomorrow','came']},
+    {t:'choice', q:'What does this mean?', show:'Ame gåtå kali ambå khailu', opts:[{a:'We ate mangoes yesterday'},{a:'We will eat mangoes tomorrow'},{a:'We are eating mangoes today'}], ans:0, why:'<b>gåtå kali</b> = yesterday; <b>khailu</b> = we ate.'},
+    {t:'type', q:'Type in Odia: “I will eat tomorrow”', ans:'Mu kali khaibi', alts:[]}
+  ]},
+{ id:'soon', title:'Soon & Quickly', sub:'Shighrå, jåldi, kebe? · 14 steps', items:[
+    {t:'intro', odia:'Shighrå', gloss:'soon', note:'<b>Shighrå</b> = soon. It goes before the verb, and pairs naturally with the future tense.'},
+    {t:'intro', odia:'Mu shighrå asibi', gloss:'I will come soon', note:'<b>shighrå</b> (soon) + <b>asibi</b> (I will come).'},
+    {t:'intro', odia:'Jåldi', gloss:'quickly / early', note:'<b>Jåldi</b> = quickly, hurry, early. The book lists it under “soon” too, but it leans toward <i>fast</i>.'},
+    {t:'intro', odia:'Jåldi aså!', gloss:'Come quickly!', note:'<b>aså</b> = come! (the command, from Simple Commands).'},
+    {t:'intro', odia:'Kebe?', gloss:'When?', note:'<b>Kebe?</b> asks a loose “when” — the answer is something like tomorrow, later, or soon.'},
+    {t:'intro', odia:'Tåme kebe asibå?', gloss:'When will you come?', note:'<b>kebe</b> sits before the verb, just like <b>shighrå</b>.'},
+    {t:'match', q:'Match the pairs', pairs:[['Shighrå','soon'],['Jåldi','quickly'],['Kebe?','When?'],['Kali','tomorrow']]},
+    {t:'choice', q:'Your friend asks “Tåme kebe asibå?” Answer “I will come soon”:', opts:[{a:'Mu shighrå asibi'},{a:'Mu gåtå kali asili'},{a:'Mu shighrå asili'}], ans:0, why:'soon = <b>shighrå</b>; I will come = <b>asibi</b> (asili = I came).'},
+    {t:'choice', q:'You’re late for school! What do you tell the kids?', opts:[{a:'Jåldi aså!'},{a:'Kebe aså?'},{a:'Shighrå asili'}], ans:0, why:'<b>Jåldi aså!</b> = Come quickly!'},
+    {t:'cloze', q:'Complete: “Rahul will come soon”', pre:'Rahul shighrå', post:'', opts:['asibå','asila','asuchi'], ans:0, why:'He/she future = <b>-ibå</b>: <b>asibå</b>.'},
+    {t:'assemble', q:'Build in Odia: “When will you eat?”  (informal)', gloss:'khaibå = you will eat', ans:['Tåme','kebe','khaibå?'], dist:['shighrå','khaili']},
+    {t:'assemble', q:'Build in Odia: “We will go home soon”', gloss:'jibu = we will go', ans:['Ame','shighrå','ghårå-ku','jibu'], dist:['kebe','jauchu']},
+    {t:'choice', q:'What does this mean?', show:'Bapa shighrå asibe', opts:[{a:'Dad will come soon'},{a:'Dad came yesterday'},{a:'When will dad come?'}], ans:0, why:'<b>asibe</b> = will come (respectful).'},
+    {t:'type', q:'Type in Odia: “I will come soon”', ans:'Mu shighrå asibi', alts:['mu sighra asibi']}
   ]}]
 
 const LESSON_IDS = new Set(LESSONS.map((l) => l.id))
@@ -662,11 +741,12 @@ export const CHAPTERS: Chapter[] = [
   { key:'simpleconj', title:'Simple Conjugation', blurb:'The -i / -å / -u pattern, verb by verb', lessons:['conjgo','conjeat','conjdrink','conjdo','conjsee','conjplay','conjsleep'] },
   { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
   { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','possess','inout','where'] },
-  { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','withothers','neg','need','market'] },
-  { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
+  { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','withothers','smallwords','neg','need','market'] },
+  { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords','didit'] },
   { key:'pasttense', title:'Past Tense', blurb:'I did → you, he/she, we did', lessons:['past','pastyou','pasthe','pastresp','pastwe','pastprog','pastperf'] },
   { key:'futuretense', title:'Future Tense', blurb:'I will → you, he/she, we will', lessons:['future','futureyou','futurehe','futureresp','futurewe'] },
-  { key:'life', title:'Feelings & Meals', blurb:'How you feel, and eating', lessons:['feel1','feel2','meals'] }]
+  { key:'life', title:'Feelings & Meals', blurb:'How you feel, and eating', lessons:['feel1','feel2','likeit','meals'] },
+  { key:'time', title:'Yesterday, Today, Soon', blurb:'Time words in all three tenses', lessons:['days','soon'] }]
   .map((c) => ({ ...c, lessons: c.lessons.filter((id) => LESSON_IDS.has(id)) }))
   .filter((c) => c.lessons.length)
 

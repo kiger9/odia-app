@@ -314,6 +314,11 @@ const WORDS: Array<{ english: string; phonetic: string }> = [
   { english: 'Breakfast', phonetic: 'Jolokia' },
   { english: 'Meal', phonetic: 'Bhojono' },
   { english: 'Sad', phonetic: 'Dukhi' },
+  // added from lessons (not in Appendix G)
+  { english: 'Also, too', phonetic: 'Be (written: bi)' },
+  { english: 'Great, excellent', phonetic: 'Badhiya' },
+  { english: 'With', phonetic: '-sangåre, -sange' },
+  { english: 'Like (I like it)', phonetic: 'Mote bhålå laguchi' },
 ]
 
 // Appendix B — verbs (English meaning · Oriya infinitive). "To " prefix dropped
