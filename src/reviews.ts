@@ -19,7 +19,9 @@ function buildItems(): ReviewItem[] {
   const items: ReviewItem[] = []
   for (const lesson of LESSONS) {
     for (const step of lesson.items) {
-      if (step.t === 'intro' && step.odia && step.gloss) {
+      // Grammar-rule cards ("-i · -å · -u") teach a pattern, not a phrase to
+      // recall, so they stay out of the review pool.
+      if (step.t === 'intro' && step.odia && step.gloss && !step.rule) {
         items.push({
           id: `${lesson.id}|${step.odia}`,
           lessonId: lesson.id,

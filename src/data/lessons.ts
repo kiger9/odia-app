@@ -25,6 +25,7 @@ export interface Step {
   dist?: string[]        // distractor tiles (assemble)
   pre?: string           // cloze: text before the blank
   post?: string          // cloze: text after the blank
+  rule?: boolean         // intro card that teaches a grammar rule, not a phrase: never quizzed or reviewed
 }
 
 export interface Lesson {
@@ -42,7 +43,7 @@ export interface Chapter {
 }
 
 export const LESSONS: Lesson[] = [
-{ id:'be', title:'To Be — åchi', sub:'I am, you are, they are · 17 steps', items:[
+{ id:'be', title:'To Be — åchi', sub:'I am, you are, they are · 20 steps', items:[
     {t:'intro', odia:'Mu åchi', gloss:'I am', note:'<b>Mu</b> = I. The verb <b>åchi</b> does the work of “am”. Odia has no separate verb for “have” either — you’ll reuse åchi constantly.'},
     {t:'intro', odia:'Tåme åchå', gloss:'You are  (informal)', note:'<b>Tåme</b> = you, for friends and children. Notice the verb changed: <b>åchi → åchå</b>.'},
     {t:'choice', q:'How do you say “I am”?', opts:[{a:'Mu åchi'},{a:'Tåme åchå'},{a:'Ame åchu'}], ans:0},
@@ -135,7 +136,7 @@ export const LESSONS: Lesson[] = [
     {t:'intro', odia:'Mu jauchi', gloss:'I am going', note:'<b>jauchi</b> = am going. It takes the same four endings you already know from åchi: jauchi / jauchå / jauchånti / jauchu.'},
     {t:'intro', odia:'Mu asuchi', gloss:'I am coming', note:'<b>asuchi</b> = am coming. Same four endings again — every Odia verb works this way.'},
     {t:'choice', q:'How do you say “I am going”?', opts:[{a:'Mu jauchi'},{a:'Mu asuchi'},{a:'Mu åchi'}], ans:0},
-    {t:'intro', odia:'-ku = to · -ru = from · -re = in', gloss:'place endings', note:'Attach these to a place. <b>ghårå</b> (house) → <b>ghårå-ku</b> (to the house), <b>ghårå-ru</b> (from the house), <b>ghåre</b> (in the house).'},
+    {t:'intro', odia:'-ku = to · -ru = from · -re = in', gloss:'place endings', note:'Attach these to a place. <b>ghårå</b> (house) → <b>ghårå-ku</b> (to the house), <b>ghårå-ru</b> (from the house), <b>ghåre</b> (in the house).', rule:true},
     {t:'intro', odia:'Mu ghårå-ku jauchi', gloss:'I am going home', note:'<b>ghårå-ku</b> = to the house. The place, then the ending, then the verb.'},
     {t:'choice', q:'What does this mean?', show:'Mu bågicha-ru asuchi', opts:[{a:'I am coming from the garden'},{a:'I am going to the garden'},{a:'I am in the garden'}], ans:0, why:'<b>-ru</b> = from; <b>bågicha</b> = garden.'},
     {t:'match', q:'Match the pairs', pairs:[['jauchi','am going'],['asuchi','am coming'],['-ku','to'],['-ru','from']]},
@@ -218,17 +219,17 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', q:'Build in Odia: “I am drinking tea”', gloss:'cha = tea', ans:['Mu','cha','piuchi'], dist:['khauchi','anuchi']},
     {t:'choice', q:'How do you say “She is bringing flowers”?  (informal)', opts:[{a:'Se phulå anuchi'},{a:'Se phulå khauchi'},{a:'Se phulå piuchi'}], ans:0, why:'phulå = flower; anuchi = bringing.'},
     {t:'cloze', q:'Complete: “They are eating rice”', pre:'Semane bhatå', post:'', opts:['khauchånti','khauchi','khauchå','piuchånti'], ans:0, why:'They → khauchånti; bhatå = cooked rice.', gloss:'bhatå = rice'},
-    {t:'intro', odia:'Mu jauchi! → Mu råhuchi!', gloss:'Bye! → Bye-bye!', note:'When someone leaves they say <b>Mu jauchi!</b> (“I’m going”). You reply <b>Mu råhuchi!</b> (“I’m staying”) — that’s bye-bye.'},
+    {t:'intro', odia:'Mu jauchi! → Mu råhuchi!', gloss:'Bye! → Bye-bye!', note:'When someone leaves they say <b>Mu jauchi!</b> (“I’m going”). You reply <b>Mu råhuchi!</b> (“I’m staying”) — that’s bye-bye.', rule:true},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Mu pani piuchi', ans:['I','am','drinking','water'], dist:['eating','tea','he'], gloss:'pani = water'},
     {t:'choice', q:'What does this mean?', show:'Tåme kånå piuchå?', opts:[{a:'What are you drinking?'},{a:'What are you eating?'},{a:'Are you drinking water?'}], ans:0, why:'kånå = what; piuchå = drinking.'},
     {t:'assemble', q:'Build in Odia: “What are you eating?”  (informal)', gloss:'kånå = what', ans:['Tåme','kånå','khauchå'], dist:['piuchå','khauchånti']},
     {t:'type', q:'Type in Odia: “I am eating”', ans:'Mu khauchi', alts:['mu khauchi']}
   ]},
 { id:'neg', title:'Saying No', sub:'Negation · 14 steps', items:[
-    {t:'intro', odia:'åchi → nahi', gloss:'is → is not', note:'To negate <b>åchi</b>, use <b>nahi</b>. Rabi ghåre åchi → Rabi ghåre <b>nahi</b> (Rabi is not home).'},
-    {t:'intro', odia:'åchånti → nahanti', gloss:'(respectful) is not', note:'The respectful <b>åchånti</b> becomes <b>nahanti</b>.'},
+    {t:'intro', odia:'åchi → nahi', gloss:'is → is not', note:'To negate <b>åchi</b>, use <b>nahi</b>. Rabi ghåre åchi → Rabi ghåre <b>nahi</b> (Rabi is not home).', rule:true},
+    {t:'intro', odia:'åchånti → nahanti', gloss:'(respectful) is not', note:'The respectful <b>åchånti</b> becomes <b>nahanti</b>.', rule:true},
     {t:'choice', q:'How do you say “They are not home”?  (respectful)', opts:[{a:'Semane ghåre nahanti'},{a:'Semane ghåre åchånti'},{a:'Semane ghåre nahi'}], ans:0, why:'Respectful negative → <b>nahanti</b>.'},
-    {t:'intro', odia:'verb + ni', gloss:'not (doing)', note:'For action verbs, add <b>-ni</b>. Mu jauchi (going) → Mu <b>jauni</b> (not going). Mu asuni (not coming), Mu khauni (not eating).'},
+    {t:'intro', odia:'verb + ni', gloss:'not (doing)', note:'For action verbs, add <b>-ni</b>. Mu jauchi (going) → Mu <b>jauni</b> (not going). Mu asuni (not coming), Mu khauni (not eating).', rule:true},
     {t:'match', q:'Match the pairs', pairs:[['nahi','is not'],['jauni','not going'],['asuni','not coming'],['khauni','not eating']]},
     {t:'choice', q:'What does this mean?', show:'Mu kichi anuni', opts:[{a:'I am not bringing anything'},{a:'I am bringing something'},{a:'I am not coming'}], ans:0, why:'kichi = anything; anuni = not bringing.'},
     {t:'assemble', q:'Build in Odia: “Rabi is not home”', gloss:'ghåre = home', ans:['Rabi','ghåre','nahi'], dist:['åchi','nahanti']},
@@ -543,21 +544,24 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', dir:'en', q:'Translate into English', show:'Ame khaibu', ans:['We','will','eat'], dist:['I','ate']},
     {t:'type', q:'Type in Odia: "We will come"', ans:'Ame asibu', alts:['ame asibu']}
   ]},
-{ id:'conjgo', title:'The -i / -å / -u Pattern', sub:'How verbs show who · 12 steps', items:[
+{ id:'conjgo', title:'The -i / -å / -u Pattern', sub:'How verbs show who · 15 steps', items:[
     {t:'intro', odia:'Mu jauchi', gloss:'I am going', note:'To say you are <b>doing</b> something right now, add <b>-uchi</b> to the root for <b>I</b>. <b>Jiba</b> (to go) → <b>Mu jauchi</b> = I am going.'},
     {t:'intro', odia:'Tåme jauchå', gloss:'You are going', note:'For <b>you</b>, the ending shifts to an <b>-å</b> sound: <b>Tåme jauchå</b>.'},
     {t:'intro', odia:'Se jauchi', gloss:'He / She is going', note:'<b>He / She</b> uses the same <b>-i</b> sound as "I": <b>Se jauchi</b>.'},
     {t:'intro', odia:'Ame jauchu', gloss:'We are going', note:'For <b>we</b>, the ending is a <b>-u</b> sound: <b>Ame jauchu</b>.'},
     {t:'intro', odia:'Semane jauchånti', gloss:'They are going', note:'For <b>they</b>, use <b>-uchånti</b> — it still ends in an <b>-i</b> sound: <b>Semane jauchånti</b>.'},
-    {t:'intro', odia:'-i  å  -u', gloss:'The pattern', note:'It is all in the last sound: <b>-i</b> = I, he/she, they · <b>-å</b> = you · <b>-u</b> = we. You already met this with <b>åchi / åchå / åchu</b> (to be)!'},
+    {t:'intro', odia:'-i · -å · -u', gloss:'I, he/she, they · you · we', note:'It is all in the last sound: <b>-i</b> = I, he/she, they · <b>-å</b> = you · <b>-u</b> = we. You already met this with <b>åchi / åchå / åchu</b> (to be)!', rule:true},
     {t:'match', pairs:[['Mu jauchi','I am going'],['Tåme jauchå','You are going'],['Se jauchi','He/She is going'],['Ame jauchu','We are going']]},
     {t:'choice', q:'How do you say "You are going"?', opts:[{a:'Tåme jauchå'},{a:'Mu jauchi'},{a:'Ame jauchu'}], ans:0, why:'<b>you</b> = the <b>-å</b> ending: jauchå.'},
-    {t:'cloze', q:'Complete: "We are going"', pre:'Ame', post:'', opts:['jauchu','jauchi','jauchå'], ans:0, why:'<b>we</b> = the <b>-u</b> ending: jauchu.'},
+    {t:'cloze', q:'Which ending? “We are going”', pre:'Ame jau', post:'', opts:['-chu','-chi','-chå','-chånti'], ans:0, why:'<b>we</b> = the <b>-u</b> sound: jau<b>chu</b>.'},
+    {t:'cloze', q:'Which ending? “You are going”  (informal)', pre:'Tåme jau', post:'', opts:['-chå','-chi','-chu','-chånti'], ans:0, why:'<b>you</b> = the <b>-å</b> sound: jau<b>chå</b>.'},
+    {t:'cloze', q:'Which ending? “He / She is going”', pre:'Se jau', post:'', opts:['-chi','-chå','-chu','-chånti'], ans:0, why:'<b>he / she</b> = the <b>-i</b> sound, same as I: jau<b>chi</b>.'},
+    {t:'cloze', q:'Which ending? “They are going”', pre:'Semane jau', post:'', opts:['-chånti','-chu','-chå','-chi'], ans:0, why:'<b>they</b> = <b>-chånti</b> (still ends in <b>-i</b>).'},
     {t:'choice', q:'What does this mean?', show:'Semane jauchånti', opts:[{a:'They are going'},{a:'We are going'},{a:'You are going'}], ans:0, why:'<b>Semane</b> = they; <b>-uchånti</b> is the "they / respectful" ending.'},
     {t:'assemble', q:'Build in Odia: "They are going home"', gloss:'ghåre = at home', ans:['Semane','ghåre','jauchånti'], dist:['jauchu','Mu']},
     {t:'type', q:'Type in Odia: "I am going"', ans:'Mu jauchi', alts:['mu jauchi']}
   ]},
-{ id:'conjeat', title:'Eating', sub:'Eating — all persons · 8 steps', items:[
+{ id:'conjeat', title:'Eating', sub:'Eating — all persons · 9 steps', items:[
     {t:'intro', odia:'Mu khauchi', gloss:'I am eating', note:'<b>Khaiba</b> (to eat) → <b>Mu khauchi</b> = i am eating. The <b>-uchi</b> ending = I.'},
     {t:'intro', odia:'Tåme khauchå', gloss:'You are eating', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme khauchå</b>.'},
     {t:'choice', q:'How do you say "He/She is eating"?', opts:[{a:'Se khauchi'},{a:'Mu khauchi'},{a:'Semane khauchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se khauchi.'},
@@ -565,9 +569,10 @@ export const LESSONS: Lesson[] = [
     {t:'cloze', q:'Complete: "We are eating"', pre:'Ame', post:'', opts:['khauchu','khauchi','khauchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: khauchu.'},
     {t:'choice', q:'What does this mean?', show:'Semane khauchånti', opts:[{a:'They are eating'},{a:'I am eating'},{a:'We are eating'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se khauchi', ans:['He/She','is','eating'], dist:['I','they']},
+    {t:'cloze', q:'Which ending? “We are eating”', pre:'Ame khau', post:'', opts:['-chu','-chi','-chå','-chånti'], ans:0, why:'we = <b>-u</b>: khau<b>chu</b>.'},
     {t:'type', q:'Type in Odia: "I am eating"', ans:'Mu khauchi', alts:['mu khauchi']}
   ]},
-{ id:'conjdrink', title:'Drinking', sub:'Drinking — all persons · 8 steps', items:[
+{ id:'conjdrink', title:'Drinking', sub:'Drinking — all persons · 9 steps', items:[
     {t:'intro', odia:'Mu piuchi', gloss:'I am drinking', note:'<b>Piba</b> (to drink) → <b>Mu piuchi</b> = i am drinking. The <b>-uchi</b> ending = I.'},
     {t:'intro', odia:'Tåme piuchå', gloss:'You are drinking', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme piuchå</b>.'},
     {t:'choice', q:'How do you say "He/She is drinking"?', opts:[{a:'Se piuchi'},{a:'Mu piuchi'},{a:'Semane piuchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se piuchi.'},
@@ -575,9 +580,10 @@ export const LESSONS: Lesson[] = [
     {t:'cloze', q:'Complete: "We are drinking"', pre:'Ame', post:'', opts:['piuchu','piuchi','piuchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: piuchu.'},
     {t:'choice', q:'What does this mean?', show:'Semane piuchånti', opts:[{a:'They are drinking'},{a:'I am drinking'},{a:'We are drinking'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se piuchi', ans:['He/She','is','drinking'], dist:['I','they']},
+    {t:'cloze', q:'Which ending? “You are drinking”  (informal)', pre:'Tåme piu', post:'', opts:['-chå','-chi','-chu','-chånti'], ans:0, why:'you = <b>-å</b>: piu<b>chå</b>.'},
     {t:'type', q:'Type in Odia: "I am drinking"', ans:'Mu piuchi', alts:['mu piuchi']}
   ]},
-{ id:'conjdo', title:'Doing', sub:'Doing, and "do + a word" · 13 steps', items:[
+{ id:'conjdo', title:'Doing', sub:'Doing, and "do + a word" · 14 steps', items:[
     {t:'intro', odia:'Mu kåruchi', gloss:'I am doing', note:'<b>Kåriba</b> (to do) → <b>Mu kåruchi</b> = i am doing. The <b>-uchi</b> ending = I.'},
     {t:'intro', odia:'Tåme kåruchå', gloss:'You are doing', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kåruchå</b>.'},
     {t:'choice', q:'How do you say "He/She is doing"?', opts:[{a:'Se kåruchi'},{a:'Mu kåruchi'},{a:'Semane kåruchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kåruchi.'},
@@ -590,9 +596,10 @@ export const LESSONS: Lesson[] = [
     {t:'intro', odia:'Mu help kåruchi', gloss:'I am helping', note:'Even English words pair up: <b>help</b> + <b>kåruchi</b> = helping.'},
     {t:'match', pairs:[['kamå kåruchi','working'],['chesta kåruchi','trying'],['help kåruchi','helping'],['kåruchi','doing']]},
     {t:'choice', q:'How do you say "I am working"?', opts:[{a:'Mu kamå kåruchi'},{a:'Mu kåruchi'},{a:'Mu kheluchi'}], ans:0, why:'<b>kamå</b> (work) + <b>kåruchi</b> = working.'},
+    {t:'cloze', q:'Which ending? “They are working”', pre:'Semane kamå kåru', post:'', opts:['-chånti','-chi','-chå','-chu'], ans:0, why:'they = <b>-chånti</b>: kåru<b>chånti</b>.'},
     {t:'type', q:'Type in Odia: "I am doing"', ans:'Mu kåruchi', alts:['mu karuchi']}
   ]},
-{ id:'conjsee', title:'Watching', sub:'Watching — all persons · 8 steps', items:[
+{ id:'conjsee', title:'Watching', sub:'Watching — all persons · 9 steps', items:[
     {t:'intro', odia:'Mu dekhuchi', gloss:'I am watching', note:'<b>Dekhiba</b> (to watch) → <b>Mu dekhuchi</b> = i am watching. The <b>-uchi</b> ending = I.'},
     {t:'intro', odia:'Tåme dekhuchå', gloss:'You are watching', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme dekhuchå</b>.'},
     {t:'choice', q:'How do you say "He/She is watching"?', opts:[{a:'Se dekhuchi'},{a:'Mu dekhuchi'},{a:'Semane dekhuchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se dekhuchi.'},
@@ -600,9 +607,10 @@ export const LESSONS: Lesson[] = [
     {t:'cloze', q:'Complete: "We are watching"', pre:'Ame', post:'', opts:['dekhuchu','dekhuchi','dekhuchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: dekhuchu.'},
     {t:'choice', q:'What does this mean?', show:'Semane dekhuchånti', opts:[{a:'They are watching'},{a:'I am watching'},{a:'We are watching'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se dekhuchi', ans:['He/She','is','watching'], dist:['I','they']},
+    {t:'cloze', q:'Which ending? “He / She is watching”', pre:'Se dekhu', post:'', opts:['-chi','-chå','-chu','-chånti'], ans:0, why:'he / she = <b>-i</b>: dekhu<b>chi</b>.'},
     {t:'type', q:'Type in Odia: "I am watching"', ans:'Mu dekhuchi', alts:['mu dekhuchi']}
   ]},
-{ id:'conjplay', title:'Playing', sub:'Playing — all persons · 8 steps', items:[
+{ id:'conjplay', title:'Playing', sub:'Playing — all persons · 9 steps', items:[
     {t:'intro', odia:'Mu kheluchi', gloss:'I am playing', note:'<b>Kheliba</b> (to play) → <b>Mu kheluchi</b> = i am playing. The <b>-i</b> ending = I.'},
     {t:'intro', odia:'Tåme kheluchå', gloss:'You are playing', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme kheluchå</b>.'},
     {t:'choice', q:'How do you say "He/She is playing"?', opts:[{a:'Se kheluchi'},{a:'Mu kheluchi'},{a:'Semane kheluchånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se kheluchi.'},
@@ -610,9 +618,10 @@ export const LESSONS: Lesson[] = [
     {t:'cloze', q:'Complete: "We are playing"', pre:'Ame', post:'', opts:['kheluchu','kheluchi','kheluchå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: kheluchu.'},
     {t:'choice', q:'What does this mean?', show:'Semane kheluchånti', opts:[{a:'They are playing'},{a:'I am playing'},{a:'We are playing'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se kheluchi', ans:['He/She','is','playing'], dist:['I','they']},
+    {t:'cloze', q:'Which ending? “We are playing”', pre:'Ame khelu', post:'', opts:['-chu','-chi','-chå','-chånti'], ans:0, why:'we = <b>-u</b>: khelu<b>chu</b>.'},
     {t:'type', q:'Type in Odia: "I am playing"', ans:'Mu kheluchi', alts:['mu kheluchi']}
   ]},
-{ id:'conjsleep', title:'Sleeping', sub:'Sleeping — all persons · 8 steps', items:[
+{ id:'conjsleep', title:'Sleeping', sub:'Sleeping — all persons · 9 steps', items:[
     {t:'intro', odia:'Mu soichi', gloss:'I am sleeping', note:'<b>Soiba</b> (to sleep) → <b>Mu soichi</b> = i am sleeping. The <b>-i</b> ending = I.'},
     {t:'intro', odia:'Tåme soichå', gloss:'You are sleeping', note:'For <b>you</b>, the <b>-å</b> ending: <b>Tåme soichå</b>.'},
     {t:'choice', q:'How do you say "He/She is sleeping"?', opts:[{a:'Se soichi'},{a:'Mu soichi'},{a:'Semane soichånti'}], ans:0, why:'He/She uses the <b>-i</b> ending: Se soichi.'},
@@ -620,6 +629,7 @@ export const LESSONS: Lesson[] = [
     {t:'cloze', q:'Complete: "We are sleeping"', pre:'Ame', post:'', opts:['soichu','soichi','soichå'], ans:0, why:'<b>we</b> uses the <b>-u</b> ending: soichu.'},
     {t:'choice', q:'What does this mean?', show:'Semane soichånti', opts:[{a:'They are sleeping'},{a:'I am sleeping'},{a:'We are sleeping'}], ans:0, why:'<b>Semane</b> = they.'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Se soichi', ans:['He/She','is','sleeping'], dist:['I','they']},
+    {t:'cloze', q:'Which ending? “You are sleeping”  (informal)', pre:'Tåme soi', post:'', opts:['-chå','-chi','-chu','-chånti'], ans:0, why:'you = <b>-å</b>: soi<b>chå</b>. (Sleep drops the <b>u</b>.)'},
     {t:'type', q:'Type in Odia: "I am sleeping"', ans:'Mu soichi', alts:['mu soichi']}
   ]},
 { id:'possess', title:'Whose Is It? (Possessives)', sub:'My, your, our, grandma’s · 13 steps', items:[
@@ -656,11 +666,11 @@ export const LESSONS: Lesson[] = [
     {t:'intro', odia:'Kirsten-rå ghårå', gloss:'Kirsten\'s house', note:'Add <b>-rå</b> to a name to say whose it is. It sounds like “ro” — the same <b>-rå</b> you know from <b>morå</b> (my) and <b>tarå</b> (his/her). For elders, use the respectful <b>-nkårå</b>: Aai-nkårå ghårå.'},
     {t:'intro', odia:'Rahul-rå båhi', gloss:'Rahul\'s book', note:'Whose comes first, then the thing: <b>Rahul-rå</b> (Rahul’s) <b>båhi</b> (book).'},
     {t:'choice', q:'What does this mean?', show:'Mitu-rå gadi', opts:[{a:'Mitu\'s car'},{a:'Mitu is going by car'},{a:'to Mitu’s car'}], ans:0, why:'<b>-rå</b> = ’s (whose). <b>gadi</b> = car.'},
-    {t:'intro', odia:'-ku · -ru · -re', gloss:'to · from · in', note:'You met these in Coming & Going: <b>ghårå-ku</b> (to the house), <b>ghårå-ru</b> (from the house), <b>Puri-re</b> (in Puri).'},
+    {t:'intro', odia:'-ku · -ru · -re', gloss:'to · from · in', note:'You met these in Coming & Going: <b>ghårå-ku</b> (to the house), <b>ghårå-ru</b> (from the house), <b>Puri-re</b> (in Puri).', rule:true},
     {t:'intro', odia:'Mu Kirsten-rå ghårå-ku jauchi', gloss:'I am going to Kirsten\'s house', note:'Little words stack up: <b>Kirsten-rå</b> (Kirsten’s) <b>ghårå-ku</b> (to the house) <b>jauchi</b> (am going).'},
     {t:'cloze', q:'Complete: “Rabi is coming from the temple”', pre:'Rabi', post:'asuchi', opts:['måndirå-ru','måndirå-ku','måndirå-rå'], ans:0, why:'<b>-ru</b> = from. (<b>-ku</b> = to, <b>-rå</b> = whose.)', gloss:'måndirå = temple'},
     {t:'intro', odia:'Mu be jauchi!', gloss:'I\'m going too!', note:'<b>be</b> = also / too. Put it right after the word it’s about: <b>Mu be</b> = me too. (Written Odia spells it <b>bi</b>.)'},
-    {t:'intro', odia:'Mote be bhokå laguchi', gloss:'I\'m hungry too', note:'<b>be</b> works with feelings too: <b>Mote be</b> bhokå laguchi = to-me-also hunger feels.'},
+    {t:'intro', odia:'Rabi be asuchi', gloss:'Rabi is coming too', note:'<b>be</b> goes right after whoever is “also” doing it: <b>Rabi be</b> asuchi = Rabi too is coming.'},
     {t:'intro', odia:'Rahul-sange', gloss:'with Rahul', note:'In quick speech, <b>-sangåre</b> (with) shortens to <b>-sange</b>. <b>Rahul-sange</b> = with Rahul, <b>mo-sange</b> = with me. Both are right.'},
     {t:'match', q:'Match the pairs', pairs:[['-rå','\'s (whose)'],['be','also / too'],['-sange','with'],['-ru','from']]},
     {t:'choice', q:'How do you say “Rahul is coming too”?', opts:[{a:'Rahul be asuchi'},{a:'Rahul-rå asuchi'},{a:'Rahul-sange asuchi'}], ans:0, why:'<b>be</b> = too, right after <b>Rahul</b>.'},
@@ -688,7 +698,7 @@ export const LESSONS: Lesson[] = [
 { id:'didit', title:'You Did It!', sub:'Praise: kåri delå, båhut badhiya · 10 steps', items:[
     {t:'intro', odia:'Tåme kåri delå!', gloss:'You did it!', note:'<b>kåri</b> (doing) + <b>delå</b> (gave) = “got it done!” <b>delå</b> has the past ending for informal you, like <b>asilå</b> and <b>khailå</b>.'},
     {t:'intro', odia:'Båhut badhiya!', gloss:'Great job! (very good)', note:'<b>båhut</b> = very (as in Mu båhut bhålå åchi), <b>badhiya</b> = great / excellent.'},
-    {t:'choice', q:'Your child finishes a puzzle. What do you say?', opts:[{a:'Tåme kåri delå!'},{a:'Ruhå!'},{a:'Mote bhålå laguni'}], ans:0, why:'<b>Tåme kåri delå!</b> = You did it! (<b>Ruhå!</b> = Stop!)'},
+    {t:'choice', q:'Your child finishes a puzzle. What do you say?', opts:[{a:'Tåme kåri delå!'},{a:'Ruhå!'},{a:'Subha ratri!'}], ans:0, why:'<b>Tåme kåri delå!</b> = You did it! (<b>Ruhå!</b> = Stop! · <b>Subha ratri!</b> = Good night!)'},
     {t:'intro', odia:'Mu kåri deli!', gloss:'I did it!', note:'For “I”, the past ending is <b>-i</b>: <b>deli</b>, like <b>asili</b>, <b>khaili</b>.'},
     {t:'match', q:'Match the pairs', pairs:[['Tåme kåri delå!','You did it!'],['Mu kåri deli!','I did it!'],['Båhut badhiya!','Great job!'],['Dhånyåvad!','Thank you!']]},
     {t:'choice', q:'What does this mean?', show:'Båhut badhiya!', opts:[{a:'Great job!'},{a:'Very hungry!'},{a:'Goodbye!'}], ans:0, why:'<b>båhut</b> = very, <b>badhiya</b> = great.'},
@@ -742,8 +752,8 @@ export const CHAPTERS: Chapter[] = [
   { key:'things', title:'Pointing & Plurals', blurb:'One & many, this/that, here/there', lessons:['plural','this','deixis'] },
   { key:'around', title:'Getting Around', blurb:'Coming, going, in & out, where', lessons:['comego','possess','inout','where'] },
   { key:'doing', title:'Doing & the Market', blurb:'Verbs, saying no, needs, buying', lessons:['verbs1','withothers','smallwords','neg','need','market'] },
-  { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords','didit'] },
-  { key:'pasttense', title:'Past Tense', blurb:'I did → you, he/she, we did', lessons:['past','pastyou','pasthe','pastresp','pastwe','pastprog','pastperf'] },
+  { key:'cmd', title:'Simple Commands', blurb:'Commands & everyday phrases for kids', lessons:['commands','letswords'] },
+  { key:'pasttense', title:'Past Tense', blurb:'I did → you, he/she, we did · You did it!', lessons:['past','pastyou','pasthe','pastresp','pastwe','pastprog','pastperf','didit'] },
   { key:'futuretense', title:'Future Tense', blurb:'I will → you, he/she, we will', lessons:['future','futureyou','futurehe','futureresp','futurewe'] },
   { key:'life', title:'Feelings & Meals', blurb:'How you feel, and eating', lessons:['feel1','feel2','likeit','meals'] },
   { key:'time', title:'Yesterday, Today, Soon', blurb:'Time words in all three tenses', lessons:['days','soon'] }]

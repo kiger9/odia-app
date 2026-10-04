@@ -29,6 +29,7 @@ export type FrameId =
   | 'count'
   | 'measure'
   | 'thisThat'
+  | 'praise'
 export type Mode = 'stmt' | 'neg' | 'yn' | 'what' | 'where' | 'when' | 'how'
 
 // Narrows generation to one lesson's topic (e.g. "past tense, you-informal").
@@ -41,6 +42,11 @@ export interface Focus {
   withReq?: boolean // must include "with someone"
   timeReq?: boolean // must include a time word
   times?: string[] // only these time words
+  withFrom?: string[] // only "with" forms taught in these lessons (-sangåre vs -sange)
+  alsoReq?: boolean // must include "be" (also / too)
+  comps?: string[] // only objects / places taught in these lessons…
+  compReq?: boolean // …and the sentence must have one
+  ownersNamed?: boolean // possessives: only "Name-rå"
 }
 
 export interface Ctx {
@@ -59,6 +65,9 @@ export interface Sentence {
   key: number // index in `od` of the word being drilled
   wrong: string[] // tempting wrong forms for od[key], all taught
   why: string // short HTML explanation
+  // od[key] split into stem + person ending (jau + chu), for "which ending?"
+  // questions; `wrong` holds the other taught endings of the same tense.
+  ending?: { stem: string; end: string; wrong: string[] }
 }
 
 export interface Gen {
@@ -295,12 +304,16 @@ interface With {
   od: string[]
   en: string
   not: string[] // subjects it can't go with ("I … with me")
+  lessons: string[]
 }
 const WITH: With[] = [
-  { od: ['Rahul-sangåre'], en: 'with Rahul', not: ['rahul'] },
-  { od: ['mo-sangåre'], en: 'with me', not: ['mu', 'ame'] },
-  { od: ['tåmå-sangåre'], en: 'with you', not: ['tame', 'apana'] },
-  { od: ['bapa-nkå-sangåre'], en: 'with dad', not: ['bapa'] },
+  { od: ['Rahul-sangåre'], en: 'with Rahul', not: ['rahul'], lessons: ['withothers'] },
+  { od: ['mo-sangåre'], en: 'with me', not: ['mu', 'ame'], lessons: ['withothers'] },
+  { od: ['tåmå-sangåre'], en: 'with you', not: ['tame', 'apana'], lessons: ['withothers'] },
+  { od: ['bapa-nkå-sangåre'], en: 'with dad', not: ['bapa'], lessons: ['withothers'] },
+  // The short spoken form (Little Linking Words).
+  { od: ['Rahul-sange'], en: 'with Rahul', not: ['rahul'], lessons: ['smallwords'] },
+  { od: ['mo-sange'], en: 'with me', not: ['mu', 'ame'], lessons: ['smallwords'] },
 ]
 
 interface Time {
@@ -329,6 +342,7 @@ interface VP {
   comp?: Comp
   with?: With
   time?: Time
+  also?: boolean // "be" right after the subject: Mu be jauchi = I'm going too
 }
 
 function modeOk(ctx: Ctx, mode: Mode, v: Verb, t: Tense, s: Subj): boolean {
@@ -368,7 +382,10 @@ function verbCandidates(ctx: Ctx) {
         if (f?.timeReq && !timesFor(ctx, tense).length) continue
         for (const mode of VERB_MODES) {
           if (f?.modes && !f.modes.includes(mode)) continue
-          if (verb.needsComp && mode !== 'what' && !compsFor(ctx, verb).length) continue
+          if (f?.alsoReq && mode !== 'stmt') continue
+          if (f?.withReq && !withsFor(ctx, verb, subj).length) continue
+          if ((verb.needsComp || f?.compReq) && mode !== 'what' && !compsFor(ctx, verb).length) continue
+          if (f?.compReq && (mode === 'what' || mode === 'where')) continue
           if (modeOk(ctx, mode, verb, tense, subj)) out.push({ verb, subj, tense, mode })
         }
       }
@@ -381,9 +398,16 @@ function timesFor(ctx: Ctx, t: Tense): Time[] {
   const only = ctx.focus?.times
   return TIMES.filter((x) => x.tense === t && knows(ctx, x.lessons) && (!only || only.includes(x.id)))
 }
-const compsFor = (ctx: Ctx, v: Verb) => v.comps.filter((c) => knows(ctx, c.lessons))
-const withsFor = (ctx: Ctx, v: Verb, s: Subj) =>
-  v.withOk && knows(ctx, ['withothers']) ? WITH.filter((w) => !w.not.includes(s.id)) : []
+const inFocus = (lessons: string[], only?: string[]) => !only || lessons.some((l) => only.includes(l))
+const compsFor = (ctx: Ctx, v: Verb) =>
+  v.comps.filter((c) => knows(ctx, c.lessons) && inFocus(c.lessons, ctx.focus?.comps))
+// A focused lesson uses the book's full -sangåre unless it asks for -sange.
+const withsFor = (ctx: Ctx, v: Verb, s: Subj) => {
+  const from = ctx.focus ? (ctx.focus.withFrom ?? ['withothers']) : undefined
+  return v.withOk
+    ? WITH.filter((w) => knows(ctx, w.lessons) && inFocus(w.lessons, from) && !w.not.includes(s.id))
+    : []
+}
 
 function makeVerb(rng: Rng, ctx: Ctx): VP | null {
   const all = verbCandidates(ctx)
@@ -399,14 +423,25 @@ function makeVerb(rng: Rng, ctx: Ctx): VP | null {
 
   const f = ctx.focus
   const comps = compsFor(ctx, verb)
-  const wantComp = verb.needsComp || chance(rng, ['ja', 'as'].includes(verb.id) ? 0.85 : 0.7)
+  const wantComp = verb.needsComp || f?.compReq || chance(rng, ['ja', 'as'].includes(verb.id) ? 0.85 : 0.7)
   if (comps.length && mode !== 'what' && mode !== 'where' && wantComp) p.comp = pick(rng, comps)
   const times = mode === 'when' ? [] : timesFor(ctx, tense)
   if (times.length && (f?.timeReq || chance(rng, 0.3))) p.time = pick(rng, times)
   const withs = withsFor(ctx, verb, subj)
   if (withs.length && (f?.withReq || (chance(rng, 0.2) && !(p.comp && p.time)))) p.with = pick(rng, withs)
   if (f?.withReq && !p.with) return null
+  // "be" belongs to its own lesson's practice, or the mixed quiz (no focus).
+  if (mode === 'stmt' && knows(ctx, ['smallwords']) && (f?.alsoReq || (!f && chance(rng, 0.08)))) p.also = true
   return p
+}
+
+// Stem + person ending of a conjugated form, and the other taught endings of
+// that tense, e.g. jau|chu with chi / chå / chånti as the wrong choices.
+function endingOf(ctx: Ctx, v: Verb, t: Tense, p: Person) {
+  const stem = { pres: v.pres, past: v.past, fut: v.fut, pprog: v.prog, pperf: v.perf ?? '' }[t]
+  const table = t === 'pres' ? END.pres : t === 'fut' ? END.fut : END.past
+  const wrong = ALL_PERSONS.filter((q) => tenseOk(ctx, v, t, q)).map((q) => table[q])
+  return { stem, end: table[p], wrong: [...new Set(wrong)].filter((e) => e !== table[p]) }
 }
 
 function renderVerb(p: VP, ctx: Ctx): Sentence {
@@ -416,8 +451,9 @@ function renderVerb(p: VP, ctx: Ctx): Sentence {
   const wh = mode === 'what' ? ['kånå'] : mode === 'where' ? ['kouthiki'] : mode === 'when' ? ['kebe'] : []
   const time = p.time?.od ?? []
   const rest = [...(p.with?.od ?? []), ...wh, ...(p.comp?.od ?? []), ...(verb.pre ?? [])]
-  const od = [subj.od, ...time, ...rest, form]
-  const odOrders = p.time?.front && (mode === 'stmt' || mode === 'neg') ? [[...time, subj.od, ...rest, form]] : []
+  const be = p.also ? ['be'] : []
+  const od = [subj.od, ...be, ...time, ...rest, form]
+  const odOrders = p.time?.front && (mode === 'stmt' || mode === 'neg') ? [[...time, subj.od, ...be, ...rest, form]] : []
 
   // English
   const [base, ing, past, pp] = verb.en
@@ -440,8 +476,9 @@ function renderVerb(p: VP, ctx: Ctx): Sentence {
     }[tense]
   const tail = [...words(p.comp?.en ?? ''), ...words(p.with?.en ?? '')]
   const tEn = words(p.time?.en ?? '')
-  const en = [...core, ...tail, ...tEn]
-  const enOrders = p.time?.front && (mode === 'stmt' || mode === 'neg') ? [[...tEn, ...core, ...tail]] : []
+  const too = p.also ? ['too'] : []
+  const en = [...core, ...tail, ...tEn, ...too]
+  const enOrders = p.time?.front && (mode === 'stmt' || mode === 'neg') ? [[...tEn, ...core, ...tail, ...too]] : []
 
   // Tempting wrong forms: other people's endings, other tenses, ±negative.
   const wrong: string[] = []
@@ -457,11 +494,14 @@ function renderVerb(p: VP, ctx: Ctx): Sentence {
   if (mode === 'neg') why = `<b>-ni</b> on the verb means “not”: <b>${form}</b>.`
   if (yn) why += ' <b>-ki</b> turns it into a yes/no question.'
   if (p.time) why += ` <b>${p.time.od.join(' ')}</b> = ${p.time.en}.`
+  if (p.also) why += ' <b>be</b> = too.'
+  if (p.with?.od[0].endsWith('-sange')) why += ' <b>-sange</b> = with.'
 
   return {
     frame: 'verb', od, odOrders, en, enOrders,
     question: mode === 'yn' || wh.length > 0,
     hint: subj.hint, key: od.length - 1, wrong: uniq(wrong, form), why,
+    ending: mode === 'neg' || yn ? undefined : endingOf(ctx, verb, tense, subj.p),
   }
 }
 
@@ -623,7 +663,7 @@ type MakeGen = (rng: Rng, ctx: Ctx) => Gen | null
 
 const beLoc: MakeGen = (rng, ctx) => {
   const subjs = knownSubjs(ctx, ctx.focus?.persons)
-  const places = knownItems(ctx, PLACES)
+  const places = knownItems(ctx, PLACES).filter((x) => inFocus(x.lessons, ctx.focus?.comps))
   if (!subjs.length || !places.length) return null
   type P = { subj: Subj; g: Gender; place: Item; mode: Mode }
   const ok = (p: P) =>
@@ -651,7 +691,12 @@ const beLoc: MakeGen = (rng, ctx) => {
       p.mode === 'neg'
         ? `“Not” for <b>${p.subj.od}</b> (${p.subj.desc}) → <b>${form}</b>.`
         : `<b>${p.subj.od}</b> (${p.subj.desc}) → <b>${BE[p.subj.p]}</b>.`
-    return simple('beLoc', od, en, 2, wrong, why, { hint: p.subj.hint, question: yn || p.mode === 'where' })
+    // åch + i / å / u / ånti — only for plain statements and "where" questions.
+    const end = BE[p.subj.p].slice(3)
+    const ending = p.mode === 'stmt' || p.mode === 'where'
+      ? { stem: 'åch', end, wrong: [...new Set(Object.values(BE).map((x) => x.slice(3)))].filter((e) => e !== end) }
+      : undefined
+    return simple('beLoc', od, en, 2, wrong, why, { hint: p.subj.hint, question: yn || p.mode === 'where', ending })
   }
   const modes = (['stmt', 'neg', 'yn', 'where'] as Mode[]).filter((m) => !ctx.focus?.modes || ctx.focus.modes.includes(m))
   for (let i = 0; i < 12; i++) {
@@ -851,10 +896,11 @@ const have: MakeGen = (rng, ctx) => {
 const poss: MakeGen = (rng, ctx) => {
   if (!knows(ctx, ['possess', 'smallwords'])) return null
   const names = knows(ctx, ['smallwords'])
-    ? ['Rahul', 'Mitu', 'Rabi'].map((n) => ({ od: `${n}-rå`, en: `${n}’s` }))
+    ? ['Rahul', 'Mitu', 'Rabi', 'Kirsten'].map((n) => ({ od: `${n}-rå`, en: `${n}’s` }))
     : []
+  const pronouns = knows(ctx, ['possess']) && !ctx.focus?.ownersNamed
   const owners = [
-    ...(knows(ctx, ['possess']) ? POSS.filter((x) => knows(ctx, x.lessons)) : []).map((x) => ({
+    ...(pronouns ? POSS.filter((x) => knows(ctx, x.lessons)) : []).map((x) => ({
       od: x.od, en: x.od === 'Tarå' ? (chance(rng, 0.5) ? 'his' : 'her') : x.poss, hint: x.hint,
     })),
     ...names.map((x) => ({ ...x, hint: undefined as string | undefined })),
@@ -864,7 +910,9 @@ const poss: MakeGen = (rng, ctx) => {
   type P = { who: (typeof owners)[number]; thing: Item }
   const render = (p: P): Sentence =>
     simple('poss', [p.who.od, p.thing.od], [p.who.en, p.thing.en], 0,
-      [...owners.map((x) => x.od), ...(p.who.od === 'Morå' ? ['Mu'] : [])],
+      p.who.od.endsWith('-rå')
+        ? ['-ku', '-ru', '-sange'].map((e) => p.who.od.replace(/-rå$/, e))
+        : [...owners.map((x) => x.od), ...(p.who.od === 'Morå' ? ['Mu'] : [])],
       p.who.od.endsWith('-rå')
         ? `A name + <b>-rå</b> = ’s (whose).`
         : `<b>${p.who.od}</b> = ${p.who.en}.`,
@@ -938,8 +986,30 @@ const verbGen: MakeGen = (rng, ctx) => {
   return { s: renderVerb(p, ctx), siblings: () => verbSiblings(p, ctx).map((q) => renderVerb(q, ctx)) }
 }
 
+// "You did it!" — kåri + the past of deba (to give): deli / delå / dela / delu /
+// dele. The lesson teaches I, you (informal) and he/she; the other persons come
+// once their past-tense lesson is done.
+const praise: MakeGen = (rng, ctx) => {
+  if (!knows(ctx, ['didit'])) return null
+  const personOk = (p: Person) => ['1s', '2i', '3i'].includes(p) || knows(ctx, TENSE_LESSONS.past[p] ?? [])
+  const subjs = knownSubjs(ctx, ctx.focus?.persons).filter((s) => personOk(s.p))
+  if (subjs.length < 2) return null
+  const ends = [...new Set(ALL_PERSONS.filter(personOk).map((q) => END.past[q]))]
+  type P = { subj: Subj; g: Gender }
+  const render = (p: P): Sentence => {
+    const end = END.past[p.subj.p]
+    const form = 'del' + end
+    return simple('praise', [p.subj.od, 'kåri', form], [...subjEn(p.subj, p.g, false), 'did', 'it'], 2,
+      ends.map((e) => 'del' + e),
+      `<b>${p.subj.od}</b> (${p.subj.desc}) + past → <b>${form}</b>. <b>kåri ${form}</b> = got it done.`,
+      { hint: p.subj.hint, ending: { stem: 'del', end, wrong: ends.filter((e) => e !== end) } })
+  }
+  const p: P = { subj: pick(rng, subjs), g: chance(rng, 0.5) ? 'He' : 'She' }
+  return { s: render(p), siblings: () => subjs.filter((x) => x !== p.subj).map((subj) => render({ ...p, subj })) }
+}
+
 const FRAMES: Record<FrameId, MakeGen> = {
-  verb: verbGen, beLoc, wellness, emotion, feel, like, need, have, poss, count, measure, thisThat,
+  verb: verbGen, beLoc, wellness, emotion, feel, like, need, have, poss, count, measure, thisThat, praise,
 }
 // The lesson that first makes each frame possible.
 const FRAME_LESSONS: Record<FrameId, string[]> = {
@@ -955,6 +1025,7 @@ const FRAME_LESSONS: Record<FrameId, string[]> = {
   count: ['count'],
   measure: ['num'],
   thisThat: ['this'],
+  praise: ['didit'],
 }
 
 export function framesAvailable(ctx: Ctx): FrameId[] {

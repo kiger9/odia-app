@@ -1,10 +1,10 @@
 // Turns generated sentences (grammar.ts) and taught vocabulary into exercise
 // steps, for two places:
 //  - the "fresh practice" that ends every lesson (and the remix when a finished
-//    lesson is replayed), focused on that lesson's topic;
-//  - the Pop Quiz, which mixes everything the learner has finished.
+//    lesson is replayed) — strictly that lesson's own topic, never other lessons;
+//  - the Pop Quiz, which is where everything the learner has finished gets mixed.
 
-import { LESSONS, type Step } from '../data/lessons'
+import { CHAPTERS, LESSONS, type Step } from '../data/lessons'
 import { enText, generate, odText, type Ctx, type Focus, type Gen, type Sentence } from './grammar'
 import { chance, makeRng, pick, shuffle, type Rng } from './rng'
 
@@ -15,8 +15,8 @@ export type PStep = Step & {
   sig?: string // identity, to avoid repeating recent questions
 }
 
-type Format = 'choiceEn' | 'choiceOd' | 'cloze' | 'buildOd' | 'buildEn' | 'type' | 'match'
-const FORMATS: Format[] = ['choiceEn', 'cloze', 'buildOd', 'choiceOd', 'buildEn', 'type', 'match']
+type Format = 'choiceEn' | 'choiceOd' | 'cloze' | 'ending' | 'buildOd' | 'buildEn' | 'type' | 'match'
+const FORMATS: Format[] = ['choiceEn', 'cloze', 'ending', 'buildOd', 'choiceOd', 'buildEn', 'type', 'match']
 
 const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '')
@@ -68,6 +68,19 @@ function sentenceStep(g: Gen, format: Format, rng: Rng): PStep | null {
         ...base, t: 'cloze', q: `Complete: ${quoted(s)}${hintOf(s)}`,
         pre: cap(pre), post: s.od.slice(s.key + 1).join(' ') + (s.question ? '?' : ''),
         opts: [s.od[s.key], ...wrong].map((o) => (s.key === 0 ? cap(o) : o)), ans: 0,
+      }
+    }
+    case 'ending': {
+      // "Which ending?" — the stem is given, pick the person ending: Ame jau [-chu].
+      // Only endings the learner has been taught are offered.
+      const e = s.ending
+      if (!e || e.wrong.length < 2) return null
+      const wrong = shuffle(rng, e.wrong).slice(0, 3)
+      return {
+        ...base, sig: sig + ':end', t: 'cloze', q: `Which ending? ${quoted(s)}${hintOf(s)}`,
+        pre: cap([...s.od.slice(0, s.key), e.stem].join(' ')),
+        post: s.od.slice(s.key + 1).join(' ') + (s.question ? '?' : ''),
+        opts: [e.end, ...wrong].map((x) => '-' + x), ans: 0,
       }
     }
     case 'buildOd': {
@@ -128,7 +141,7 @@ function buildVocab(): Vocab[] {
   for (const l of LESSONS)
     for (const it of l.items) {
       if (it.t === 'intro' && it.odia && it.gloss) {
-        if (/[→=]/.test(it.odia)) continue
+        if (it.rule || /[→=]/.test(it.odia)) continue // grammar rules aren't words to quiz
         if (it.odia.includes('·')) {
           // "Eita · Seita" = "This (one) · That (one)" → two words. A trailing
           // note belongs to every word: "Duita · Tinita" = "Two · Three
@@ -167,6 +180,8 @@ function vocabStep(pool: Vocab[], target: Vocab, format: Format, rng: Rng): PSte
   }
   const sig = norm(target.od)
   switch (format) {
+    case 'ending':
+      return null // single words have no person ending to drill
     case 'choiceEn':
     case 'cloze': {
       const d = pickDistinct(2, 'en')
@@ -194,7 +209,9 @@ function vocabStep(pool: Vocab[], target: Vocab, format: Format, rng: Rng): PSte
 
 // ---------- what each lesson's fresh practice focuses on ----------
 
-const LESSON_FOCUS: Record<string, Focus> = {
+// A lesson with several pieces lists one focus per piece; practice rotates
+// through them so each piece gets its own questions.
+const LESSON_FOCUS: Record<string, Focus | Focus[]> = {
   be: { frames: ['beLoc'] },
   howru: { frames: ['wellness'] },
   have: { frames: ['have'] },
@@ -210,11 +227,19 @@ const LESSON_FOCUS: Record<string, Focus> = {
   this: { frames: ['thisThat'] },
   comego: { frames: ['verb'], tenses: ['pres'], verbs: ['ja', 'as'] },
   possess: { frames: ['poss'] },
-  inout: { frames: ['beLoc', 'verb'], verbs: ['ja'] },
+  inout: [
+    { frames: ['beLoc'], comps: ['inout'] },
+    { frames: ['verb'], verbs: ['ja'], comps: ['inout'], compReq: true },
+  ],
   where: { frames: ['beLoc', 'verb'], modes: ['where'] },
   verbs1: { frames: ['verb'], tenses: ['pres'], verbs: ['kha', 'pi', 'anu', 'rah'] },
-  withothers: { frames: ['verb'], withReq: true },
-  smallwords: { frames: ['poss'] },
+  withothers: { frames: ['verb'], withReq: true, withFrom: ['withothers'] },
+  smallwords: [
+    { frames: ['poss'], ownersNamed: true }, // Kirsten-rå ghårå
+    { frames: ['verb'], alsoReq: true }, // Mu be jauchi
+    { frames: ['verb'], withReq: true, withFrom: ['smallwords'] }, // Rahul-sange
+    { frames: ['verb'], verbs: ['ja', 'as'], comps: ['comego', 'smallwords'], compReq: true }, // -ku / -ru
+  ],
   neg: { frames: ['verb', 'beLoc'], modes: ['neg'] },
   need: { frames: ['need'] },
   likeit: { frames: ['like'] },
@@ -233,6 +258,7 @@ const LESSON_FOCUS: Record<string, Focus> = {
   futurehe: { frames: ['verb'], tenses: ['fut'], persons: ['3i'] },
   futureresp: { frames: ['verb'], tenses: ['fut'], persons: ['2r', '3r'] },
   futurewe: { frames: ['verb'], tenses: ['fut'], persons: ['1p'] },
+  didit: { frames: ['praise'] },
   days: { frames: ['verb'], timeReq: true, times: ['aji', 'kali', 'gatakali'] },
   soon: { frames: ['verb'], tenses: ['fut'], modes: ['stmt', 'when'], times: ['shighra'], timeReq: true },
 }
@@ -262,6 +288,7 @@ export function rememberSeen(steps: PStep[]): void {
 interface Source {
   ctx?: Ctx // generate sentences in this context…
   vocab: Vocab[] // …or fall back to these words
+  endings?: boolean // a conjugation lesson: lean on "which ending?" questions
 }
 
 function makeSet(sources: Source[], n: number, rng: Rng, avoid: Set<string>): PStep[] {
@@ -276,7 +303,7 @@ function makeSet(sources: Source[], n: number, rng: Rng, avoid: Set<string>): PS
     let chosen: PStep | null = null
     let fallback: PStep | null = null
     for (let attempt = 0; attempt < 30 && !chosen; attempt++) {
-      const fmts = [formats[0], ...shuffle(rng, FORMATS)]
+      const fmts = [src.endings && chance(rng, 0.4) ? 'ending' : formats[0], ...shuffle(rng, FORMATS)] as Format[]
       let step: PStep | null = null
       const g = src.ctx && (src.vocab.length === 0 || chance(rng, 0.8)) ? generate(rng, src.ctx) : null
       if (g) for (const f of fmts) if ((step = sentenceStep(g, f, rng))) break
@@ -301,22 +328,43 @@ function makeSet(sources: Source[], n: number, rng: Rng, avoid: Set<string>): PS
 function formatOf(s: PStep): Format {
   if (s.t === 'assemble') return s.dir === 'en' ? 'buildEn' : 'buildOd'
   if (s.t === 'choice') return s.show ? 'choiceEn' : 'choiceOd'
+  if (s.sig?.endsWith(':end')) return 'ending'
   return s.t as Format
 }
 
 const vocabFor = (known: Set<string>) => VOCAB.filter((v) => known.has(v.lesson))
 
-// Fresh practice for one lesson: mostly its own topic, plus one spiral-review
-// question from earlier lessons.
+// Lessons whose whole point is "which person ending?" — their practice asks for
+// the ending itself more often.
+const ENDING_LESSONS = new Set([
+  'be', 'conjgo', 'conjeat', 'conjdrink', 'conjdo', 'conjsee', 'conjplay', 'conjsleep',
+  'past', 'pastyou', 'pasthe', 'pastresp', 'pastwe', 'future', 'futureyou', 'futurehe', 'futureresp', 'futurewe', 'didit',
+])
+
+// Words for a lesson with no generator focus: its own, or — if it teaches too
+// few to make questions from — those of the finished lessons in its chapter.
+function lessonVocab(lessonId: string, known: Set<string>): Vocab[] {
+  const own = VOCAB.filter((v) => v.lesson === lessonId)
+  if (own.length >= 3) return own
+  const mates = CHAPTERS.find((c) => c.lessons.includes(lessonId))?.lessons ?? [lessonId]
+  return VOCAB.filter((v) => mates.includes(v.lesson) && known.has(v.lesson))
+}
+
+// Fresh practice for one lesson — only on that lesson's topic. Mixing in other
+// lessons is the Pop Quiz's job; dropped into a focused lesson it just reads as
+// a random question out of nowhere.
 export function freshSteps(lessonId: string, completed: Set<string>, n: number, rng: Rng = makeRng()): PStep[] {
   const known = new Set([...completed, lessonId])
-  const own = VOCAB.filter((v) => v.lesson === lessonId)
-  const focus = LESSON_FOCUS[lessonId]
-  const main: Source = focus ? { ctx: { known, focus }, vocab: [] } : { vocab: own.length >= 3 ? own : vocabFor(known) }
-  const spiral: Source = { ctx: { known }, vocab: vocabFor(known) }
-  const sources = Array.from({ length: n }, (_, i) => (i === n - 1 && n >= 4 ? spiral : main))
+  const vocab = lessonVocab(lessonId, known)
+  const focuses = [LESSON_FOCUS[lessonId] ?? []].flat()
+  const endings = ENDING_LESSONS.has(lessonId)
+  const sources: Source[] = focuses.length
+    ? focuses.map((focus) => ({ ctx: { known, focus }, vocab: [], endings }))
+    : [{ vocab }]
   let steps = makeSet(sources, n, rng, new Set())
-  if (steps.length < n) steps = [...steps, ...makeSet([spiral], n - steps.length, rng, new Set(steps.map((s) => s.sig!)))]
+  // Too few distinct sentences? Top up from the lesson's own words.
+  if (steps.length < n && vocab.length)
+    steps = [...steps, ...makeSet([{ vocab }], n - steps.length, rng, new Set(steps.map((s) => s.sig!)))]
   return steps
 }
 
