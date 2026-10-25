@@ -430,15 +430,15 @@ export const LESSONS: Lesson[] = [
   ]},
 { id:'feel2', title:'How Do You Feel?', sub:'Asking about feelings · 11 steps', items:[
     {t:'intro', odia:'Tåme kemiti åchå?', gloss:'How do you feel?  (informal)', note:'<b>kemiti</b> = how. <b>Tåme kemiti åchå?</b> asks how someone is feeling / doing.'},
-    {t:'intro', odia:'Tåmåku bhokå laguchi ki?', gloss:'Are you hungry?', note:'Add <b>ki</b> to make a yes/no question. <b>Tåmåku</b> = to you. "to-you hunger feels?" = Are you hungry?'},
-    {t:'intro', odia:'Tåme khusi åchå ki?', gloss:'Are you happy?', note:'For emotions: <b>Tåme khusi åchå ki?</b> = Are you happy?'},
-    {t:'choice', q:'How do you ask "Are you hungry?"', opts:[{a:'Tåmåku bhokå laguchi ki?'},{a:'Mote bhokå laguchi'},{a:'Tåme khusi åchå ki?'}], ans:0, why:'<b>ki</b> makes it a question; <b>Tåmåku</b> = to you.'},
-    {t:'match', q:'Match the pairs', pairs:[['Tåme kemiti åchå?','How do you feel?'],['Tåmåku bhokå laguchi ki?','Are you hungry?'],['Tåme khusi åchå ki?','Are you happy?']]},
+    {t:'intro', odia:'Tåmåku bhokå laguchi-ki?', gloss:'Are you hungry?', note:'Add <b>-ki</b> to the verb to make a yes/no question. <b>Tåmåku</b> = to you. "to-you hunger feels?" = Are you hungry?'},
+    {t:'intro', odia:'Tåme khusi åchå-ki?', gloss:'Are you happy?', note:'For emotions: <b>Tåme khusi åchå-ki?</b> = Are you happy?'},
+    {t:'choice', q:'How do you ask "Are you hungry?"', opts:[{a:'Tåmåku bhokå laguchi-ki?'},{a:'Mote bhokå laguchi'},{a:'Tåme khusi åchå-ki?'}], ans:0, why:'<b>-ki</b> makes it a question; <b>Tåmåku</b> = to you.'},
+    {t:'match', q:'Match the pairs', pairs:[['Tåme kemiti åchå?','How do you feel?'],['Tåmåku bhokå laguchi-ki?','Are you hungry?'],['Tåme khusi åchå-ki?','Are you happy?']]},
     {t:'intro', odia:'Hå, mote bhokå laguchi', gloss:'Yes, I feel hungry', note:'<b>Hå</b> = yes. Answer a "feeling" question the same way you say it about yourself.'},
-    {t:'choice', q:'What does this mean?', show:'Tåme khusi åchå ki?', opts:[{a:'Are you happy?'},{a:'I am happy'},{a:'Are you hungry?'}], ans:0, why:'khusi = happy, ki = the question marker.'},
-    {t:'assemble', q:'Build in Odia: "Are you hungry?"', gloss:'ki = the question marker', ans:['Tåmåku','bhokå','laguchi','ki?'], dist:['Mote','åchi']},
+    {t:'choice', q:'What does this mean?', show:'Tåme khusi åchå-ki?', opts:[{a:'Are you happy?'},{a:'I am happy'},{a:'Are you hungry?'}], ans:0, why:'khusi = happy, -ki = the question marker.'},
+    {t:'assemble', q:'Build in Odia: "Are you hungry?"', gloss:'-ki = the question marker', ans:['Tåmåku','bhokå','laguchi-ki?'], dist:['Mote','laguchi','åchi']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Tåme kemiti åchå?', ans:['How','do','you','feel?'], dist:['are','hungry']},
-    {t:'cloze', q:'Complete: "Are you happy?"', pre:'Tåme khusi åchå', post:'', opts:['ki?','laguchi','mote'], ans:0, why:'<b>ki</b> turns it into a yes/no question.'},
+    {t:'cloze', q:'Complete: "Are you happy?"', pre:'Tåme khusi åchå', post:'', opts:['-ki?','laguchi','mote'], ans:0, why:'<b>-ki</b> turns it into a yes/no question.'},
     {t:'type', q:'Type in Odia: "How do you feel?"  (informal)', ans:'Tåme kemiti åchå?', alts:['tame kemiti acha','tame kemiti acha?']}
   ]},
 { id:'meals', title:'Meal Time', sub:'Eating, breakfast, food · 13 steps', items:[
@@ -693,7 +693,7 @@ export const LESSONS: Lesson[] = [
     {t:'assemble', q:'Build in Odia: “I like rice”', gloss:'bhatå = rice', ans:['Mote','bhatå','bhålå','laguchi'], dist:['Mu','laguni']},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Hå, mote pizza bhålå laguchi', ans:['Yes,','I','like','pizza'], dist:['don\'t','eat']},
     {t:'choice', q:'What does this mean?', show:'Mitu, tåme kådåli khaibå-ki?', opts:[{a:'Mitu, will you eat a banana?'},{a:'Mitu is eating a banana'},{a:'Mitu likes bananas'}], ans:0, why:'<b>khaibå-ki?</b> = will you eat?'},
-    {t:'type', q:'Type in Odia: “Do you like it?”', ans:'Bhålå laguchi-ki?', alts:['bhala laguchi ki','bhalo laguchi ki']}
+    {t:'type', q:'Type in Odia: “Do you like it?”', ans:'Bhålå laguchi-ki?', alts:['bhala laguchi-ki','bhalo laguchi-ki']}
   ]},
 { id:'didit', title:'You Did It!', sub:'Praise: kåri delå, båhut badhiya · 10 steps', items:[
     {t:'intro', odia:'Tåme kåri delå!', gloss:'You did it!', note:'<b>kåri</b> (doing) + <b>delå</b> (gave) = “got it done!” <b>delå</b> has the past ending for informal you, like <b>asilå</b> and <b>khailå</b>.'},

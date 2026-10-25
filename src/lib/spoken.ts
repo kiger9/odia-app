@@ -25,7 +25,11 @@ export function answerOdia(step: PStep): string | undefined {
       // attach to the stem at the end of `pre`; the question particle "-ki"
       // keeps its hyphen ("åchi-ki", never "åchiki").
       const o = (step.opts?.[step.ans as number] ?? '') as string
-      const filled = o === '-ki' ? `${step.pre ?? ''}-ki` : o.startsWith('-') ? `${step.pre ?? ''}${o.slice(1)}` : `${step.pre ?? ''} ${o}`
+      const filled = /^-ki\??$/.test(o)
+        ? `${step.pre ?? ''}${o}`
+        : o.startsWith('-')
+          ? `${step.pre ?? ''}${o.slice(1)}`
+          : `${step.pre ?? ''} ${o}`
       return `${filled} ${step.post ?? ''}`.replace(/\s+/g, ' ').trim()
     }
     case 'assemble':

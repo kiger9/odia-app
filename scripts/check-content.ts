@@ -1,7 +1,8 @@
 // Content convention check: the yes/no question particle is always hyphenated
-// ("åchi-ki", never "åchiki"). Scans every string a learner can see — all
+// ("åchi-ki", never "åchiki" or "åchi ki"). Scans every string a learner can see — all
 // lesson steps, what the practice generator produces, and the practice bank —
-// and exits 1, listing offenders, if a word is a known word glued to "ki".
+// and exits 1, listing offenders, if a word is a known word glued to "ki" or
+// "ki" stands on its own as a separate word.
 //
 //   npm run check:content
 //
@@ -25,6 +26,7 @@ function tokensIn(value: unknown, out: string[] = []): string[] {
   if (typeof value === 'string') {
     const text = value.replace(/<[^>]*>/g, ' ')
     for (const t of text.toLowerCase().split(/[\s·/,.;:!?“”"‘’()—–]+/)) {
+      if (t === 'ki') out.push(' ki') // the particle written apart: "åchå ki?"
       const tok = t.replace(/^[-']+|[-']+$/g, '')
       if (tok) out.push(tok)
     }
@@ -65,11 +67,13 @@ const known = (stem: string) => stem in WORDS || found.has(stem)
 const offenders = [...found.keys()]
   .filter((t) => t.endsWith('ki') && !t.endsWith('-ki') && !NOT_THE_PARTICLE.has(t) && t.length > 4 && known(t.slice(0, -2)))
   .sort()
+const apart = found.get(' ki')
 
-if (offenders.length) {
+if (offenders.length || apart) {
   console.error('Question particle written without its hyphen (write "stem-ki"):')
   for (const t of offenders)
     console.error(`  ${t}  →  ${t.slice(0, -2)}-ki   (${[...found.get(t)!].sort().join(', ')})`)
+  if (apart) console.error(`  "ki" as a separate word  →  attach it: "åchå-ki"   (${[...apart].sort().join(', ')})`)
   process.exit(1)
 }
 console.log(`check:content ok — ${found.size} distinct words scanned, no unhyphenated "-ki"`)
