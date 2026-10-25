@@ -76,7 +76,7 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
             {current.note && (
               <p
                 className="answer-note muted"
-                dangerouslySetInnerHTML={{ __html: fillName(current.note) }}
+                dangerouslySetInnerHTML={{ __html: fillName(current.note, true) }}
               />
             )}
           </div>

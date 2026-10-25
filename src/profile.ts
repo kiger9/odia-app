@@ -1,6 +1,7 @@
 // Profile: the learner's name, lifetime stats, encouragement, and progress reset.
 
 import { db } from './db'
+import { escapeHtml } from './lib/personalize'
 
 // --- name (localStorage, so it survives a progress reset) ---
 const NAME_KEY = 'odia:name'
@@ -64,9 +65,11 @@ export function encouragement(): string {
 }
 
 // Replace the {name} placeholder with the learner's name (used by reviews & quiz,
-// which draw from lesson content that may contain {name}).
-export function fillName(s: string): string {
-  return typeof s === 'string' ? s.replace(/\{name\}/g, getName() || 'Suresh') : s
+// which draw from lesson content that may contain {name}). Pass html for text
+// that's rendered as HTML, so the name is escaped there.
+export function fillName(s: string, html = false): string {
+  const name = getName() || 'Suresh'
+  return typeof s === 'string' ? s.replace(/\{name\}/g, html ? escapeHtml(name) : name) : s
 }
 
 // Format a YYYY-MM-DD date as e.g. "Aug 8, 2026".
