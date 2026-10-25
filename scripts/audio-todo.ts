@@ -2,8 +2,11 @@
 // (from data/script.ts) and recorded clip (from data/clips.ts), so it's clear
 // what still needs transcribing or recording.
 //
-//   npm run audio:todo -- be howru have        # table
+//   npm run audio:todo -- be howru have        # table (also: dictionary)
 //   npm run audio:todo -- --json be howru      # machine-readable
+//
+// "dictionary" is a pseudo lesson: every dictionary entry's phonetic (a verb's
+// infinitive) plus each verb's present example, with source "dictionary".
 //
 // A phrase is "spoken" if it's a step's Odia question, its Odia answer, or an
 // Odia tile in a match (see lib/spoken.ts).
@@ -14,6 +17,7 @@ import { makeRng } from '../src/gen/rng'
 import { answerOdia, promptOdia } from '../src/lib/spoken'
 import { toScript } from '../src/data/script'
 import { CLIPS } from '../src/data/clips'
+import { DICTIONARY } from '../src/data/dictionary'
 
 const args = process.argv.slice(2)
 const json = args.includes('--json')
@@ -44,24 +48,31 @@ function practiceSteps(id: string): PStep[] {
 
 interface Row {
   lesson: string
-  source: 'lesson' | 'practice'
+  source: 'lesson' | 'practice' | 'dictionary'
   phonetic: string
   script: string | null
   clip: string | null
 }
 const rows: Row[] = []
 const seen = new Set<string>()
+function addRow(id: string, source: Row['source'], phonetic: string) {
+  if (seen.has(phonetic)) return
+  seen.add(phonetic)
+  const script = toScript(phonetic) ?? null
+  rows.push({ lesson: id, source, phonetic, script, clip: (script && CLIPS[script]) || null })
+}
 for (const id of ids) {
+  if (id === 'dictionary') {
+    for (const e of DICTIONARY) {
+      addRow(id, 'dictionary', e.phonetic)
+      if (e.present) addRow(id, 'dictionary', e.present)
+    }
+    continue
+  }
   const lesson = LESSONS.find((l) => l.id === id)
   if (!lesson) throw new Error(`no lesson "${id}"`)
   const add = (source: Row['source'], steps: PStep[]) => {
-    for (const s of steps)
-      for (const phonetic of spokenIn(s)) {
-        if (seen.has(phonetic)) continue
-        seen.add(phonetic)
-        const script = toScript(phonetic) ?? null
-        rows.push({ lesson: id, source, phonetic, script, clip: (script && CLIPS[script]) || null })
-      }
+    for (const s of steps) for (const phonetic of spokenIn(s)) addRow(id, source, phonetic)
   }
   add('lesson', lesson.items)
   add('practice', practiceSteps(id))

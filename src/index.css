@@ -689,8 +689,22 @@ button {
 .dict-item {
   border-bottom: 1px solid var(--line);
 }
+.dict-line {
+  display: flex;
+  align-items: center;
+}
+/* fixed-width slot for the play button: the buttons form one column, and rows
+   don't shift when a clip arrives (the button renders nothing until then) */
+.dict-play {
+  flex: none;
+  width: 40px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+}
 .dict-row {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -712,7 +726,10 @@ button {
 .dict-phon {
   color: var(--saffron-dk);
   text-align: right;
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 55%;
+  overflow-wrap: anywhere;
 }
 .dict-tag {
   font-size: 0.6rem;
@@ -730,7 +747,7 @@ button {
 .dict-detail {
   background: var(--paper);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 10px 0 10px 12px; /* no right padding: the play slots line up with the rows' */
   margin: 0 0 8px;
   display: flex;
   flex-direction: column;
@@ -742,9 +759,15 @@ button {
 }
 .dd-line {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   gap: 12px;
   font-size: 0.9rem;
+}
+.dd-line .dd-v {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
 }
 .dd-v {
   color: var(--saffron-dk);

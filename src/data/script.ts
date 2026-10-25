@@ -25,6 +25,7 @@ import { PASTTENSE } from './words/pasttense'
 import { FUTURETENSE } from './words/futuretense'
 import { LIFE } from './words/life'
 import { TIME } from './words/time'
+import { DICTIONARY_WORDS } from './words/dictionary'
 
 export const WORD_LISTS: Record<string, Record<string, string>> = {
   start: START,
@@ -39,6 +40,7 @@ export const WORD_LISTS: Record<string, Record<string, string>> = {
   futuretense: FUTURETENSE,
   life: LIFE,
   time: TIME,
+  dictionary: DICTIONARY_WORDS,
 }
 
 export const WORDS: Record<string, string> = Object.assign({}, ...Object.values(WORD_LISTS))
