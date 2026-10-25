@@ -4,10 +4,13 @@ import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App.tsx'
 import { requestPersistentStorage } from './db.ts'
+import { primeAudio } from './audio.ts'
 
 // Turn on offline support (the service worker) and ask iOS to keep our data.
 registerSW({ immediate: true })
 void requestPersistentStorage()
+// Ready the Odia audio player, so the learner's first tap unlocks sound on iOS.
+primeAudio()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

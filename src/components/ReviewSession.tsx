@@ -4,7 +4,10 @@ import { dueItemsFrom, recordReview, type ReviewItem } from '../reviews'
 import { markPracticedToday } from '../streak'
 import { fillName } from '../profile'
 import { Rating, type Grade } from '../srs'
+import { speak, stopSpeaking } from '../audio'
 import Modal from './Modal'
+import MuteButton from './MuteButton'
+import { SpeakButton } from './Steps'
 
 export default function ReviewSession({ onExit }: { onExit: () => void }) {
   const [queue, setQueue] = useState<ReviewItem[] | null>(null)
@@ -15,6 +18,7 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
   // Snapshot the due items once when the session starts.
   useEffect(() => {
     db.progress.toArray().then((rows: Progress[]) => setQueue(dueItemsFrom(rows)))
+    return stopSpeaking
   }, [])
 
   if (queue === null) {
@@ -45,6 +49,7 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
   }
 
   async function rate(grade: Grade) {
+    stopSpeaking()
     await recordReview(current!.id, grade)
     const wasLast = index >= (queue?.length ?? 0) - 1
     setRevealed(false)
@@ -64,6 +69,7 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
         <span className="q-count">
           {index + 1} / {queue.length}
         </span>
+        <MuteButton />
       </div>
 
       <section className="card review-q">
@@ -72,7 +78,10 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
 
         {revealed ? (
           <div className="answer">
-            <p className="answer-phonetic">{fillName(current.phonetic)}</p>
+            <p className="answer-phonetic">
+              {fillName(current.phonetic)}
+              <SpeakButton text={fillName(current.phonetic)} />
+            </p>
             {current.note && (
               <p
                 className="answer-note muted"
@@ -81,7 +90,13 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
             )}
           </div>
         ) : (
-          <button className="btn-primary" onClick={() => setRevealed(true)}>
+          <button
+            className="btn-primary"
+            onClick={() => {
+              setRevealed(true)
+              speak(fillName(current.phonetic))
+            }}
+          >
             Show answer
           </button>
         )}

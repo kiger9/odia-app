@@ -8,6 +8,7 @@ import { lessonRun, rememberSeen, type PStep } from '../gen/exercises'
 import { StepView } from './Steps'
 import { personalize } from '../lib/personalize'
 import Modal from './Modal'
+import MuteButton from './MuteButton'
 
 export default function LessonPlayer({
   lesson,
@@ -89,6 +90,7 @@ export default function LessonPlayer({
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${(index / total) * 100}%` }} />
         </div>
+        <MuteButton />
       </div>
       <StepView
         key={index}

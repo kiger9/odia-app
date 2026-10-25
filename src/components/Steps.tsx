@@ -1,9 +1,12 @@
 // The exercise screens (teach card, multiple choice, fill-the-blank, match,
 // build-a-sentence, type-it), shared by lessons and the Pop Quiz.
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { PStep } from '../gen/exercises'
 import { answerMatches } from '../lib/normalize'
+import { answerOdia, promptOdia } from '../lib/spoken'
+import { toScript } from '../data/script'
+import { canSpeak, speak, stopSpeaking } from '../audio'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
 
 function shuffle<T>(arr: T[]): T[] {
@@ -19,6 +22,16 @@ const optText = (o: string | { a: string }) => (typeof o === 'string' ? o : o.a)
 const sameTokens = (a: string[], b: string[]) =>
   a.length === b.length && a.every((t, i) => t.toLowerCase() === b[i].toLowerCase())
 
+// Replays a phrase on tap — even when muted, since the learner asked to hear it.
+export function SpeakButton({ text }: { text?: string }) {
+  if (!canSpeak(text)) return null
+  return (
+    <button type="button" className="speak-btn" aria-label="Play audio" onClick={() => speak(text, true)}>
+      🔊
+    </button>
+  )
+}
+
 // The core teaching display: phonetic spelling large, Odia script small beneath.
 function Phrase({
   phonetic,
@@ -31,11 +44,14 @@ function Phrase({
   showScript: boolean
   size?: 'lg' | 'md'
 }) {
+  const shown = script ?? toScript(phonetic)
   return (
     <div className="phrase">
-      <p className={size === 'lg' ? 'phonetic-lg' : 'phonetic-md'}>{phonetic}</p>
-      {/* Odia-script subtext — hidden until the script content layer is ready. */}
-      {SHOW_SCRIPT_FEATURE && showScript && script && <p className="script-sub">{script}</p>}
+      <p className={size === 'lg' ? 'phonetic-lg' : 'phonetic-md'}>
+        {phonetic}
+        <SpeakButton text={phonetic} />
+      </p>
+      {SHOW_SCRIPT_FEATURE && showScript && shown && <p className="script-sub">{shown}</p>}
     </div>
   )
 }
@@ -43,17 +59,23 @@ function Phrase({
 function Feedback({
   correct,
   answer,
+  say,
   why,
   onNext,
 }: {
   correct: boolean
   answer?: string
+  say?: string // the right answer in Odia, read aloud once answered
   why?: string
   onNext: () => void
 }) {
+  useEffect(() => speak(say), [say])
   return (
     <div className={`feedback ${correct ? 'ok' : 'no'}`}>
-      <p className="fb-title">{correct ? 'Correct ✓' : 'Not quite'}</p>
+      <p className="fb-title">
+        {correct ? 'Correct ✓' : 'Not quite'}
+        <SpeakButton text={say} />
+      </p>
       {!correct && answer && (
         <p className="fb-ans">
           Answer: <b>{answer}</b>
@@ -131,6 +153,7 @@ function ChoiceStep({ step, showScript, onNext, onResult }: StepProps) {
         <Feedback
           correct={picked === ans}
           answer={optText(opts[ans])}
+          say={answerOdia(step)}
           why={step.why}
           onNext={onNext}
         />
@@ -175,7 +198,13 @@ function ClozeStep({ step, onNext, onResult }: StepProps) {
         })}
       </div>
       {picked !== null && (
-        <Feedback correct={picked === ans} answer={opts[ans]} why={step.why} onNext={onNext} />
+        <Feedback
+          correct={picked === ans}
+          answer={opts[ans]}
+          say={answerOdia(step)}
+          why={step.why}
+          onNext={onNext}
+        />
       )}
     </div>
   )
@@ -219,7 +248,10 @@ function MatchStep({ step, onNext, onResult }: StepProps) {
               key={l}
               className={`tile ${matched.has(l) ? 'locked' : selLeft === l ? 'sel' : ''}`}
               disabled={matched.has(l)}
-              onClick={() => setSelLeft(l)}
+              onClick={() => {
+                setSelLeft(l)
+                speak(l)
+              }}
             >
               {l}
             </button>
@@ -310,7 +342,13 @@ function AssembleStep({ step, showScript, onNext, onResult }: StepProps) {
           Check
         </button>
       ) : (
-        <Feedback correct={correct} answer={ans.join(' ')} why={step.why} onNext={onNext} />
+        <Feedback
+          correct={correct}
+          answer={ans.join(' ')}
+          say={answerOdia(step)}
+          why={step.why}
+          onNext={onNext}
+        />
       )}
     </div>
   )
@@ -373,13 +411,21 @@ function TypeStep({ step, onNext, onResult }: StepProps) {
           Check
         </button>
       ) : (
-        <Feedback correct={correct} answer={ans} why={step.why} onNext={onNext} />
+        <Feedback correct={correct} answer={ans} say={answerOdia(step)} why={step.why} onNext={onNext} />
       )}
     </div>
   )
 }
 
 export function StepView(props: StepProps) {
+  // Each step is its own mount (the players key it by position), so this says
+  // the step's Odia question once as it appears, and cuts off any audio when
+  // the learner moves on.
+  useEffect(() => {
+    speak(promptOdia(props.step))
+    return stopSpeaking
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const view = (() => {
     switch (props.step.t) {
       case 'intro':

@@ -1,9 +1,9 @@
 // App settings kept in localStorage (synchronous, so there's no flash on load).
 
-// Master switch for the Odia-script layer. Hidden for now — the lessons are
-// phonetic-only, so there's no script to show yet. Flip to true (and populate the
-// `script` fields in the lessons) to bring back the toggle and the script subtext.
-export const SHOW_SCRIPT_FEATURE = false
+// Master switch for the Odia-script layer: the Settings toggle and the script
+// subtext. Script comes from a step's `script` field or, failing that, from the
+// word list in data/script.ts — phrases it can't convert just show no script.
+export const SHOW_SCRIPT_FEATURE = true
 
 const SHOW_SCRIPT_KEY = 'odia:showScript'
 

@@ -23,6 +23,15 @@ export default defineConfig({
         // Pulls the evening-reminder handlers (periodicsync / notificationclick)
         // into the generated service worker. See public/notify-sw.js.
         importScripts: ['notify-sw.js'],
+        // Odia audio clips aren't precached (there will be hundreds); each is
+        // kept once played, so lessons already heard keep their sound offline.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes('/audio/'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'odia-audio', expiration: { maxEntries: 3000 } },
+          },
+        ],
       },
       manifest: {
         name: 'Odia in Small Bites',

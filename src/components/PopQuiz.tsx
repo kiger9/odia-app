@@ -4,6 +4,7 @@ import { buildQuiz, rememberSeen, type PStep } from '../gen/exercises'
 import { markPracticedToday } from '../streak'
 import { recordQuizResult, encouragement, getName } from '../profile'
 import { StepView } from './Steps'
+import MuteButton from './MuteButton'
 import { personalize } from '../lib/personalize'
 import Modal from './Modal'
 
@@ -109,6 +110,7 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
         <span className="q-count">
           {index + 1} / {questions.length}
         </span>
+        <MuteButton />
       </div>
 
       <StepView
