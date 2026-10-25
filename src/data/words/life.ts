@@ -42,10 +42,10 @@ export const LIFE: Record<string, string> = {
   khaithili: 'ଖାଇଥିଲି', // "had eaten"
   khauthili: 'ଖାଉଥିଲି', // "was eating"
   // sangåre (with) is a separate word in script; the name/pronoun/-nkå before it attaches
-  'mo-sangåre': 'ମୋ ସଙ୍ଗରେ',
-  'tåmå-sangåre': 'ତମ ସଙ୍ଗରେ', // spoken tåmå → ତମ (formal: ତୁମ)
-  'rahul-sangåre': 'ରାହୁଲ ସଙ୍ଗରେ',
-  'bapa-nkå-sangåre': 'ବାପାଙ୍କ ସଙ୍ଗରେ',
+  'mo-sangåre': 'ମୋ ସାଙ୍ଗରେ',
+  'tåmå-sangåre': 'ତମ ସାଙ୍ଗରେ', // spoken tåmå → ତମ (formal: ତୁମ)
+  'rahul-sangåre': 'ରାହୁଲ ସାଙ୍ଗରେ',
+  'bapa-nkå-sangåre': 'ବାପାଙ୍କ ସାଙ୍ଗରେ',
   phulå: 'ଫୁଲ',
   pani: 'ପାଣି',
   anibe: 'ଆଣିବେ',
