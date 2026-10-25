@@ -9,7 +9,7 @@
 // Odia tile in a match (see lib/spoken.ts).
 
 import { CHAPTERS, LESSONS } from '../src/data/lessons'
-import { freshSteps, type PStep } from '../src/gen/exercises'
+import { bankSteps, freshSteps, type PStep } from '../src/gen/exercises'
 import { makeRng } from '../src/gen/rng'
 import { answerOdia, promptOdia } from '../src/lib/spoken'
 import { toScript } from '../src/data/script'
@@ -31,8 +31,11 @@ function spokenIn(step: PStep): string[] {
   return out.filter((p): p is string => !!p && !p.includes('{name}')).map((p) => p.trim())
 }
 
-// The practice a learner taking the course in order can meet in this lesson.
+// The practice a learner can meet in this lesson: its bank if it has one (that
+// is everything it can say), else whatever the generator might produce.
 function practiceSteps(id: string): PStep[] {
+  const bank = bankSteps(id)
+  if (bank) return bank
   const done = new Set(COURSE.slice(0, COURSE.indexOf(id)))
   const steps: PStep[] = []
   for (let seed = 1; seed <= 2000; seed++) steps.push(...freshSteps(id, done, 6, makeRng(seed)))

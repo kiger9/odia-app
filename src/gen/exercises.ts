@@ -5,6 +5,7 @@
 //  - the Pop Quiz, which is where everything the learner has finished gets mixed.
 
 import { CHAPTERS, LESSONS, type Step } from '../data/lessons'
+import bankJson from '../data/practice-bank.json'
 import { enText, generate, odText, type Ctx, type Focus, type Gen, type Sentence } from './grammar'
 import { chance, makeRng, pick, shuffle, type Rng } from './rng'
 
@@ -350,10 +351,45 @@ function lessonVocab(lessonId: string, known: Set<string>): Vocab[] {
   return VOCAB.filter((v) => mates.includes(v.lesson) && known.has(v.lesson))
 }
 
+// ---------- pre-built practice banks ----------
+
+// A lesson with a bank (built by `npm run practice:bank`) practises only from
+// those steps, so the only Odia it can ask is what has been recorded. Lessons
+// without one are generated fresh each time.
+const BANKS = bankJson as unknown as Record<string, PStep[] | undefined>
+
+export function bankSteps(lessonId: string): PStep[] | undefined {
+  const bank = BANKS[lessonId]
+  return bank?.length ? bank : undefined
+}
+
+// n steps from a bank at random: ones not seen recently first, and not the same
+// format twice running where there's a choice.
+function drawFromBank(bank: PStep[], n: number, rng: Rng, avoid: Set<string>): PStep[] {
+  const pool = shuffle(rng, bank)
+  const unseen = pool.filter((s) => !avoid.has(s.sig!))
+  const seen = pool.filter((s) => avoid.has(s.sig!))
+  const out: PStep[] = []
+  let last: Format | undefined
+  while (out.length < n && (unseen.length || seen.length)) {
+    const from = unseen.length ? unseen : seen
+    const [step] = from.splice(Math.max(0, from.findIndex((s) => formatOf(s) !== last)), 1)
+    last = formatOf(step)
+    out.push({ ...step, fresh: true })
+  }
+  return out
+}
+
 // Fresh practice for one lesson — only on that lesson's topic. Mixing in other
 // lessons is the Pop Quiz's job; dropped into a focused lesson it just reads as
 // a random question out of nowhere.
 export function freshSteps(lessonId: string, completed: Set<string>, n: number, rng: Rng = makeRng()): PStep[] {
+  const bank = bankSteps(lessonId)
+  return bank ? drawFromBank(bank, n, rng, new Set(loadRecent())) : generateSteps(lessonId, completed, n, rng)
+}
+
+// Straight from the generator, bank or no bank — what the bank builder samples.
+export function generateSteps(lessonId: string, completed: Set<string>, n: number, rng: Rng = makeRng()): PStep[] {
   const known = new Set([...completed, lessonId])
   const vocab = lessonVocab(lessonId, known)
   const focuses = [LESSON_FOCUS[lessonId] ?? []].flat()
@@ -393,8 +429,17 @@ export function lessonRunLength(lessonId: string): number {
 }
 
 // A Pop Quiz over everything finished so far, avoiding recently-seen questions.
+// Finished lessons with a bank supply their share of the questions from it (all
+// of them, if every finished lesson has one); the rest are generated.
 export function buildQuiz(completed: Set<string>, n = 10, rng: Rng = makeRng()): PStep[] {
   if (!completed.size) return []
+  const avoid = new Set(loadRecent())
+  const banked = [...completed].filter((id) => bankSteps(id))
+  const allBanked = banked.length === completed.size
+  const pool = [...new Map(banked.flatMap((id) => bankSteps(id)!).map((s) => [s.sig, s])).values()]
+  const fromBank = drawFromBank(pool, allBanked ? n : Math.round((n * banked.length) / completed.size), rng, avoid)
+  const rest = allBanked ? 0 : n - fromBank.length
   const src: Source = { ctx: { known: completed }, vocab: vocabFor(completed) }
-  return makeSet([src], n, rng, new Set(loadRecent())).map((s) => ({ ...s, fresh: false }))
+  const generated = makeSet([src], rest, rng, new Set([...avoid, ...fromBank.map((s) => s.sig!)]))
+  return shuffle(rng, [...fromBank, ...generated]).map((s) => ({ ...s, fresh: false }))
 }
