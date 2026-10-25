@@ -1038,4 +1038,5 @@ export const CLIPS: Record<string, string> = {
   'ତମେ ମୋ ସାଙ୍ଗରେ କାମ କରିଲ': 'tame-mo-sangare-kama-karila.mp3',
   'ତମେ ବଗିଚାରୁ ଆସିଲ': 'tame-bagicha-ru-asila.mp3',
   'ତମେ ଆମ୍ବ ଆଣିଲ': 'tame-amba-anila.mp3',
+  'ତମେ କୋଉଠିକି ଗଲ?': 'tame-kouthiki-gala-q.mp3',
 }
