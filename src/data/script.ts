@@ -30,9 +30,12 @@ const WORDS: Record<string, string> = {
 export function toScript(phonetic: string): string | undefined {
   const out: string[] = []
   for (const word of phonetic.trim().split(/\s+/)) {
-    const script = WORDS[word.toLowerCase().replace(/[?!.,;:“”"]/g, '')]
+    const key = word.toLowerCase().replace(/[?!.,;:“”"]/g, '')
+    if (!key) continue // a stray "?" written apart from its sentence
+    const script = WORDS[key]
     if (!script) return undefined
     out.push(script)
   }
+  if (!out.length) return undefined
   return out.join(' ') + (/\?\s*$/.test(phonetic) ? '?' : '')
 }

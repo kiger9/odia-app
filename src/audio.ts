@@ -2,28 +2,11 @@
 // phrase's Odia script, plus the mute setting (kept in localStorage).
 //
 // Clips are recorded with ElevenLabs (voice "Barsha", an Odia voice) from the
-// script in data/script.ts. A phrase with no clip is simply silent.
+// script in data/script.ts and listed in data/clips.ts. A phrase with no clip
+// is simply silent; `npm run audio:todo` lists the ones still missing.
 
+import { CLIPS } from './data/clips'
 import { toScript } from './data/script'
-
-// Odia script → clip file in public/audio.
-const CLIPS: Record<string, string> = {
-  'ମୁଁ ଅଛି': 'mu-achi.mp3',
-  'ତମେ ଅଛ': 'tame-acha.mp3',
-  'ଆପଣ ଅଛନ୍ତି': 'apana-achanti.mp3',
-  'ଆମେ ଅଛୁ': 'ame-achu.mp3',
-  'ମୁଁ ଘରେ ଅଛି': 'mu-ghare-achi.mp3',
-  'ଆପଣ ଘରେ ଅଛନ୍ତି': 'apana-ghare-achanti.mp3',
-  'ସେ ଅଛନ୍ତି': 'se-achanti.mp3',
-  'ସେମାନେ ଅଛନ୍ତି': 'semane-achanti.mp3',
-  'ସେମାନେ ଘରେ ଅଛନ୍ତି': 'semane-ghare-achanti.mp3',
-  'ସେ ଘରେ ଅଛି': 'se-ghare-achi.mp3',
-  'ଆମେ ଘରେ ଅଛୁ': 'ame-ghare-achu.mp3',
-  'ତମେ ଘରେ ଅଛ': 'tame-ghare-acha.mp3',
-  'ରାହୁଲ ଘରେ ଅଛି': 'rahul-ghare-achi.mp3',
-  'ରବି ଘରେ ଅଛି': 'rabi-ghare-achi.mp3',
-  'ମିତୁ ଘରେ ଅଛି': 'mitu-ghare-achi.mp3',
-}
 
 const MUTED_KEY = 'odia:muted'
 
