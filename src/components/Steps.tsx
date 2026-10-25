@@ -25,8 +25,19 @@ const sameTokens = (a: string[], b: string[]) =>
 
 // Replays a phrase on tap — even when muted, since the learner asked to hear it.
 // Callers give it a fixed slot (never inline after the text) so it doesn't move.
-export function SpeakButton({ text }: { text?: string }) {
+// With a label ("Hear answer") it's a pill, so it can't be mistaken for the
+// question's play button.
+export function SpeakButton({ text, label }: { text?: string; label?: string }) {
   if (!canSpeak(text)) return null
+  if (label)
+    return (
+      <button type="button" className="speak-pill" onClick={() => speak(text, true)}>
+        <span className="speak-dot">
+          <PlayIcon />
+        </span>
+        {label}
+      </button>
+    )
   return (
     <button type="button" className="speak-btn" aria-label="Play audio" onClick={() => speak(text, true)}>
       <PlayIcon />
@@ -78,7 +89,7 @@ function Feedback({
     <div className={`feedback ${correct ? 'ok' : 'no'}`}>
       <div className="fb-head">
         <p className="fb-title">{correct ? 'Correct ✓' : 'Not quite'}</p>
-        <SpeakButton text={say} />
+        <SpeakButton text={say} label="Hear answer" />
       </div>
       {!correct && answer && (
         <p className="fb-ans">
