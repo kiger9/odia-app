@@ -101,7 +101,7 @@ export const LIFE: Roleplay[] = [
       { who: 'child', od: 'Ame kouthiki jauchu?', en: 'Where are we going?' },
       { who: 'parent', od: 'Ame khaiba-ku jauchu', en: 'We are going to eat' },
       { who: 'child', od: 'Bapa be asibe-ki?', en: 'Will dad come too?' },
-      { who: 'parent', od: 'Hå, bapa be asuchånti', en: 'Yes, dad is coming too' },
+      { who: 'parent', od: 'Hå, bapa be asibe', en: 'Yes, dad will come too' },
       { who: 'child', od: 'Mu båhut khusi åchi!', en: 'I am very happy!' },
     ],
   },

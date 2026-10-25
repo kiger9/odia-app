@@ -5,7 +5,7 @@
 // "dictionary" is a pseudo lesson: every dictionary entry's phonetic (a verb's
 // infinitive) plus each verb's present example; "roleplays" is another: every
 // line of every roleplay (src/data/roleplays/), reported under
-// "roleplay:<chapter>". "all" means every lesson in course order, then the
+// "roleplay:<chapter>" (which also works as an id on its own). "all" means every lesson in course order, then the
 // dictionary and the roleplays.
 //
 // A phrase is "spoken" if it's a step's Odia question, its Odia answer, or an
@@ -65,8 +65,11 @@ export function spokenRows(ids: string[]): Row[] {
       }
       continue
     }
-    if (id === 'roleplays') {
-      for (const r of ROLEPLAYS) for (const l of r.lines) addRow(`roleplay:${r.chapter}`, 'roleplay', l.od)
+    if (id === 'roleplays' || id.startsWith('roleplay:')) {
+      const only = id === 'roleplays' ? null : id.slice('roleplay:'.length)
+      const rs = ROLEPLAYS.filter((r) => !only || r.chapter === only)
+      if (!rs.length) throw new Error(`no roleplays for "${id}"`)
+      for (const r of rs) for (const l of r.lines) addRow(`roleplay:${r.chapter}`, 'roleplay', l.od)
       continue
     }
     const lesson = LESSONS.find((l) => l.id === id)

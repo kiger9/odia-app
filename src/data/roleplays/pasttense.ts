@@ -1,8 +1,8 @@
 // Roleplays for the "pasttense" chapter (see ../roleplays.ts for the format and rules).
 // Words available: start … cmd, plus pasttense.ts (-ili/-ilå/-ila/-ilu/-ile,
 // gåli/gålå/…, the I-forms of -uthili and -ithili, kåri deli/delå, badhiya).
-// Past questions here use kånå/kouthiki/kemiti: no past "-ki" forms (khailå-ki …)
-// are in the word lists yet, nor dekhilå or kårili/kårilå/kårila (later chapters).
+// Past questions here use kånå/kouthi/kouthiki/kemiti: no past "-ki" forms
+// (khailå-ki …) are taught yet.
 
 import type { Roleplay } from '../roleplays'
 
@@ -47,7 +47,7 @@ export const PASTTENSE: Roleplay[] = [
       { who: 'child', od: 'Gopal asila', en: 'Gopal came' },
       { who: 'parent', od: 'Gopal kouthi åchi?', en: 'Where is Gopal?' },
       { who: 'child', od: 'Gopal ghårå-ku gåla', en: 'Gopal went home' },
-      { who: 'parent', od: 'Tåme kouthi khelilå?', en: 'Where did you play?  (informal)' },
+      { who: 'parent', od: 'Tåme kånå kårilå?', en: 'What did you do?  (informal)' },
       { who: 'child', od: 'Ame bahare khelilu', en: 'We played outside' },
     ],
   },
@@ -59,7 +59,7 @@ export const PASTTENSE: Roleplay[] = [
     you: 'child',
     lines: [
       { who: 'child', od: 'Mu hati dekhili!', en: 'I saw an elephant!' },
-      { who: 'parent', od: 'Kouthi?', en: 'Where?' },
+      { who: 'parent', od: 'Tåme kouthi dekhilå?', en: 'Where did you see it?  (informal)' },
       { who: 'child', od: 'Mu måndirå-ku jauthili', en: 'I was going to the temple' },
       { who: 'parent', od: 'Ame be hati dekhilu', en: 'We saw an elephant too' },
       { who: 'child', od: 'Hati båhut bådå!', en: 'The elephant is so big!' },
@@ -117,8 +117,8 @@ export const PASTTENSE: Roleplay[] = [
       { who: 'child', od: 'Aai asile', en: 'Grandma came' },
       { who: 'parent', od: 'Aai kånå anile?', en: 'What did Grandma bring?' },
       { who: 'child', od: 'Aai phulå anile', en: 'Grandma brought flowers' },
-      { who: 'parent', od: 'Aai kouthi åchånti?', en: 'Where is Grandma?' },
-      { who: 'child', od: 'Aai bhitåre soichånti', en: 'Grandma is sleeping inside' },
+      { who: 'parent', od: 'Tåme kånå kårilå?', en: 'What did you do?  (informal)' },
+      { who: 'child', od: 'Ame ambå khailu', en: 'We ate mangoes' },
     ],
   },
 ]

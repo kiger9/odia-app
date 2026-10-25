@@ -1,8 +1,7 @@
 // Roleplays for the "cmd" chapter (see ../roleplays.ts for the format and rules).
 // Words available: start … doing, plus cmd.ts (Ruhå!, Dekhå!, … nahi, aså/jaå,
-// emiti/semiti, khelå, tike/besi). The "let's" forms (Aså jibå, Aså khaibå …)
-// and "khai paribå" are not usable here: jibå, khaibå, pibå, khelibå and paribå
-// are first listed in later chapters' word lists.
+// emiti/semiti, khelå, tike/besi) and what the chapter's lessons teach (Aså
+// jibå, Aså khaibå, Eita khai paribå, Kichi nuhe).
 
 import type { Roleplay } from '../roleplays'
 
@@ -22,17 +21,18 @@ export const CMD: Roleplay[] = [
     ],
   },
   {
-    id: 'cmd-come-here',
+    id: 'cmd-lets-go',
     chapter: 'cmd',
-    title: 'Come here, Mitu',
-    scene: 'The parent calls Mitu in from playing.',
+    title: 'Let’s go',
+    scene: 'The parent is at the door with the shopping bag.',
     you: 'child',
     lines: [
       { who: 'parent', od: 'Mitu, eithiki aså!', en: 'Mitu, come here!' },
-      { who: 'child', od: 'Mu kheluchi!', en: 'I am playing!' },
-      { who: 'parent', od: 'Ebe aså', en: 'Come now' },
-      { who: 'child', od: 'Mu asuchi!', en: 'I am coming!' },
-      { who: 'parent', od: 'Dhaudå nahi!', en: 'Don’t run!' },
+      { who: 'child', od: 'Kånå?', en: 'What?' },
+      { who: 'parent', od: 'Aså jibå', en: 'Let’s go' },
+      { who: 'child', od: 'Kouthiki?', en: 'Where to?' },
+      { who: 'parent', od: 'Ame market-ku jauchu', en: 'We are going to the market' },
+      { who: 'child', od: 'Aså jibå!', en: 'Let’s go!' },
     ],
   },
   {
@@ -65,15 +65,16 @@ export const CMD: Roleplay[] = [
     ],
   },
   {
-    id: 'cmd-thank-you',
+    id: 'cmd-you-can-eat-this',
     chapter: 'cmd',
-    title: 'A little water',
-    scene: 'The child comes into the kitchen, thirsty after playing.',
-    you: 'child',
+    title: 'You can eat this',
+    scene: 'The child finds a fruit they have never seen in the market bag.',
+    you: 'parent',
     lines: [
-      { who: 'parent', od: 'Tåmårå kånå dårkar?', en: 'What do you want?  (informal)' },
-      { who: 'child', od: 'Morå tike pani dårkar', en: 'I need a little water' },
-      { who: 'parent', od: 'Mu pani anuchi', en: 'I am bringing water' },
+      { who: 'child', od: 'Eita kånå?', en: 'What is this?' },
+      { who: 'parent', od: 'Eita khai paribå', en: 'You can eat this' },
+      { who: 'child', od: 'Mitha-ki?', en: 'Is it sweet?' },
+      { who: 'parent', od: 'Hå, båhut mitha', en: 'Yes, very sweet' },
       { who: 'child', od: 'Dhånyåvad!', en: 'Thank you!' },
       { who: 'parent', od: 'Kichi nuhe', en: 'You’re welcome' },
     ],
@@ -95,15 +96,16 @@ export const CMD: Roleplay[] = [
   {
     id: 'cmd-a-little-a-lot',
     chapter: 'cmd',
-    title: 'A little or a lot?',
-    scene: 'The parent is serving dinner.',
+    title: 'Let’s eat',
+    scene: 'Dinner is ready and the parent is serving.',
     you: 'child',
     lines: [
+      { who: 'parent', od: 'Aså khaibå', en: 'Let’s eat' },
+      { who: 'child', od: 'Mu asuchi!', en: 'I am coming!' },
       { who: 'parent', od: 'Bhatå besi dårkar-ki?', en: 'Do you want a lot of rice?' },
       { who: 'child', od: 'Na, tike dårkar', en: 'No, I want a little' },
       { who: 'parent', od: 'Machå dårkar-ki?', en: 'Do you want fish?' },
       { who: 'child', od: 'Hå, besi dårkar!', en: 'Yes, I want a lot!' },
-      { who: 'parent', od: 'Mu machå anuchi', en: 'I am bringing fish' },
     ],
   },
   {
