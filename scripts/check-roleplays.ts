@@ -1,9 +1,11 @@
 // Checks the roleplays (src/data/roleplays/) against their rules, and exits 1
 // listing every problem:
 //   - 4–6 lines, speakers alternating, the learner's role among them;
-//   - every word in a line is in the word list of the roleplay's chapter or an
-//     earlier one (src/data/words/), so the learner has met it and it can be
-//     spoken — names and all; no {name} placeholder;
+//   - every word in a line has been met by the end of the roleplay's chapter:
+//     it is in the word list of that chapter or an earlier one (src/data/words/)
+//     or in the Odia of those chapters' lessons (a chapter's own sentences may
+//     be spelt out in a later chapter's word list) — names and all; no {name}
+//     placeholder;
 //   - a question ends with "?" (in Odia and English alike — the English may
 //     carry a trailing "(informal)" hint); a line whose last word is a "-ki"
 //     form is a question; no full stops, no "·", no bare endings like "-ku";
@@ -14,9 +16,9 @@
 //   npm run check:roleplays           # report
 //   npm run check:roleplays -- --stats  # also a per-chapter table
 
-import { CHAPTERS } from '../src/data/lessons'
+import { CHAPTERS, LESSON_BY_ID, type Step } from '../src/data/lessons'
 import { ROLEPLAYS, ROLEPLAYS_BY_CHAPTER } from '../src/data/roleplays'
-import { WORD_LISTS, toScript } from '../src/data/script'
+import { WORDS, WORD_LISTS, toScript } from '../src/data/script'
 
 const stats = process.argv.includes('--stats')
 const problems: string[] = []
@@ -25,14 +27,40 @@ const bad = (r: { id: string }, msg: string) => problems.push(`${r.id}: ${msg}`)
 const order = CHAPTERS.map((c) => c.key)
 const strip = (w: string) => w.toLowerCase().replace(/[?!.,;:“”"]/g, '')
 
+// The Odia words a chapter's lessons show (teaching cards, phrases shown,
+// answers, match tiles, cloze parts), as far as they are known words.
+function lessonWords(key: string): Set<string> {
+  const out = new Set<string>()
+  const add = (text: unknown) => {
+    if (typeof text !== 'string') return
+    for (const w of text.split(/\s+/).map(strip)) if (w in WORDS) out.add(w)
+  }
+  const ch = CHAPTERS.find((c) => c.key === key)
+  for (const id of ch?.lessons ?? [])
+    for (const st of LESSON_BY_ID[id]?.items ?? ([] as Step[])) {
+      if (st.rule) continue
+      add(st.odia)
+      add(st.show)
+      add(st.pre)
+      add(st.post)
+      if (Array.isArray(st.ans)) st.ans.forEach(add)
+      else add(st.ans)
+      st.alts?.forEach(add)
+      st.pairs?.forEach(([od]) => add(od))
+      if (!st.show) st.opts?.forEach((o) => add(typeof o === 'string' ? o : o.a))
+    }
+  return out
+}
+
 // Words a learner has met by the end of each chapter.
+const chapterWords = new Map(order.map((key) => [key, new Set([...Object.keys(WORD_LISTS[key] ?? {}), ...lessonWords(key)])]))
 const allowed = new Map<string, Set<string>>()
 for (let i = 0; i < order.length; i++) {
   const set = new Set<string>()
-  for (const key of order.slice(0, i + 1)) for (const w of Object.keys(WORD_LISTS[key] ?? {})) set.add(w)
+  for (const key of order.slice(0, i + 1)) for (const w of chapterWords.get(key)!) set.add(w)
   allowed.set(order[i], set)
 }
-const firstChapterWith = (w: string) => order.find((k) => w in (WORD_LISTS[k] ?? {}))
+const firstChapterWith = (w: string) => order.find((k) => chapterWords.get(k)!.has(w))
 
 const ids = new Set<string>()
 for (const r of ROLEPLAYS) {

@@ -1,5 +1,123 @@
 // Roleplays for the "doing" chapter (see ../roleplays.ts for the format and rules).
+// Words available: start … around, plus doing.ts (bring/stay, with, -rå, be,
+// saying no, dårkar, the market phrases).
 
 import type { Roleplay } from '../roleplays'
 
-export const DOING: Roleplay[] = []
+export const DOING: Roleplay[] = [
+  {
+    id: 'doing-more-water',
+    chapter: 'doing',
+    title: 'More water?',
+    scene: 'At the table, the child has finished a glass of water.',
+    you: 'child',
+    lines: [
+      { who: 'parent', od: 'Au pani dårkar-ki?', en: 'Do you want more water?' },
+      { who: 'child', od: 'Hå, morå pani dårkar', en: 'Yes, I need water' },
+      { who: 'parent', od: 'Au bhatå dårkar-ki?', en: 'Do you want more rice?' },
+      { who: 'child', od: 'Na, au nahi', en: 'No, no more' },
+    ],
+  },
+  {
+    id: 'doing-what-eating',
+    chapter: 'doing',
+    title: 'What are you eating?',
+    scene: 'The parent finds the child snacking in the kitchen.',
+    you: 'parent',
+    lines: [
+      { who: 'parent', od: 'Tåme kånå khauchå?', en: 'What are you eating?  (informal)' },
+      { who: 'child', od: 'Mu ambå khauchi', en: 'I am eating a mango' },
+      { who: 'parent', od: 'Mitha-ki?', en: 'Is it sweet?' },
+      { who: 'child', od: 'Na, ambå mitha nuhe', en: 'No, the mango isn’t sweet' },
+      { who: 'parent', od: 'Tåmårå kådåli dårkar-ki?', en: 'Do you want a banana?  (informal)' },
+      { who: 'child', od: 'Hå, gote kådåli diå!', en: 'Yes, give me one banana!  (informal)' },
+    ],
+  },
+  {
+    id: 'doing-playing-outside',
+    chapter: 'doing',
+    title: 'Who is playing?',
+    scene: 'The parent calls out to the child playing in the yard.',
+    you: 'child',
+    lines: [
+      { who: 'parent', od: 'Tåme kånå kåruchå?', en: 'What are you doing?  (informal)' },
+      { who: 'child', od: 'Mu Rahul-sangåre kheluchi', en: 'I am playing with Rahul' },
+      { who: 'parent', od: 'Mitu be kheluchi-ki?', en: 'Is Mitu playing too?' },
+      { who: 'child', od: 'Na, Mitu soichi', en: 'No, Mitu is sleeping' },
+    ],
+  },
+  {
+    id: 'doing-play-shop',
+    chapter: 'doing',
+    title: 'Playing shop',
+    scene: 'The child plays shopkeeper with a basket of mangoes; the parent is the customer.',
+    you: 'parent',
+    lines: [
+      { who: 'child', od: 'Tåmårå kånå dårkar?', en: 'What do you want?  (informal)' },
+      { who: 'parent', od: 'Ambå kete tånka?', en: 'How much are the mangoes?' },
+      { who: 'child', od: 'Dås tånka', en: 'Ten rupees' },
+      { who: 'parent', od: 'Ådha kilo diå', en: 'Give me half a kilo  (informal)' },
+      { who: 'child', od: 'Au kichi dårkar-ki?', en: 'Do you need anything more?' },
+      { who: 'parent', od: 'Na, setiki tau', en: 'No, that’s enough' },
+    ],
+  },
+  {
+    id: 'doing-dad-brings',
+    chapter: 'doing',
+    title: 'What is Dad bringing?',
+    scene: 'Dad is on his way home with the shopping; the child wants to know what’s for dinner.',
+    you: 'child',
+    lines: [
+      { who: 'child', od: 'Bapa kånå anuchånti?', en: 'What is Dad bringing?' },
+      { who: 'parent', od: 'Bapa machå anuchånti', en: 'Dad is bringing fish' },
+      { who: 'child', od: 'Mu machå khauni', en: 'I am not eating fish' },
+      { who: 'parent', od: 'Tåmårå kånå dårkar?', en: 'What do you want?  (informal)' },
+      { who: 'child', od: 'Morå bhatå dårkar', en: 'I want rice' },
+      { who: 'parent', od: 'Mu bhatå anuchi', en: 'I am bringing rice' },
+    ],
+  },
+  {
+    id: 'doing-no-school',
+    chapter: 'doing',
+    title: 'No school today',
+    scene: 'A holiday morning; the parent checks the child’s plans.',
+    you: 'parent',
+    lines: [
+      { who: 'parent', od: 'Tåme school-ku jauchå-ki?', en: 'Are you going to school?  (informal)' },
+      { who: 'child', od: 'Na, mu jauni', en: 'No, I am not going' },
+      { who: 'parent', od: 'Rahul school-ku jauchi-ki?', en: 'Is Rahul going to school?' },
+      { who: 'child', od: 'Na, Rahul ghåre råhuchi', en: 'No, Rahul is staying at home' },
+      { who: 'parent', od: 'Mu market-ku jauchi', en: 'I am going to the market' },
+      { who: 'child', od: 'Mu be jauchi!', en: 'I’m going too!' },
+    ],
+  },
+  {
+    id: 'doing-grandmas-tea',
+    chapter: 'doing',
+    title: 'Grandma’s tea',
+    scene: 'Grandma has a cup of tea, and the child wants one too.',
+    you: 'parent',
+    lines: [
+      { who: 'child', od: 'Aai kånå piuchånti?', en: 'What is Grandma drinking?' },
+      { who: 'parent', od: 'Aai cha piuchånti', en: 'Grandma is drinking tea' },
+      { who: 'child', od: 'Morå be cha dårkar', en: 'I want tea too' },
+      { who: 'parent', od: 'Na, tåme khirå piuchå', en: 'No, you are drinking milk  (informal)' },
+      { who: 'child', od: 'Khirå mitha-ki?', en: 'Is the milk sweet?' },
+      { who: 'parent', od: 'Hå, khirå mitha', en: 'Yes, the milk is sweet' },
+    ],
+  },
+  {
+    id: 'doing-whose-book',
+    chapter: 'doing',
+    title: 'Where’s my book?',
+    scene: 'The child is looking for a school book before bedtime.',
+    you: 'child',
+    lines: [
+      { who: 'child', od: 'Morå båhi kouthi åchi?', en: 'Where is my book?' },
+      { who: 'parent', od: 'Båhi-ta tåle åchi', en: 'The book is downstairs' },
+      { who: 'child', od: 'Na, seita Rabi-rå båhi', en: 'No, that is Rabi’s book' },
+      { who: 'parent', od: 'Tåmårå båhi bahare åchi-ki?', en: 'Is your book outside?  (informal)' },
+      { who: 'child', od: 'Hå, båhi-ta eithi åchi!', en: 'Yes, the book is here!' },
+    ],
+  },
+]

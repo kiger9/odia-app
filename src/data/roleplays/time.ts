@@ -1,5 +1,124 @@
 // Roleplays for the "time" chapter (see ../roleplays.ts for the format and rules).
+// Words available: everything — now with aji / kali / gåtå kali, shighrå, jåldi,
+// kebe? and the full set of future forms.
 
 import type { Roleplay } from '../roleplays'
 
-export const TIME: Roleplay[] = []
+export const TIME: Roleplay[] = [
+  {
+    id: 'time-when-dad',
+    chapter: 'time',
+    title: 'When will dad come?',
+    scene: 'Dinner is ready, but dad is not home yet.',
+    you: 'child',
+    lines: [
+      { who: 'child', od: 'Bapa kebe asibe?', en: 'When will dad come?' },
+      { who: 'parent', od: 'Bapa shighrå asibe', en: 'Dad will come soon' },
+      { who: 'child', od: 'Mote båhut bhokå laguchi', en: 'I feel very hungry' },
+      { who: 'parent', od: 'Ame bapa-nkå-sangåre khaibu', en: 'We will eat with dad' },
+      { who: 'child', od: 'Ame kånå khaibu?', en: 'What will we eat?' },
+      { who: 'parent', od: 'Aji ame machå khaibu', en: 'Today we will eat fish' },
+    ],
+  },
+  {
+    id: 'time-market-tomorrow',
+    chapter: 'time',
+    title: 'Market tomorrow',
+    scene: 'The parent is planning tomorrow’s shopping.',
+    you: 'parent',
+    lines: [
+      { who: 'parent', od: 'Kali ame bajår jibu', en: 'Tomorrow we will go to the market' },
+      { who: 'child', od: 'Mu be jibi!', en: 'I will go too!' },
+      { who: 'parent', od: 'Tåmårå kånå dårkar?', en: 'What do you want?  (informal)' },
+      { who: 'child', od: 'Morå ambå dårkar', en: 'I want mangoes' },
+      { who: 'parent', od: 'Ame ambå anibu', en: 'We will bring mangoes' },
+    ],
+  },
+  {
+    id: 'time-pizza-yesterday',
+    chapter: 'time',
+    title: 'Pizza yesterday',
+    scene: 'The child comes home after a day at a friend’s house.',
+    you: 'parent',
+    lines: [
+      { who: 'parent', od: 'Tåme gåtå kali kånå khailå?', en: 'What did you eat yesterday?  (informal)' },
+      { who: 'child', od: 'Mu gåtå kali pizza khaili', en: 'I ate pizza yesterday' },
+      { who: 'parent', od: 'Aji ame machå khaibu', en: 'Today we will eat fish' },
+      { who: 'child', od: 'Mote machå bhålå laguni', en: 'I don’t like fish' },
+      { who: 'parent', od: 'Tåme kali pizza khaibå', en: 'You will eat pizza tomorrow  (informal)' },
+      { who: 'child', od: 'Båhut badhiya!', en: 'Great!' },
+    ],
+  },
+  {
+    id: 'time-hurry',
+    chapter: 'time',
+    title: 'Hurry up!',
+    scene: 'It is time to leave for school.',
+    you: 'child',
+    lines: [
+      { who: 'parent', od: 'Jåldi aså!', en: 'Come quickly!' },
+      { who: 'child', od: 'Mu asuchi!', en: 'I am coming!' },
+      { who: 'parent', od: 'Tåmåku bhokå laguchi-ki?', en: 'Are you hungry?  (informal)' },
+      { who: 'child', od: 'Na, mu jolokia khaili', en: 'No, I ate breakfast' },
+      { who: 'parent', od: 'Aså jibå!', en: 'Let’s go!' },
+    ],
+  },
+  {
+    id: 'time-grandma-tomorrow',
+    chapter: 'time',
+    title: 'Grandma is coming',
+    scene: 'The child has heard that grandma is visiting.',
+    you: 'child',
+    lines: [
+      { who: 'child', od: 'Aai kebe asibe?', en: 'When will grandma come?' },
+      { who: 'parent', od: 'Aai kali asibe', en: 'Grandma will come tomorrow' },
+      { who: 'child', od: 'Aai eithi råhibe-ki?', en: 'Will grandma stay here?' },
+      { who: 'parent', od: 'Hå, Aai eithi råhibe', en: 'Yes, grandma will stay here' },
+      { who: 'child', od: 'Mu båhut khusi åchi!', en: 'I am very happy!' },
+      { who: 'parent', od: 'Aai tåmå-sangåre khelibe', en: 'Grandma will play with you' },
+    ],
+  },
+  {
+    id: 'time-play-later',
+    chapter: 'time',
+    title: 'Play with me!',
+    scene: 'The parent is busy working when the child comes over.',
+    you: 'parent',
+    lines: [
+      { who: 'child', od: 'Tåme mo-sangåre khelibå-ki?', en: 'Will you play with me?  (informal)' },
+      { who: 'parent', od: 'Mu ebe kamå kåruchi', en: 'I am working now' },
+      { who: 'child', od: 'Tåme kebe khelibå?', en: 'When will you play?  (informal)' },
+      { who: 'parent', od: 'Mu shighrå khelibi', en: 'I will play soon' },
+      { who: 'child', od: 'Jåldi aså!', en: 'Come quickly!' },
+    ],
+  },
+  {
+    id: 'time-trip-tomorrow',
+    chapter: 'time',
+    title: 'A trip tomorrow',
+    scene: 'Bedtime, the night before a family trip.',
+    you: 'child',
+    lines: [
+      { who: 'parent', od: 'Kali ame Puri jibu', en: 'Tomorrow we will go to Puri' },
+      { who: 'child', od: 'Bapa be jibe-ki?', en: 'Will dad go too?' },
+      { who: 'parent', od: 'Hå, bapa be jibe', en: 'Yes, dad will go too' },
+      { who: 'child', od: 'Mu jåldi soibi!', en: 'I will go to sleep early!' },
+      { who: 'parent', od: 'Subha ratri!', en: 'Good night!' },
+      { who: 'child', od: 'Subha ratri!', en: 'Good night!' },
+    ],
+  },
+  {
+    id: 'time-yesterday-today',
+    chapter: 'time',
+    title: 'Yesterday and today',
+    scene: 'At breakfast, the child talks about yesterday.',
+    you: 'parent',
+    lines: [
+      { who: 'child', od: 'Mu gåtå kali Rahul-rå ghårå-ku gåli', en: 'Yesterday I went to Rahul’s house' },
+      { who: 'parent', od: 'Tåme kånå kårilå?', en: 'What did you do?  (informal)' },
+      { who: 'child', od: 'Ame bahare khelilu', en: 'We played outside' },
+      { who: 'parent', od: 'Tåme aji kouthiki jibå?', en: 'Where will you go today?  (informal)' },
+      { who: 'child', od: 'Aji mu ghåre råhibi', en: 'Today I will stay at home' },
+    ],
+  },
+]
