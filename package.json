@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "audio:todo": "rolldown scripts/audio-todo.ts --platform node --format esm --log-level silent -o node_modules/.cache/scripts/audio-todo.mjs && node node_modules/.cache/scripts/audio-todo.mjs",
+    "check:roleplays": "rolldown scripts/check-roleplays.ts --platform node --format esm --log-level silent -o node_modules/.cache/scripts/check-roleplays.mjs && node node_modules/.cache/scripts/check-roleplays.mjs",
     "check:content": "rolldown scripts/check-content.ts --platform node --format esm --log-level silent -o node_modules/.cache/scripts/check-content.mjs && node node_modules/.cache/scripts/check-content.mjs",
     "practice:bank": "rolldown scripts/practice-bank.ts --platform node --format esm --log-level silent -o node_modules/.cache/scripts/practice-bank.mjs && node node_modules/.cache/scripts/practice-bank.mjs",
     "audio:record": "rolldown scripts/record-audio.ts --platform node --format esm --log-level silent -o node_modules/.cache/scripts/record-audio.mjs && node node_modules/.cache/scripts/record-audio.mjs"

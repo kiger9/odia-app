@@ -1,6 +1,7 @@
 // Content convention check: the yes/no question particle is always hyphenated
 // ("åchi-ki", never "åchiki" or "åchi ki"). Scans every string a learner can see — all
-// lesson steps, what the practice generator produces, and the practice bank —
+// lesson steps, what the practice generator produces, the practice bank and
+// the roleplays —
 // and exits 1, listing offenders, if a word is a known word glued to "ki" or
 // "ki" stands on its own as a separate word.
 //
@@ -16,6 +17,7 @@ import bankJson from '../src/data/practice-bank.json'
 import { buildQuiz, generateSteps, lessonRun } from '../src/gen/exercises'
 import { makeRng } from '../src/gen/rng'
 import { WORD_LISTS, WORDS } from '../src/data/script'
+import { ROLEPLAYS } from '../src/data/roleplays'
 
 const SEEDS = 300
 const COURSE = CHAPTERS.flatMap((c) => c.lessons)
@@ -50,6 +52,7 @@ function scan(source: string, value: unknown) {
 
 for (const lesson of LESSONS) scan(`lesson ${lesson.id}`, lesson.items)
 scan('practice bank', bankJson)
+for (const r of ROLEPLAYS) scan(`roleplay ${r.id}`, r.lines.map((l) => l.od))
 for (const id of COURSE) {
   const done = new Set(COURSE.slice(0, COURSE.indexOf(id)))
   for (let seed = 1; seed <= SEEDS; seed++) {

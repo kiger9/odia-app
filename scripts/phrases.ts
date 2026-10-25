@@ -3,8 +3,10 @@
 // (what's missing) and audio:record (records what's missing).
 //
 // "dictionary" is a pseudo lesson: every dictionary entry's phonetic (a verb's
-// infinitive) plus each verb's present example. "all" means every lesson in
-// course order plus the dictionary.
+// infinitive) plus each verb's present example; "roleplays" is another: every
+// line of every roleplay (src/data/roleplays/), reported under
+// "roleplay:<chapter>". "all" means every lesson in course order, then the
+// dictionary and the roleplays.
 //
 // A phrase is "spoken" if it's a step's Odia question, its Odia answer, or an
 // Odia tile in a match (see lib/spoken.ts).
@@ -16,6 +18,7 @@ import { answerOdia, promptOdia } from '../src/lib/spoken'
 import { toScript } from '../src/data/script'
 import { CLIPS } from '../src/data/clips'
 import { DICTIONARY } from '../src/data/dictionary'
+import { ROLEPLAYS } from '../src/data/roleplays'
 
 export const COURSE = CHAPTERS.flatMap((c) => c.lessons)
 
@@ -38,14 +41,14 @@ function practiceSteps(id: string): PStep[] {
 
 export interface Row {
   lesson: string
-  source: 'lesson' | 'practice' | 'dictionary'
+  source: 'lesson' | 'practice' | 'dictionary' | 'roleplay'
   phonetic: string
   script: string | null
   clip: string | null
 }
 
 export function spokenRows(ids: string[]): Row[] {
-  if (ids.includes('all')) ids = [...COURSE, 'dictionary']
+  if (ids.includes('all')) ids = [...COURSE, 'dictionary', 'roleplays']
   const rows: Row[] = []
   const seen = new Set<string>()
   function addRow(id: string, source: Row['source'], phonetic: string) {
@@ -60,6 +63,10 @@ export function spokenRows(ids: string[]): Row[] {
         addRow(id, 'dictionary', e.phonetic)
         if (e.present) addRow(id, 'dictionary', e.present)
       }
+      continue
+    }
+    if (id === 'roleplays') {
+      for (const r of ROLEPLAYS) for (const l of r.lines) addRow(`roleplay:${r.chapter}`, 'roleplay', l.od)
       continue
     }
     const lesson = LESSONS.find((l) => l.id === id)
