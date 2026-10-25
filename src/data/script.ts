@@ -9,7 +9,7 @@
 // Tåme → ତମେ (formal: ତୁମେ); likewise tåmårå → ତମର (formal: ତୁମର) and
 // gote → ଗୋଟେ (formal: ଗୋଟିଏ).
 
-const WORDS: Record<string, string> = {
+export const WORDS: Record<string, string> = {
   // Lesson 1 — To Be (åchi)
   mu: 'ମୁଁ',
   tåme: 'ତମେ',
@@ -43,7 +43,6 @@ const WORDS: Record<string, string> = {
   gai: 'ଗାଈ',
   pen: 'ପେନ୍',
   'åchi-ki': 'ଅଛି କି',
-  åchiki: 'ଅଛି କି', // written without the hyphen in one lesson card
   hå: 'ହଁ',
   na: 'ନା',
   // names the practice generator uses in lesson 1
@@ -66,5 +65,10 @@ export function toScript(phonetic: string): string | undefined {
     out.push(script + (word.endsWith(',') ? ',' : '')) // keep the pause in "Na, …"
   }
   if (!out.length) return undefined
-  return out.join(' ') + (/\?\s*$/.test(phonetic) ? '?' : '')
+  // A phrase ending in the "-ki" question particle is a question even where
+  // the "?" is left off (a fill-in-the-blank answer, a card), so it speaks as
+  // the same question recording as its "?" twin. Nothing visible changes.
+  const last = phonetic.trim().split(/\s+/).pop()!.toLowerCase().replace(/[?!.,;:“”"]/g, '')
+  const question = /\?\s*$/.test(phonetic) || last.endsWith('-ki')
+  return out.join(' ') + (question ? '?' : '')
 }
