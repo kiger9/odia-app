@@ -26,11 +26,23 @@ export function SpeakerIcon({ muted = false }: { muted?: boolean }) {
   )
 }
 
-// Solid play triangle for the replay button.
+// Play triangle for the replay button, with rounded corners. Its centroid sits
+// on the centre of the 24-unit box, which is what makes a triangle look centred
+// in a circle (centring its bounding box makes it look pushed left).
 export function PlayIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="currentColor">
-      <path d="M8.5 5.6v12.8a1 1 0 0 0 1.5.86l10.2-6.4a1 1 0 0 0 0-1.72L10 4.74a1 1 0 0 0-1.5.86z" />
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      aria-hidden="true"
+      focusable="false"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinejoin="round"
+    >
+      <path d="M8.8 6.5v11l9.5-5.5z" />
     </svg>
   )
 }

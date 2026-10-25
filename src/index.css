@@ -1078,16 +1078,23 @@ button {
 }
 .speak-btn {
   flex: none;
-  width: 44px;
-  height: 44px;
+  position: relative;
+  width: 31px;
+  height: 31px;
   border: none;
   border-radius: 50%;
   background: var(--saffron);
   color: var(--ink);
   display: grid;
   place-items: center;
-  padding: 0 0 0 2px; /* the triangle looks centred a touch right of centre */
+  padding: 0;
   cursor: pointer;
+}
+/* keep a comfortable tap target around the small circle */
+.speak-btn::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
 }
 .speak-btn:active {
   background: var(--saffron-dk);
@@ -1303,9 +1310,13 @@ button {
   gap: 12px;
 }
 .fb-head .speak-btn {
-  width: 40px;
-  height: 40px;
-  margin: -4px -4px -4px auto;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+}
+.fb-head .speak-btn svg {
+  width: 14px;
+  height: 14px;
 }
 .fb-title {
   font-weight: 700;
