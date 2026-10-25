@@ -45,16 +45,22 @@ export const WORDS: Record<string, string> = Object.assign({}, ...Object.values(
 
 export function toScript(phonetic: string): string | undefined {
   const out: string[] = []
+  let prev = ''
   for (const word of phonetic.trim().split(/\s+/)) {
     if (word === '·') {
       out.push('·') // "Morå · Tåmårå · Tarå": several words on one card
+      prev = ''
       continue
     }
     const key = word.toLowerCase().replace(/[?!.,;:“”"]/g, '')
     if (!key) continue // a stray "?" written apart from its sentence
-    const script = WORDS[key]
+    let script = WORDS[key]
     if (!script) return undefined
+    // The book writes "-ibå" for both "you will …" (ଖାଇବ) and, after "aså",
+    // "let's …" (ଖାଇବା) — the word list holds the first; "let's" takes the long ା.
+    if (prev === 'aså' && key.endsWith('ibå') && script.endsWith('ବ')) script += 'ା'
     out.push(script + (word.endsWith(',') ? ',' : '')) // keep the pause in "Na, …"
+    prev = key
   }
   if (!out.length) return undefined
   // A phrase ending in the "-ki" question particle is a question even where
