@@ -1022,4 +1022,9 @@ export const CLIPS: Record<string, string> = {
   'ମୁଁ ହେଲ୍ପ କରିଥିଲି': 'mu-help-karithili.mp3',
   'ମୁଁ ଗାଈ ଦେଖିଥିଲି': 'mu-gai-dekhithili.mp3',
   'ମୁଁ ବାହାରେ ଖେଳିଥିଲି': 'mu-bahare-khelithili.mp3',
+  'ମୁଁ ଆଜି ଚେଷ୍ଟା କରୁଛି': 'mu-aji-chesta-karuchi.mp3',
+  'ମୁଁ ଆଜି ପିଉଛି': 'mu-aji-piuchi.mp3',
+  'ଆମେ କାଲି ଚେଷ୍ଟା କରିବୁ': 'ame-kali-chesta-karibu.mp3',
+  'ଆପଣ ଆଜି ଘରେ କାମ କରୁଛନ୍ତି': 'apana-aji-ghare-kama-karuchanti.mp3',
+  'ତମେ ଗତ କାଲି ବାହାରେ ଖେଳିଲ': 'tame-gata-kali-bahare-khelila.mp3',
 }
