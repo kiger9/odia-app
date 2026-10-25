@@ -3,6 +3,7 @@
 
 import { useState } from 'react'
 import { getMuted, setMuted } from '../audio'
+import { SpeakerIcon } from './icons'
 
 export default function MuteButton() {
   const [muted, setMutedState] = useState(getMuted)
@@ -19,7 +20,7 @@ export default function MuteButton() {
       aria-label={muted ? 'Turn sound on' : 'Mute sound'}
       aria-pressed={muted}
     >
-      {muted ? '🔇' : '🔊'}
+      <SpeakerIcon muted={muted} />
     </button>
   )
 }

@@ -1069,19 +1069,38 @@ button {
   font-weight: 700;
   margin: 0;
 }
-/* replays a spoken Odia phrase */
-.speak-btn {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 1.15rem;
-  line-height: 1;
-  padding: 4px;
-  margin-left: 8px;
-  vertical-align: middle;
+/* replays a spoken Odia phrase: a round saffron play button that always sits
+   in its own centred row above the phrase, so text length can't move it */
+.speak-slot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
 }
+.speak-btn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: var(--saffron);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  padding: 0 0 0 2px; /* the triangle looks centred a touch right of centre */
+  cursor: pointer;
+}
+.speak-btn:active {
+  background: var(--saffron-dk);
+  transform: translateY(1px);
+}
+/* sound on/off toggle in the top bar, next to the progress bar */
 .mute-btn {
-  font-size: 1.25rem;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
 }
 .script-sub {
   font-size: 1.05rem;
@@ -1275,6 +1294,18 @@ button {
 }
 .feedback.no {
   background: var(--no-bg);
+}
+/* title on the left, replay pinned to the right end */
+.fb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fb-head .speak-btn {
+  width: 40px;
+  height: 40px;
+  margin: -4px -4px -4px auto;
 }
 .fb-title {
   font-weight: 700;

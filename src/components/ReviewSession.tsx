@@ -4,7 +4,7 @@ import { dueItemsFrom, recordReview, type ReviewItem } from '../reviews'
 import { markPracticedToday } from '../streak'
 import { fillName } from '../profile'
 import { Rating, type Grade } from '../srs'
-import { speak, stopSpeaking } from '../audio'
+import { canSpeak, speak, stopSpeaking } from '../audio'
 import Modal from './Modal'
 import MuteButton from './MuteButton'
 import { SpeakButton } from './Steps'
@@ -78,10 +78,12 @@ export default function ReviewSession({ onExit }: { onExit: () => void }) {
 
         {revealed ? (
           <div className="answer">
-            <p className="answer-phonetic">
-              {fillName(current.phonetic)}
-              <SpeakButton text={fillName(current.phonetic)} />
-            </p>
+            {canSpeak(fillName(current.phonetic)) && (
+              <div className="speak-slot">
+                <SpeakButton text={fillName(current.phonetic)} />
+              </div>
+            )}
+            <p className="answer-phonetic">{fillName(current.phonetic)}</p>
             {current.note && (
               <p
                 className="answer-note muted"

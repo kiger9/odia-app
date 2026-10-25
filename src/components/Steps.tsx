@@ -8,6 +8,7 @@ import { answerOdia, promptOdia } from '../lib/spoken'
 import { toScript } from '../data/script'
 import { canSpeak, speak, stopSpeaking } from '../audio'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
+import { PlayIcon } from './icons'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -23,11 +24,12 @@ const sameTokens = (a: string[], b: string[]) =>
   a.length === b.length && a.every((t, i) => t.toLowerCase() === b[i].toLowerCase())
 
 // Replays a phrase on tap — even when muted, since the learner asked to hear it.
+// Callers give it a fixed slot (never inline after the text) so it doesn't move.
 export function SpeakButton({ text }: { text?: string }) {
   if (!canSpeak(text)) return null
   return (
     <button type="button" className="speak-btn" aria-label="Play audio" onClick={() => speak(text, true)}>
-      🔊
+      <PlayIcon />
     </button>
   )
 }
@@ -47,10 +49,12 @@ function Phrase({
   const shown = script ?? toScript(phonetic)
   return (
     <div className="phrase">
-      <p className={size === 'lg' ? 'phonetic-lg' : 'phonetic-md'}>
-        {phonetic}
-        <SpeakButton text={phonetic} />
-      </p>
+      {canSpeak(phonetic) && (
+        <div className="speak-slot">
+          <SpeakButton text={phonetic} />
+        </div>
+      )}
+      <p className={size === 'lg' ? 'phonetic-lg' : 'phonetic-md'}>{phonetic}</p>
       {SHOW_SCRIPT_FEATURE && showScript && shown && <p className="script-sub">{shown}</p>}
     </div>
   )
@@ -72,10 +76,10 @@ function Feedback({
   useEffect(() => speak(say), [say])
   return (
     <div className={`feedback ${correct ? 'ok' : 'no'}`}>
-      <p className="fb-title">
-        {correct ? 'Correct ✓' : 'Not quite'}
+      <div className="fb-head">
+        <p className="fb-title">{correct ? 'Correct ✓' : 'Not quite'}</p>
         <SpeakButton text={say} />
-      </p>
+      </div>
       {!correct && answer && (
         <p className="fb-ans">
           Answer: <b>{answer}</b>
