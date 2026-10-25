@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type LessonProgress, type Progress, type Stats } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
+import { ROLEPLAYS_BY_CHAPTER, unlockedChapters } from '../data/roleplays'
 import { poolStats, formatWhen } from '../reviews'
 import { viewStreak, todayString, getCelebratedDay, setCelebratedDay } from '../streak'
 import { encouragement } from '../profile'
@@ -21,12 +22,16 @@ export default function Home({
   onStart,
   onReview,
   onQuiz,
+  onRoleplay,
+  onRandomRoleplay,
   onProfile,
   onDictionary,
 }: {
   onStart: (lessonId: string, startStep: number) => void
   onReview: () => void
   onQuiz: () => void
+  onRoleplay: (chapter: string) => void
+  onRandomRoleplay: () => void
   onProfile: () => void
   onDictionary: () => void
 }) {
@@ -38,6 +43,9 @@ export default function Home({
   const totalLessons = CHAPTERS.reduce((n, c) => n + c.lessons.length, 0)
   const completed = progress.filter((p) => p.completed).length
   const { poolSize, dueCount, nextDue } = poolStats(reviewRows)
+  const completedIds = new Set(progress.filter((p) => p.completed).map((p) => p.lessonId))
+  // Roleplays open up chapter by chapter, once every lesson in it is done.
+  const openChapters = new Set(unlockedChapters(completedIds).filter((k) => ROLEPLAYS_BY_CHAPTER[k]?.length))
   const streak = viewStreak(statsRec)
 
   // Resume-or-restart prompt for a partly-done lesson.
@@ -135,6 +143,19 @@ export default function Home({
         <span className="quiz-arrow">›</span>
       </button>
 
+      <button className="quiz-btn rp-btn" onClick={onRandomRoleplay} disabled={openChapters.size === 0}>
+        <span className="quiz-emoji">🗣️</span>
+        <span className="quiz-text">
+          <b>Roleplay</b>
+          <small>
+            {openChapters.size === 0
+              ? 'Finish every lesson in a chapter to unlock this feature'
+              : "A random conversation from the chapters you've finished"}
+          </small>
+        </span>
+        <span className="quiz-arrow">›</span>
+      </button>
+
       {CHAPTERS.map((ch) => {
         const lessons = ch.lessons.map((id) => LESSON_BY_ID[id])
         const doneInCh = ch.lessons.filter((id) => byId.get(id)?.completed).length
@@ -182,6 +203,25 @@ export default function Home({
                   </button>
                 )
               })}
+              {(ROLEPLAYS_BY_CHAPTER[ch.key]?.length ?? 0) > 0 && (
+                <button
+                  className={`lesson-row rp-row ${openChapters.has(ch.key) ? 'open' : 'locked'}`}
+                  onClick={() => onRoleplay(ch.key)}
+                  disabled={!openChapters.has(ch.key)}
+                >
+                  <div className="lesson-main">
+                    <span className="lesson-icon">{openChapters.has(ch.key) ? '🗣️' : '🔒'}</span>
+                    <span className="lesson-text">
+                      <b>Roleplay</b>
+                      <small>
+                        {openChapters.has(ch.key)
+                          ? `${ROLEPLAYS_BY_CHAPTER[ch.key].length} conversations · put the chapter to use`
+                          : `Finish all ${ch.lessons.length} lessons to unlock`}
+                      </small>
+                    </span>
+                  </div>
+                </button>
+              )}
             </div>
           </section>
         )

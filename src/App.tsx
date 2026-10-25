@@ -7,8 +7,11 @@ import LessonPlayer from './components/LessonPlayer'
 import ReviewSession from './components/ReviewSession'
 import PopQuiz from './components/PopQuiz'
 import Dictionary from './components/Dictionary'
+import Roleplay from './components/Roleplay'
 import Modal from './components/Modal'
-import { LESSON_BY_ID } from './data/lessons'
+import { CHAPTERS, LESSON_BY_ID } from './data/lessons'
+import { ROLEPLAYS_BY_CHAPTER, ROLEPLAY_BY_ID, unlockedRoleplays } from './data/roleplays'
+import { db } from './db'
 import { getShowScript, setShowScript } from './settings'
 import { getName, setName, hasBeenAskedName, markNameAsked } from './profile'
 import { backupIfStale } from './backup'
@@ -28,6 +31,8 @@ type Screen =
   | { name: 'lesson'; id: string; startStep: number }
   | { name: 'review' }
   | { name: 'quiz' }
+  | { name: 'roleplay'; chapter: string } // a chapter's roleplays, in order
+  | { name: 'roleplay-random'; pick: string[] } // ids chosen from finished chapters
   | { name: 'profile' }
   | { name: 'settings' }
   | { name: 'dictionary' }
@@ -104,11 +109,22 @@ export default function App() {
     setSetup('done')
   }
 
+  // One roleplay at random from the chapters finished so far.
+  async function startRandomRoleplay() {
+    const rows = await db.lessonProgress.toArray()
+    const done = new Set(rows.filter((r) => r.completed).map((r) => r.lessonId))
+    const open = unlockedRoleplays(done)
+    const pick = open.length ? [open[Math.floor(Math.random() * open.length)].id] : []
+    setScreen({ name: 'roleplay-random', pick })
+  }
+
   const home = (
     <Home
       onStart={(id, startStep) => setScreen({ name: 'lesson', id, startStep })}
       onReview={() => setScreen({ name: 'review' })}
       onQuiz={() => setScreen({ name: 'quiz' })}
+      onRoleplay={(chapter) => setScreen({ name: 'roleplay', chapter })}
+      onRandomRoleplay={() => void startRandomRoleplay()}
       onProfile={() => setScreen({ name: 'profile' })}
       onDictionary={() => setScreen({ name: 'dictionary' })}
     />
@@ -131,6 +147,29 @@ export default function App() {
     view = <ReviewSession onExit={() => setScreen({ name: 'home' })} />
   } else if (screen.name === 'quiz') {
     view = <PopQuiz onExit={() => setScreen({ name: 'home' })} />
+  } else if (screen.name === 'roleplay') {
+    const chapter = CHAPTERS.find((c) => c.key === screen.chapter)
+    view = (
+      <Roleplay
+        key={screen.chapter}
+        roleplays={ROLEPLAYS_BY_CHAPTER[screen.chapter] ?? []}
+        heading={`${chapter?.title ?? 'Roleplay'} · Roleplay`}
+        showScript={showScript}
+        onExit={() => setScreen({ name: 'home' })}
+      />
+    )
+  } else if (screen.name === 'roleplay-random') {
+    const picked = screen.pick.map((id) => ROLEPLAY_BY_ID[id]).filter((r) => !!r)
+    view = (
+      <Roleplay
+        key={screen.pick.join(',')}
+        roleplays={picked}
+        heading="Random roleplay"
+        showScript={showScript}
+        onExit={() => setScreen({ name: 'home' })}
+        onAnother={() => void startRandomRoleplay()}
+      />
+    )
   } else if (screen.name === 'profile') {
     view = (
       <Profile

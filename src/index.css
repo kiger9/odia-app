@@ -1676,3 +1676,146 @@ button {
   margin: 10px 0 0;
   line-height: 1.4;
 }
+
+/* ---------- roleplay ---------- */
+.rp-btn {
+  background: linear-gradient(120deg, #e9f4ee, #d9eee2);
+  border-color: #bfdccb;
+}
+.rp-row {
+  gap: 0;
+  background: linear-gradient(120deg, #f3faf5, #e9f4ee);
+  border-color: #cfe4d8;
+}
+.rp-row:disabled {
+  cursor: default;
+  opacity: 0.7;
+  background: var(--card);
+  border-style: dashed;
+}
+.rp-row:disabled:active {
+  transform: none;
+}
+.rp-row .lesson-icon {
+  font-size: 0.95rem;
+}
+.rp-row.open .lesson-icon {
+  background: var(--ok-bg);
+}
+.rp-scene {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rp-title {
+  margin: 0;
+  font-size: 1.3rem;
+}
+.rp-setting,
+.rp-roles {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+.rp-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rp-bubble {
+  max-width: 88%;
+  border-radius: 16px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: pop-in 0.25s ease;
+}
+.rp-bubble.them {
+  align-self: flex-start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+.rp-bubble.me {
+  align-self: flex-end;
+  background: #fff3e2;
+  border: 1px solid #f3d9b5;
+  border-bottom-right-radius: 4px;
+}
+.rp-bubble.turn {
+  background: var(--ok-bg);
+  border: 1.5px dashed var(--ok);
+}
+.rp-who {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.rp-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rp-line .speak-btn {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.rp-line .speak-btn svg {
+  width: 13px;
+  height: 13px;
+}
+.rp-od {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.rp-script {
+  margin: 0;
+  font-size: 0.95rem;
+}
+.rp-en {
+  margin: 0;
+  font-size: 0.88rem;
+}
+.rp-prompt {
+  margin: 2px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.rp-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+.rp-ask {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.rp-mark {
+  display: flex;
+  gap: 10px;
+}
+.rp-mark .btn-rate {
+  flex: 1;
+  padding: 14px;
+  font-size: 1rem;
+}
+.btn-ghost {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  background: none;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 13px;
+  cursor: pointer;
+  margin-top: 8px;
+}

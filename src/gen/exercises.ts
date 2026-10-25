@@ -4,8 +4,9 @@
 //    lesson is replayed) — strictly that lesson's own topic, never other lessons;
 //  - the Pop Quiz, which is where everything the learner has finished gets mixed.
 
-import { CHAPTERS, LESSONS, type Step } from '../data/lessons'
+import { CHAPTERS, LESSONS, chapterOf, type Step } from '../data/lessons'
 import bankJson from '../data/practice-bank.json'
+import { ROLEPLAYS_BY_CHAPTER, ROLE_LABEL, unlockedChapters, type Roleplay } from '../data/roleplays'
 import { enText, generate, odText, type Ctx, type Focus, type Gen, type Sentence } from './grammar'
 import { chance, makeRng, pick, shuffle, type Rng } from './rng'
 
@@ -14,6 +15,7 @@ export type PStep = Step & {
   orders?: string[][] // other accepted word orders (assemble)
   fresh?: boolean // generated, not from the curated lesson
   sig?: string // identity, to avoid repeating recent questions
+  odOpts?: boolean // choice: the options are Odia even though a phrase is shown (a roleplay reply)
 }
 
 type Format = 'choiceEn' | 'choiceOd' | 'cloze' | 'ending' | 'buildOd' | 'buildEn' | 'type' | 'match'
@@ -284,6 +286,94 @@ export function rememberSeen(steps: PStep[]): void {
   }
 }
 
+// ---------- roleplay lines as exercises ----------
+
+// A line of a roleplay (data/roleplays.ts) as a step: its meaning, the reply to
+// the line before it, or typing / building it. Only the lines themselves are
+// ever said, so the roleplays' recordings cover these steps too.
+type RpFormat = 'meaning' | 'reply' | 'type' | 'build'
+const RP_FORMATS: RpFormat[] = ['meaning', 'reply', 'type', 'build']
+
+function roleplayStep(r: Roleplay, i: number, format: RpFormat, rng: Rng): PStep | null {
+  const line = r.lines[i]
+  const pool = (ROLEPLAYS_BY_CHAPTER[r.chapter] ?? []).flatMap((x) => x.lines)
+  const sig = `rp:${r.id}:${i}`
+  // Lines from the same chapter that differ from this one in both languages.
+  const others = (field: 'od' | 'en') => {
+    const seen = new Set([norm(line.od), norm(line.en)])
+    const out: typeof pool = []
+    for (const l of shuffle(rng, pool)) {
+      if (seen.has(norm(l.od)) || seen.has(norm(l.en))) continue
+      seen.add(norm(l.od))
+      seen.add(norm(l.en))
+      if (field === 'od' || l.od.endsWith('?') === line.od.endsWith('?')) out.push(l)
+    }
+    return out
+  }
+  const question = line.od.endsWith('?')
+  switch (format) {
+    case 'meaning': {
+      const d = others('en').slice(0, 2)
+      if (d.length < 2) return null
+      return { t: 'choice', q: 'What does this mean?', show: line.od, opts: [line, ...d].map((l) => ({ a: l.en })), ans: 0, sig: sig + ':m', fresh: true }
+    }
+    case 'reply': {
+      if (i === 0) return null
+      const prev = r.lines[i - 1]
+      const d = others('od').slice(0, 2)
+      if (d.length < 2) return null
+      return {
+        t: 'choice', q: `The ${ROLE_LABEL[prev.who].toLowerCase()} says this. Reply: “${line.en}”`,
+        show: prev.od, opts: [line, ...d].map((l) => ({ a: l.od })), ans: 0, odOpts: true, sig: sig + ':r', fresh: true,
+      }
+    }
+    case 'type':
+      if (line.od.split(' ').length > 4) return null
+      return { t: 'type', q: `Type in Odia: “${line.en}”`, ans: line.od, sig: sig + ':t', fresh: true }
+    case 'build': {
+      // Tiles carry no "?" or ",": a "-ki" question still speaks as one; other
+      // questions and lines with a pause would need a second recording, so skip them.
+      const words = line.od.split(' ')
+      if (line.od.includes(',') || (question && !words[words.length - 1].endsWith('-ki?'))) return null
+      const ans = words.map((w) => w.replace(/\?$/, ''))
+      const have = new Set(ans.map(norm))
+      const dist = shuffle(rng, [...new Set(pool.flatMap((l) => l.od.replace(/[?,]/g, '').split(' ')))])
+        .filter((w) => !have.has(norm(w))).slice(0, 2)
+      if (dist.length < 2) return null
+      return { t: 'assemble', q: `Build in Odia: “${line.en}”`, ans, dist, sig: sig + ':b', fresh: true }
+    }
+  }
+}
+
+// n distinct steps drawn from these roleplays, not seen recently where possible.
+function roleplaySteps(roleplays: Roleplay[], n: number, rng: Rng, avoid: Set<string>): PStep[] {
+  const out: PStep[] = []
+  const used = new Set<string>()
+  let fallback: PStep | null = null
+  for (let attempt = 0; attempt < 40 * n && out.length < n && roleplays.length; attempt++) {
+    const r = pick(rng, roleplays)
+    const i = Math.floor(rng() * r.lines.length)
+    const step = roleplayStep(r, i, pick(rng, RP_FORMATS), rng)
+    if (!step || used.has(step.sig!)) continue
+    if (avoid.has(step.sig!)) {
+      fallback ??= step
+      continue
+    }
+    used.add(step.sig!)
+    out.push(step)
+  }
+  if (out.length < n && fallback && !used.has(fallback.sig!)) out.push(fallback)
+  return out
+}
+
+// The roleplays of a lesson's chapter, once every lesson in it is finished —
+// so practice never asks for a line built on a lesson still to come.
+function chapterRoleplays(lessonId: string, completed: Set<string>): Roleplay[] {
+  const ch = chapterOf(lessonId)
+  if (!ch || !ch.lessons.every((id) => id === lessonId || completed.has(id))) return []
+  return ROLEPLAYS_BY_CHAPTER[ch.key] ?? []
+}
+
 // ---------- assembling a set of practice steps ----------
 
 interface Source {
@@ -384,8 +474,14 @@ function drawFromBank(bank: PStep[], n: number, rng: Rng, avoid: Set<string>): P
 // lessons is the Pop Quiz's job; dropped into a focused lesson it just reads as
 // a random question out of nowhere.
 export function freshSteps(lessonId: string, completed: Set<string>, n: number, rng: Rng = makeRng()): PStep[] {
+  const avoid = new Set(loadRecent())
+  // Once the whole chapter is done, one of the steps is a line from its roleplays.
+  const rp = roleplaySteps(chapterRoleplays(lessonId, completed), n > 1 ? 1 : 0, rng, avoid)
   const bank = bankSteps(lessonId)
-  return bank ? drawFromBank(bank, n, rng, new Set(loadRecent())) : generateSteps(lessonId, completed, n, rng)
+  const own = bank ? drawFromBank(bank, n - rp.length, rng, avoid) : generateSteps(lessonId, completed, n - rp.length, rng)
+  if (!rp.length) return own
+  const at = Math.floor(rng() * (own.length + 1))
+  return [...own.slice(0, at), ...rp, ...own.slice(at)]
 }
 
 // Straight from the generator, bank or no bank — what the bank builder samples.
@@ -434,6 +530,10 @@ export function lessonRunLength(lessonId: string): number {
 export function buildQuiz(completed: Set<string>, n = 10, rng: Rng = makeRng()): PStep[] {
   if (!completed.size) return []
   const avoid = new Set(loadRecent())
+  // Up to a fifth of the quiz is lines from the roleplays of finished chapters.
+  const roleplays = unlockedChapters(completed).flatMap((key) => ROLEPLAYS_BY_CHAPTER[key] ?? [])
+  const rp = roleplaySteps(roleplays, Math.floor(n / 5), rng, avoid)
+  n -= rp.length
   const banked = [...completed].filter((id) => bankSteps(id))
   const allBanked = banked.length === completed.size
   const pool = [...new Map(banked.flatMap((id) => bankSteps(id)!).map((s) => [s.sig, s])).values()]
@@ -441,5 +541,5 @@ export function buildQuiz(completed: Set<string>, n = 10, rng: Rng = makeRng()):
   const rest = allBanked ? 0 : n - fromBank.length
   const src: Source = { ctx: { known: completed }, vocab: vocabFor(completed) }
   const generated = makeSet([src], rest, rng, new Set([...avoid, ...fromBank.map((s) => s.sig!)]))
-  return shuffle(rng, [...fromBank, ...generated]).map((s) => ({ ...s, fresh: false }))
+  return shuffle(rng, [...fromBank, ...generated, ...rp]).map((s) => ({ ...s, fresh: false }))
 }

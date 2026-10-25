@@ -18,8 +18,9 @@ export function promptOdia(step: PStep): string | undefined {
 export function answerOdia(step: PStep): string | undefined {
   switch (step.t) {
     case 'choice':
-      // With a phrase shown, the options are its English meanings.
-      return step.show ? undefined : optText(step.opts?.[step.ans as number] ?? '')
+      // With a phrase shown, the options are its English meanings — unless
+      // it's a roleplay line and the options are replies to it.
+      return step.show && !step.odOpts ? undefined : optText(step.opts?.[step.ans as number] ?? '')
     case 'cloze': {
       // The whole sentence, blank filled. "-chu" options are endings that
       // attach to the stem at the end of `pre`; the question particle "-ki"
