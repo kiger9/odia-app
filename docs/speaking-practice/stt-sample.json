@@ -1,0 +1,485 @@
+{
+ "_about": "ElevenLabs Scribe transcriptions of 60 random clips from public/audio (voice Barsha, eleven_v4), gathered 2026-10-25 while planning speaking practice. \"expected\" is the clip's Odia script from src/data/clips.ts. The *_keyterms columns passed the expected words plus seven fixed decoys (ମୁଁ ତମେ ଆପଣ ଅଛି ଅଛନ୍ତି ଘରେ ନାହିଁ) as keyterms. These are TTS clips, not learners: use them to test the matcher, not to estimate accuracy on real voices.",
+ "clips": [
+  {
+   "clip": "mu-bagicha-ku-jaithili.mp3",
+   "expected": "ମୁଁ ବଗିଚାକୁ ଯାଇଥିଲି",
+   "scribe_v1_ori": "ମୁଁ ବଗିଚାକୁ ଯାଇଥିଲି",
+   "scribe_v2_auto": "ମୁଁ ବଗିଚାକୁ ଯାଇଥିଲି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ବଗିଚାକୁ ଯାଇଥିଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ବଗିଚାକୁ ଯାଇଥିଲି"
+  },
+  {
+   "clip": "duita-bahi-achi.mp3",
+   "expected": "ଦୁଇଟା ବହି ଅଛି",
+   "scribe_v1_ori": "দুইটা বহি আছে",
+   "scribe_v2_auto": "দুইটা বই আছে",
+   "scribe_v1_ori_keyterms": "ଦୁଇଟା ବହି ଅଛି",
+   "scribe_v2_auto_keyterms": "ଦୁଇଟା ବହି ଅଛି"
+  },
+  {
+   "clip": "ame-amba-anilu.mp3",
+   "expected": "ଆମେ ଆମ୍ବ ଆଣିଲୁ",
+   "scribe_v1_ori": "ଆମେ ଆମ୍ବ ଆଣିଲୁ",
+   "scribe_v2_auto": "അമ്മേ ആമ്പോ ആണിലു",
+   "scribe_v1_ori_keyterms": "ଆମେ ଆମ୍ବ ଆଣିଲୁ",
+   "scribe_v2_auto_keyterms": "ଆମେ ଆମ୍ବ ଆଣିଲୁ"
+  },
+  {
+   "clip": "rakhiba.mp3",
+   "expected": "ରଖିବା",
+   "scribe_v1_ori": "রখিবা",
+   "scribe_v2_auto": "রখিবা",
+   "scribe_v1_ori_keyterms": "ରଖିବା",
+   "scribe_v2_auto_keyterms": "ରଖିବା"
+  },
+  {
+   "clip": "mitu-hati-dekhiba-ki-q.mp3",
+   "expected": "ମିତୁ ହାତୀ ଦେଖିବ କି?",
+   "scribe_v1_ori": "ମିତୁ ହାତୀ ଦେଖିବ କି?",
+   "scribe_v2_auto": "ମିତୁ ହାତୀ ଦେଖିବ କି?",
+   "scribe_v1_ori_keyterms": "ମିତୁ ହାତୀ ଦେଖିବ କି?",
+   "scribe_v2_auto_keyterms": "ମିତୁ ହାତୀ ଦେଖିବ କି?"
+  },
+  {
+   "clip": "bapa-hati-dekhile.mp3",
+   "expected": "ବାପା ହାତୀ ଦେଖିଲେ",
+   "scribe_v1_ori": "ବାପା ହାତୀ ଦେଖିଲେ",
+   "scribe_v2_auto": "ବାପା ହାତୀ ଦେଖିଲେ",
+   "scribe_v1_ori_keyterms": "ବାପା ହାତୀ ଦେଖିଲେ",
+   "scribe_v2_auto_keyterms": "ବାପା ହାତୀ ଦେଖିଲେ"
+  },
+  {
+   "clip": "au-thare.mp3",
+   "expected": "ଆଉ ଥରେ",
+   "scribe_v1_ori": "ଆଉ ଥରେ",
+   "scribe_v2_auto": "આઉથરે",
+   "scribe_v1_ori_keyterms": "ଆଉ ଥରେ",
+   "scribe_v2_auto_keyterms": "ଆଉ ଥରେ"
+  },
+  {
+   "clip": "padma.mp3",
+   "expected": "ପଦ୍ମ",
+   "scribe_v1_ori": "ପଦ୍ମ",
+   "scribe_v2_auto": "पद्म",
+   "scribe_v1_ori_keyterms": "ପଦ୍ମ",
+   "scribe_v2_auto_keyterms": "ପଦ୍ମ"
+  },
+  {
+   "clip": "rahul-kouthi-achi-q.mp3",
+   "expected": "ରାହୁଲ କୋଉଠି ଅଛି?",
+   "scribe_v1_ori": "রাহুল কোটে আছে?",
+   "scribe_v2_auto": "রাহুল কোথায় আছে?",
+   "scribe_v1_ori_keyterms": "ରାହୁଲ କୋଉଠି ଅଛି?",
+   "scribe_v2_auto_keyterms": "ରାହୁଲ କୋଉଠି ଅଛି?"
+  },
+  {
+   "clip": "mu-kholuchi.mp3",
+   "expected": "ମୁଁ ଖୋଲୁଛି",
+   "scribe_v1_ori": "ମୁଁ ଖୋଲୁଛି",
+   "scribe_v2_auto": "ମୁଁ ଖୋଲୁଛି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ଖୋଲୁଛି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ଖୋଲୁଛି"
+  },
+  {
+   "clip": "mitu-soichi.mp3",
+   "expected": "ମିତୁ ଶୋଇଛି",
+   "scribe_v1_ori": "মিতু শোইছে",
+   "scribe_v2_auto": "মিতু শোয়েছে",
+   "scribe_v1_ori_keyterms": "ମିତୁ ଶୋଇଛି",
+   "scribe_v2_auto_keyterms": "ମିତୁ ଶୋଇଛି"
+  },
+  {
+   "clip": "rabi-gai-dekhuchi.mp3",
+   "expected": "ରବି ଗାଈ ଦେଖୁଛି",
+   "scribe_v1_ori": "ରବି ଗାଈ ଦେଖୁଛି",
+   "scribe_v2_auto": "রবি গাই দেখুছে",
+   "scribe_v1_ori_keyterms": "ରବି ଗାଈ ଦେଖୁଛି",
+   "scribe_v2_auto_keyterms": "ରବି ଗାଈ ଦେଖୁଛି"
+  },
+  {
+   "clip": "mu-maruchi.mp3",
+   "expected": "ମୁଁ ମରୁଛି",
+   "scribe_v1_ori": "ମୁଁ ମରୁଛି",
+   "scribe_v2_auto": "ମୁଁ ମରୁଛି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ମରୁଛି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ମରୁଛି"
+  },
+  {
+   "clip": "pilamane-bahara-ku-jauchanti-ki-q.mp3",
+   "expected": "ପିଲାମାନେ ବାହାରକୁ ଯାଉଛନ୍ତି କି?",
+   "scribe_v1_ori": "ପିଲାମାନେ ବାହାରକୁ ଯାଉଛନ୍ତି କି?",
+   "scribe_v2_auto": "ପିଲାମାନେ ବାହାରକୁ ଯାଉଛନ୍ତି କି?",
+   "scribe_v1_ori_keyterms": "ପିଲାମାନେ ବାହାରକୁ ଯାଉଛନ୍ତି କି?",
+   "scribe_v2_auto_keyterms": "ପିଲାମାନେ ବାହାରକୁ ଯାଉଛନ୍ତି କି?"
+  },
+  {
+   "clip": "ame-bhata-khauchu.mp3",
+   "expected": "ଆମେ ଭାତ ଖାଉଛୁ",
+   "scribe_v1_ori": "ଆମେ ଭାତ ଖାଉଚୁ",
+   "scribe_v2_auto": "ଆମେ ଭାତ ଖାଉଚୁ",
+   "scribe_v1_ori_keyterms": "ଆମେ ଭାତ ଖାଉଛୁ",
+   "scribe_v2_auto_keyterms": "ଆମେ ଭାତ ଖାଉଛୁ"
+  },
+  {
+   "clip": "mopakhare-gote-bahi-achi.mp3",
+   "expected": "ମୋ ପାଖରେ ଗୋଟେ ବହି ଅଛି",
+   "scribe_v1_ori": "ମୋ ପାଖରେ ଗୋଟେ ବହି ଅଛି",
+   "scribe_v2_auto": "ମୋ ପାଖରେ ଗୋଟେ ବହି ଅଛି",
+   "scribe_v1_ori_keyterms": "ମୋ ପାଖରେ ଗୋଟେ ବହି ଅଛି",
+   "scribe_v2_auto_keyterms": "ମୋ ପାଖରେ ଗୋଟେ ବହି ଅଛି"
+  },
+  {
+   "clip": "apana-kouthiki-jauchanti-q.mp3",
+   "expected": "ଆପଣ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v1_ori": "ଆପଣ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v2_auto": "ଆପଣ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v1_ori_keyterms": "ଆପଣ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v2_auto_keyterms": "ଆପଣ କୋଉଠିକି ଯାଉଛନ୍ତି?"
+  },
+  {
+   "clip": "rahul-ghare-kama-kariba.mp3",
+   "expected": "ରାହୁଲ ଘରେ କାମ କରିବ",
+   "scribe_v1_ori": "ରାହୁଲ ଘରେ କାମ କରିବ",
+   "scribe_v2_auto": "ରାହୁଲ ଘରେ କାମ କରିବ",
+   "scribe_v1_ori_keyterms": "ରାହୁଲ ଘରେ କାମ କରିବ",
+   "scribe_v2_auto_keyterms": "ରାହୁଲ ଘରେ କାମ କରିବ"
+  },
+  {
+   "clip": "nua.mp3",
+   "expected": "ନୂଆ",
+   "scribe_v1_ori": "Nuwa",
+   "scribe_v2_auto": "Noah",
+   "scribe_v1_ori_keyterms": "ନୂଆ",
+   "scribe_v2_auto_keyterms": "ନୂଆ"
+  },
+  {
+   "clip": "bapa-aji-chesta-karuchanti.mp3",
+   "expected": "ବାପା ଆଜି ଚେଷ୍ଟା କରୁଛନ୍ତି",
+   "scribe_v1_ori": "ବାପା ଆଜି ଚେଷ୍ଟା କରୁଛନ୍ତି",
+   "scribe_v2_auto": "ବାପା ଆଜି ଚେଷ୍ଟା କରୁଛନ୍ତି",
+   "scribe_v1_ori_keyterms": "ବାପା ଆଜି ଚେଷ୍ଟା କରୁଛନ୍ତି",
+   "scribe_v2_auto_keyterms": "ବାପା ଆଜି ଚେଷ୍ଟା କରୁଛନ୍ତି"
+  },
+  {
+   "clip": "ame-tama-sangare-mandira-ru-asibu.mp3",
+   "expected": "ଆମେ ତମ ସାଙ୍ଗରେ ମନ୍ଦିରରୁ ଆସିବୁ",
+   "scribe_v1_ori": "ଆମେ ତମ ସାଙ୍ଗରେ ମନ୍ଦିରରୁ ଆସିବୁ",
+   "scribe_v2_auto": "ଆମେ ତମ ସାଙ୍ଗରେ ମନ୍ଦିରରୁ ଆସିବୁ",
+   "scribe_v1_ori_keyterms": "ଆମେ ତମ ସାଙ୍ଗରେ ମନ୍ଦିରରୁ ଆସିବୁ",
+   "scribe_v2_auto_keyterms": "ଆମେ ତମ ସାଙ୍ଗରେ ମନ୍ଦିରରୁ ଆସିବୁ"
+  },
+  {
+   "clip": "kouthi-q.mp3",
+   "expected": "କୋଉଠି?",
+   "scribe_v1_ori": "कोठे?",
+   "scribe_v2_auto": "कोठे?",
+   "scribe_v1_ori_keyterms": "କୋଉଠି?",
+   "scribe_v2_auto_keyterms": "କୋଉଠି?"
+  },
+  {
+   "clip": "mu-hati-dekhibi.mp3",
+   "expected": "ମୁଁ ହାତୀ ଦେଖିବି",
+   "scribe_v1_ori": "ମୁଁ ହାତଟି ଦେଖିବି",
+   "scribe_v2_auto": "ମୁଁ ହାତଟି ଦେଖିବି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ହାତୀ ଦେଖିବି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ହାତୀ ଦେଖିବି"
+  },
+  {
+   "clip": "mitu-upare-soila.mp3",
+   "expected": "ମିତୁ ଉପରେ ଶୋଇଲା",
+   "scribe_v1_ori": "ମିତୁ ଉପରେ ଶୋଇଲା",
+   "scribe_v2_auto": "मृत्यु उपरे सोइला",
+   "scribe_v1_ori_keyterms": "ମିତୁ ଉପରେ ଶୋଇଲା",
+   "scribe_v2_auto_keyterms": "ମିତୁ ଉପରେ ଶୋଇଲା"
+  },
+  {
+   "clip": "keteta-pila-achanti-q.mp3",
+   "expected": "କେତେଟା ପିଲା ଅଛନ୍ତି?",
+   "scribe_v1_ori": "କେତେଟା ପିଲା ଅଛନ୍ତି?",
+   "scribe_v2_auto": "କେତେଟା ପିଲା ଅଛନ୍ତି?",
+   "scribe_v1_ori_keyterms": "କେତେଟା ପିଲା ଅଛନ୍ତି?",
+   "scribe_v2_auto_keyterms": "କେତେଟା ପିଲା ଅଛନ୍ତି?"
+  },
+  {
+   "clip": "mati.mp3",
+   "expected": "ମାଟି",
+   "scribe_v1_ori": "মাটি",
+   "scribe_v2_auto": "মাটি",
+   "scribe_v1_ori_keyterms": "ମାଟି",
+   "scribe_v2_auto_keyterms": "ମାଟି"
+  },
+  {
+   "clip": "semane-kouthiki-jauchanti-q.mp3",
+   "expected": "ସେମାନେ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v1_ori": "ସେମାନେ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v2_auto": "ସେମାନେ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v1_ori_keyterms": "ସେମାନେ କୋଉଠିକି ଯାଉଛନ୍ତି?",
+   "scribe_v2_auto_keyterms": "ସେମାନେ କୋଉଠିକି ଯାଉଛନ୍ତି?"
+  },
+  {
+   "clip": "aji-rahul-macha-khauchi.mp3",
+   "expected": "ଆଜି ରାହୁଲ ମାଛ ଖାଉଛି",
+   "scribe_v1_ori": "ଆଜି ରାହୁଲ ମାଛ ଖାଉଛି",
+   "scribe_v2_auto": "ଆଜି ରାହୁଲ ମାଛ ଖାଉଛି",
+   "scribe_v1_ori_keyterms": "ଆଜି ରାହୁଲ ମାଛ ଖାଉଛି",
+   "scribe_v2_auto_keyterms": "ଆଜି ରାହୁଲ ମାଛ ଖାଉଛି"
+  },
+  {
+   "clip": "mu-piili.mp3",
+   "expected": "ମୁଁ ପିଇଲି",
+   "scribe_v1_ori": "ମୁଁ ପିଲି",
+   "scribe_v2_auto": "Mu pii li",
+   "scribe_v1_ori_keyterms": "ମୁଁ ପିଇଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ପିଇଲି"
+  },
+  {
+   "clip": "mitu-kemiti-achi-q.mp3",
+   "expected": "ମିତୁ କେମିତି ଅଛି?",
+   "scribe_v1_ori": "ମିଟୁ କେମିତି ଅଛୁ?",
+   "scribe_v2_auto": "ମିଟୁ କେମିତି ଅଛେ?",
+   "scribe_v1_ori_keyterms": "ମିତୁ କେମିତି ଅଛି?",
+   "scribe_v2_auto_keyterms": "ମିତୁ କେମିତି ଅଛି?"
+  },
+  {
+   "clip": "aai-hati-dekhibe.mp3",
+   "expected": "ଆଈ ହାତୀ ଦେଖିବେ",
+   "scribe_v1_ori": "ଆଈ ହାତୀ ଦେଖିବେ",
+   "scribe_v2_auto": "ଆଇ ହାତୀ ଦେଖିବେ",
+   "scribe_v1_ori_keyterms": "ଆଈ ହାତୀ ଦେଖିବେ",
+   "scribe_v2_auto_keyterms": "ଆଈ ହାତୀ ଦେଖିବେ"
+  },
+  {
+   "clip": "ame-ghare-soibu.mp3",
+   "expected": "ଆମେ ଘରେ ଶୋଇବୁ",
+   "scribe_v1_ori": "ଆମେ ଘରେ ଶୋଇବୁ",
+   "scribe_v2_auto": "আমি ঘরে শুইবো",
+   "scribe_v1_ori_keyterms": "ଆମେ ଘରେ ଶୋଇବୁ",
+   "scribe_v2_auto_keyterms": "ଆମେ ଘରେ ଶୋଇବୁ"
+  },
+  {
+   "clip": "rabi-kebe-khaiba-q.mp3",
+   "expected": "ରବି କେବେ ଖାଇବ?",
+   "scribe_v1_ori": "ରବି କେବେ ଖାଇବ?",
+   "scribe_v2_auto": "ରବି କେବେ ଖାଇବ?",
+   "scribe_v1_ori_keyterms": "ରବି କେବେ ଖାଇବ?",
+   "scribe_v2_auto_keyterms": "ରବି କେବେ ଖାଇବ?"
+  },
+  {
+   "clip": "apana-gata-kali-gai-dekhile.mp3",
+   "expected": "ଆପଣ ଗତ କାଲି ଗାଈ ଦେଖିଲେ",
+   "scribe_v1_ori": "ଆପଣ ଗତକାଲି ଗାଈ ଦେଖିଲେ?",
+   "scribe_v2_auto": "ଆପଣ ଗତକାଲି ଗାଈ ଦେଖିଲେ?",
+   "scribe_v1_ori_keyterms": "ଆପଣ ଗତ କାଲି ଗାଈ ଦେଖିଲେ?",
+   "scribe_v2_auto_keyterms": "ଆପଣ ଗତ କାଲି ଗାଈ ଦେଖିଲେ?"
+  },
+  {
+   "clip": "mu-shighra-asibi.mp3",
+   "expected": "ମୁଁ ଶୀଘ୍ର ଆସିବି",
+   "scribe_v1_ori": "ମୁଁ ଶୀଘ୍ର ଆସିବି",
+   "scribe_v2_auto": "মই শীঘ্ৰ আহিবি",
+   "scribe_v1_ori_keyterms": "ମୁଁ ଶୀଘ୍ର ଆସିବି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ଶୀଘ୍ର ଆସିବି"
+  },
+  {
+   "clip": "ame-bapa-nka-sangare-ghara-ku-asibu.mp3",
+   "expected": "ଆମେ ବାପାଙ୍କ ସାଙ୍ଗରେ ଘରକୁ ଆସିବୁ",
+   "scribe_v1_ori": "ଆମେ ବାପାଙ୍କ ସାଙ୍ଗରେ ଘରକୁ ଆସିବୁ",
+   "scribe_v2_auto": "ଆମେ ବାପାଙ୍କ ସାଙ୍ଗରେ ଘରକୁ ଆସିବୁ",
+   "scribe_v1_ori_keyterms": "ଆମେ ବାପାଙ୍କ ସାଙ୍ଗରେ ଘରକୁ ଆସିବୁ",
+   "scribe_v2_auto_keyterms": "ଆମେ ବାପାଙ୍କ ସାଙ୍ଗରେ ଘରକୁ ଆସିବୁ"
+  },
+  {
+   "clip": "rahul-kemiti-achi-q.mp3",
+   "expected": "ରାହୁଲ କେମିତି ଅଛି?",
+   "scribe_v1_ori": "ରାହୁଲ, କେମିତି ଅଛି?",
+   "scribe_v2_auto": "ରାହୁଲ କେମିତି ଅଛି?",
+   "scribe_v1_ori_keyterms": "ରାହୁଲ କେମିତି ଅଛି?",
+   "scribe_v2_auto_keyterms": "ରାହୁଲ କେମିତି ଅଛି?"
+  },
+  {
+   "clip": "mitu-be-chesta-karuchi.mp3",
+   "expected": "ମିତୁ ବେ ଚେଷ୍ଟା କରୁଛି",
+   "scribe_v1_ori": "ମୃତ୍ୟୁ ବେ strive ରେ ଚେଷ୍ଟା କରୁଛି",
+   "scribe_v2_auto": "ମୃତ୍ୟୁ ବେ ଚେଷ୍ଟା କରୁଛି",
+   "scribe_v1_ori_keyterms": "ମିତୁ ବେ ଚେଷ୍ଟା କରୁଛି",
+   "scribe_v2_auto_keyterms": "ମିତୁ ବେ ଚେଷ୍ଟା କରୁଛି"
+  },
+  {
+   "clip": "anuchi.mp3",
+   "expected": "ଆଣୁଛି",
+   "scribe_v1_ori": "ଆଣୁଛି",
+   "scribe_v2_auto": "আণুছি",
+   "scribe_v1_ori_keyterms": "ଆଣୁଛି",
+   "scribe_v2_auto_keyterms": "ଆଣୁଛି"
+  },
+  {
+   "clip": "tame-kouthiki-jiba-q.mp3",
+   "expected": "ତମେ କୋଉଠିକି ଯିବ?",
+   "scribe_v1_ori": "ତମେ କୋଉଠିକି ଯିବ?",
+   "scribe_v2_auto": "ତମେ କୋଉଠିକି ଯିବ?",
+   "scribe_v1_ori_keyterms": "ତମେ କୋଉଠିକି ଯିବ?",
+   "scribe_v2_auto_keyterms": "ତମେ କୋଉଠିକି ଯିବ?"
+  },
+  {
+   "clip": "aai-kadali-khauchanti.mp3",
+   "expected": "ଆଈ କଦଳୀ ଖାଉଛନ୍ତି",
+   "scribe_v1_ori": "ଆଈ କଦଳୀ ଖାଉଛନ୍ତି",
+   "scribe_v2_auto": "ଆଈ କଦଳୀ ଖାଉଛନ୍ତି",
+   "scribe_v1_ori_keyterms": "ଆଈ କଦଳୀ ଖାଉଛନ୍ତି",
+   "scribe_v2_auto_keyterms": "ଆଈ କଦଳୀ ଖାଉଛନ୍ତି"
+  },
+  {
+   "clip": "chata-bahi-achi.mp3",
+   "expected": "ଛଅଟା ବହି ଅଛି",
+   "scribe_v1_ori": "ଛଅଟା ବହି ଅଛି",
+   "scribe_v2_auto": "ଛଅଟା ବହି ଅଛି",
+   "scribe_v1_ori_keyterms": "ଛଅଟା ବହି ଅଛି",
+   "scribe_v2_auto_keyterms": "ଛଅଟା ବହି ଅଛି"
+  },
+  {
+   "clip": "rabi-rahul-sangare-jolokia-khaila.mp3",
+   "expected": "ରବି ରାହୁଲ ସାଙ୍ଗରେ ଜଳଖିଆ ଖାଇଲା",
+   "scribe_v1_ori": "ରବି ରାହୁଲ ସାଙ୍ଗରେ ଜଳଖିଆ ଖାଇଲା",
+   "scribe_v2_auto": "ରବି ରାହୁଲ ସାଙ୍ଗରେ ଜଳଖିଆ ଖାଇଲା",
+   "scribe_v1_ori_keyterms": "ରବି ରାହୁଲ ସାଙ୍ଗରେ ଜଳଖିଆ ଖାଇଲା",
+   "scribe_v2_auto_keyterms": "ରବି ରାହୁଲ ସାଙ୍ଗରେ ଜଳଖିଆ ଖାଇଲା"
+  },
+  {
+   "clip": "khira.mp3",
+   "expected": "ଖୀର",
+   "scribe_v1_ori": "Keto",
+   "scribe_v2_auto": "खीरा",
+   "scribe_v1_ori_keyterms": "ଖୀର",
+   "scribe_v2_auto_keyterms": "ଖୀର"
+  },
+  {
+   "clip": "hata.mp3",
+   "expected": "ହାତ",
+   "scribe_v1_ori": "ହାତ",
+   "scribe_v2_auto": "はと",
+   "scribe_v1_ori_keyterms": "ହାତ",
+   "scribe_v2_auto_keyterms": "ହାତ"
+  },
+  {
+   "clip": "mu-rahul-sangare-kheluthili.mp3",
+   "expected": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳୁଥିଲି",
+   "scribe_v1_ori": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳୁଥିଲି",
+   "scribe_v2_auto": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳୁଥିଲି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳୁଥିଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳୁଥିଲି"
+  },
+  {
+   "clip": "duita-tinita.mp3",
+   "expected": "ଦୁଇଟା · ତିନିଟା",
+   "scribe_v1_ori": "ଦୁଇଟା ତିନିଟା",
+   "scribe_v2_auto": "দুইটা তিনটা",
+   "scribe_v1_ori_keyterms": "ଦୁଇଟା ତିନିଟା",
+   "scribe_v2_auto_keyterms": "ଦୁଇଟା ତିନିଟା"
+  },
+  {
+   "clip": "dhanyavad.mp3",
+   "expected": "ଧନ୍ୟବାଦ",
+   "scribe_v1_ori": "ধন্যবাদ",
+   "scribe_v2_auto": "ধন্যবাদ",
+   "scribe_v1_ori_keyterms": "ଧନ୍ୟବାଦ",
+   "scribe_v2_auto_keyterms": "ଧନ୍ୟବାଦ"
+  },
+  {
+   "clip": "mu-mandira-ku-jauthili.mp3",
+   "expected": "ମୁଁ ମନ୍ଦିରକୁ ଯାଉଥିଲି",
+   "scribe_v1_ori": "ମୁଁ ମନ୍ଦିରକୁ ଯାଉଥିଲି",
+   "scribe_v2_auto": "ମୁଁ ମନ୍ଦିରକୁ ଯାଉଥିଲି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ମନ୍ଦିରକୁ ଯାଉଥିଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ମନ୍ଦିରକୁ ଯାଉଥିଲି"
+  },
+  {
+   "clip": "se-kadali-khauchi.mp3",
+   "expected": "ସେ କଦଳୀ ଖାଉଛି",
+   "scribe_v1_ori": "ସେ କଦ୍ଦଳୀ ଖାଉଛି",
+   "scribe_v2_auto": "ସେ ପଦ୍ଦଳି ଖାଉଛି",
+   "scribe_v1_ori_keyterms": "ସେ କଦଳୀ ଖାଉଛି",
+   "scribe_v2_auto_keyterms": "ସେ କଦଳୀ ଖାଉଛି"
+  },
+  {
+   "clip": "charita-kadali-achi.mp3",
+   "expected": "ଚାରିଟା କଦଳୀ ଅଛି",
+   "scribe_v1_ori": "ଚାରିଟା କଦଳୀ ଅଛି",
+   "scribe_v2_auto": "ଚାରିଟା କଦଳୀ ଅଛି",
+   "scribe_v1_ori_keyterms": "ଚାରିଟା କଦଳୀ ଅଛି",
+   "scribe_v2_auto_keyterms": "ଚାରିଟା କଦଳୀ ଅଛି"
+  },
+  {
+   "clip": "aai-asuchanti.mp3",
+   "expected": "ଆଈ ଆସୁଛନ୍ତି",
+   "scribe_v1_ori": "ଆଇ ଆସୁଛନ୍ତି",
+   "scribe_v2_auto": "ଆଇ ଆସୁଛନ୍ତି",
+   "scribe_v1_ori_keyterms": "ଆଈ ଆସୁଛନ୍ତି",
+   "scribe_v2_auto_keyterms": "ଆଈ ଆସୁଛନ୍ତି"
+  },
+  {
+   "clip": "mu-rahul-sangare-bagicha-ru-asithili.mp3",
+   "expected": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସିଥିଲି",
+   "scribe_v1_ori": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସିଥିଲି",
+   "scribe_v2_auto": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସିଥିଲି।",
+   "scribe_v1_ori_keyterms": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସିଥିଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସିଥିଲି"
+  },
+  {
+   "clip": "ei-gadi-ta-nua.mp3",
+   "expected": "ଏଇ ଗାଡ଼ିଟା ନୂଆ",
+   "scribe_v1_ori": "এই গাড়িটা নোয়া",
+   "scribe_v2_auto": "এই গাড়িটা নোয়া",
+   "scribe_v1_ori_keyterms": "ଏଇ ଗାଡ଼ିଟା ନୂଆ",
+   "scribe_v2_auto_keyterms": "ଏଇ ଗାଡ଼ିଟା ନୂଆ"
+  },
+  {
+   "clip": "aai-hati-dekhuchanti.mp3",
+   "expected": "ଆଈ ହାତୀ ଦେଖୁଛନ୍ତି",
+   "scribe_v1_ori": "ଆଈ ହାତେ ଦେଖୁଛନ୍ତି",
+   "scribe_v2_auto": "ଆଈ ହାତୀ ଦେଖୁଛନ୍ତି",
+   "scribe_v1_ori_keyterms": "ଆଈ ହାତୀ ଦେଖୁଛନ୍ତି",
+   "scribe_v2_auto_keyterms": "ଆଈ ହାତୀ ଦେଖୁଛନ୍ତି"
+  },
+  {
+   "clip": "mu-rahul-sangare-khelithili.mp3",
+   "expected": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳିଥିଲି",
+   "scribe_v1_ori": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳିଥିଲି",
+   "scribe_v2_auto": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳିଥିଲି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳିଥିଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ରାହୁଲ ସାଙ୍ଗରେ ଖେଳିଥିଲି"
+  },
+  {
+   "clip": "semane-mo-sangare-bagicha-ru-asuchanti-ki-q.mp3",
+   "expected": "ସେମାନେ ମୋ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସୁଛନ୍ତି କି?",
+   "scribe_v1_ori": "ସେମାନେ ମୋ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସୁଛନ୍ତି କି?",
+   "scribe_v2_auto": "ସେମାନେ ମୋ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସୁଛନ୍ତି କି?",
+   "scribe_v1_ori_keyterms": "ସେମାନେ ମୋ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସୁଛନ୍ତି କି?",
+   "scribe_v2_auto_keyterms": "ସେମାନେ ମୋ ସାଙ୍ଗରେ ବଗିଚାରୁ ଆସୁଛନ୍ତି କି?"
+  },
+  {
+   "clip": "aai-amba-anuchanti.mp3",
+   "expected": "ଆଈ ଆମ୍ବ ଆଣୁଛନ୍ତି",
+   "scribe_v1_ori": "ଆଏ ଆମ ଆଣୁଛନ୍ତି",
+   "scribe_v2_auto": "ଆଏ ଆମ ଆଣୁଛନ୍ତି",
+   "scribe_v1_ori_keyterms": "ଆଈ ଆମ୍ବ ଆଣୁଛନ୍ତି।",
+   "scribe_v2_auto_keyterms": "ଆଈ ଆମ୍ବ ଆଣୁଛନ୍ତି।"
+  },
+  {
+   "clip": "tini-ghanta.mp3",
+   "expected": "ତିନି ଘଣ୍ଟା",
+   "scribe_v1_ori": "ତିନି ଘଣ୍ଟା",
+   "scribe_v2_auto": "तीन्ही घंटा",
+   "scribe_v1_ori_keyterms": "ତିନି ଘଣ୍ଟା",
+   "scribe_v2_auto_keyterms": "ତିନି ଘଣ୍ଟା"
+  },
+  {
+   "clip": "mu-bhitara-ku-jaithili.mp3",
+   "expected": "ମୁଁ ଭିତରକୁ ଯାଇଥିଲି",
+   "scribe_v1_ori": "ମୁଁ ଭିତରକୁ ଯାଇଥିଲି",
+   "scribe_v2_auto": "ମୁଁ ଭିତରକୁ ଯାଇଥିଲି",
+   "scribe_v1_ori_keyterms": "ମୁଁ ଭିତରକୁ ଯାଇଥିଲି",
+   "scribe_v2_auto_keyterms": "ମୁଁ ଭିତରକୁ ଯାଇଥିଲି"
+  }
+ ]
+}
