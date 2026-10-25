@@ -13,10 +13,12 @@ React + TypeScript + Vite app that teaches spoken Odia in the book's phonetic sp
 
 - `npm run check:content` fails if any lesson step, generated sentence or bank step writes a known word run together with `ki` (e.g. `åchiki`) or writes `ki` as a separate word (`åchå ki?`). Run it after editing `src/data/lessons.ts` or `src/gen/`.
 - `npm run -s audio:todo -- <lessons>` (e.g. `be howru have`) lists every phrase those lessons can speak with its script and clip; the last line should read `0 need script · 0 need recording`.
+- `npm run -s audio:todo -- --check all` fails if any phrase the app can speak has no script, no clip, or a clip file missing from `public/audio/` (entries left without script on purpose are listed in `NO_SCRIPT_OK` in `scripts/audio-todo.ts`). The deploy workflow runs it before building, so a lesson change without its audio won't deploy.
 - `npm run lint` and `npm run build` should stay clean.
 
 ## Recording audio
 
+- **Any change to what the app says needs its audio in the same commit.** After editing `src/data/lessons.ts`, `src/data/words/`, `src/data/dictionary.ts` or `src/gen/` (and rebuilding the practice bank if needed): give new phrases Odia script, run `npm run audio:record -- --dry-run all`, then `npm run audio:record -- all`, confirm `npm run -s audio:todo -- --check all` passes, and commit `src/data/clips.ts` and `public/audio/` with the change. Report the clips recorded and credits used. If recording isn't possible here (no `ELEVENLABS_API_KEY`, `api.elevenlabs.io` blocked, quota reached), say so plainly instead of committing silent phrases; the deploy would fail anyway.
 - Clips are recorded with ElevenLabs: voice "Barsha" (`Zcdoxp4Mfxbmk4fIwInk`), model `eleven_v4`, one take per phrase, stored as mono 48 kbps mp3 in `public/audio/` and listed in `src/data/clips.ts` (Odia script → file).
 - `npm run audio:record -- all` records every phrase that has script but no clip, straight from the ElevenLabs API (needs `ELEVENLABS_API_KEY` and network access to `api.elevenlabs.io`). Try `--dry-run` first (count + credit estimate) and `--limit 5` for a small test. It is safe to stop and rerun; recorded phrases are skipped. It prints the credits used.
 - New words go in `src/data/words/<chapter>.ts` (spoken forms where the book teaches them; same spelling in every chapter). Then `npm run -s audio:todo -- all` should end with `0 need script · 0 need recording` apart from entries that aren't Odia.

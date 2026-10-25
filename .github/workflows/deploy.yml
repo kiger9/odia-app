@@ -25,6 +25,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # every phrase the app can speak must have its clip (see CLAUDE.md)
+      - run: npm run -s audio:todo -- --check all
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
