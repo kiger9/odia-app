@@ -947,4 +947,10 @@ export const CLIPS: Record<string, string> = {
   'ରବି ବାହାରକୁ ଯାଉଛି କି?': 'rabi-bahara-ku-jauchi-ki.mp3',
   'ଆଈ ଉପରେ ଅଛନ୍ତି': 'aai-upare-achanti.mp3',
   'ସେମାନେ ବାହାରକୁ ଯାଉଛନ୍ତି': 'semane-bahara-ku-jauchanti.mp3',
+  'ତାର ଟଙ୍କା ଦରକାର ନାହିଁ': 'tara-tanka-darkar-nahi.mp3',
+  'ସେମାନଙ୍କର ଚା ଦରକାର': 'semanankara-cha-darkar.mp3',
+  'ତମର ପାଣି ଦରକାର କି?': 'tamara-pani-darkar-ki-q.mp3',
+  'ସେମାନଙ୍କର ଚା ଦରକାର ନାହିଁ': 'semanankara-cha-darkar-nahi.mp3',
+  'ମୋର ଚା ଦରକାର ନାହିଁ': 'mora-cha-darkar-nahi.mp3',
+  'ସେମାନଙ୍କର ଟଙ୍କା ଦରକାର ନାହିଁ': 'semanankara-tanka-darkar-nahi.mp3',
 }
