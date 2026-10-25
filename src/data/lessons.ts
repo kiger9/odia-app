@@ -101,7 +101,7 @@ export const LESSONS: Lesson[] = [
   ]},
 { id:'num', title:'Numbers 1–10', sub:'Saying the numbers · 14 steps', items:[
     {t:'intro', odia:'Ek · Dui · Tini', gloss:'One · Two · Three', note:'These are the plain numbers — what you say when reciting, or when talking about amounts: rupees, kilos, hours. Counting actual <i>objects</i> works differently; that’s the next lesson.'},
-    {t:'choice', q:'Which one is <b>three</b>?', opts:[{a:'Tini'},{a:'Dui'},{a:'Chari'}], ans:0},
+    {t:'choice', q:'Which one is “three”?', opts:[{a:'Tini'},{a:'Dui'},{a:'Chari'}], ans:0},
     {t:'intro', odia:'Chari · Panch', gloss:'Four · Five', note:'Halfway. Say them out loud in order: ek, dui, tini, chari, panch.'},
     {t:'match', q:'Match the pairs', pairs:[['Ek','one'],['Dui','two'],['Tini','three'],['Chari','four'],['Panch','five']]},
     {t:'intro', odia:'Chå · Sat · Ath', gloss:'Six · Seven · Eight', note:'<b>Chå</b> and <b>chari</b> sound close — six vs four. Worth slowing down on.'},
@@ -123,7 +123,7 @@ export const LESSONS: Lesson[] = [
     {t:'choice', q:'Which one means “three fish”?', opts:[{a:'Tinita machå'},{a:'Tini kilo machå'},{a:'Tini tånka machå'}], ans:0, why:'Counting whole fish → <b>tinita</b>. <i>Tini kilo machå</i> is three kilos of it.'},
     {t:'assemble', q:'Build in Odia: “There are three books”', gloss:'åchi = is / are', ans:['Tinita','båhi','åchi'], dist:['Tini','åchånti']},
     {t:'intro', odia:'Keteta?', gloss:'How many?', note:'<b>Keteta kådåli åchi?</b> = “How many bananas are there?” Answer with a <b>-ta</b> number. (For amounts you’d ask <b>kete?</b> — how much.)'},
-    {t:'cloze', q:'Answer “Keteta kådåli åchi?” — say <b>two</b>', pre:'', post:'kådåli åchi', opts:['Gote','Duita','Tinita','Dåsta'], ans:1, why:'The noun doesn’t change for plural once a number is there — still just <i>kådåli</i>.', gloss:'kådåli = banana'},
+    {t:'cloze', q:'Answer “Keteta kådåli åchi?” — say “two”', pre:'', post:'kådåli åchi', opts:['Gote','Duita','Tinita','Dåsta'], ans:1, why:'The noun doesn’t change for plural once a number is there — still just <i>kådåli</i>.', gloss:'kådåli = banana'},
     {t:'assemble', dir:'en', q:'Translate into English', show:'Panchta gai åchi', ans:['There','are','five','cows'], dist:['four','books','is'], gloss:'Panchta = five of them'},
     {t:'choice', q:'What does this mean?', show:'Keteta pila åchånti?', opts:[{a:'How many children are there?'},{a:'How much rice is there?'},{a:'Where are the children?'}], ans:0, why:'<b>pila</b> = child. People take <b>åchånti</b>.'},
     {t:'assemble', q:'Build in Odia: “There are ten bananas”', gloss:'kådåli = banana', ans:['Dåsta','kådåli','åchi'], dist:['Dås','åchånti']},
