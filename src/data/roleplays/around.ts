@@ -2,4 +2,116 @@
 
 import type { Roleplay } from '../roleplays'
 
-export const AROUND: Roleplay[] = []
+export const AROUND: Roleplay[] = [
+  {
+    id: 'around-garden',
+    chapter: 'around',
+    title: 'Off to the garden',
+    scene: 'The child is at the door with shoes on.',
+    you: 'child',
+    lines: [
+      { who: 'parent', od: 'Tåme kouthiki jauchå?', en: 'Where are you going?  (informal)' },
+      { who: 'child', od: 'Mu bågicha-ku jauchi', en: 'I am going to the garden' },
+      { who: 'parent', od: 'Rabi bahare åchi-ki?', en: 'Is Rabi outside?' },
+      { who: 'child', od: 'Hå, Rabi bahare kheluchi', en: 'Yes, Rabi is playing outside' },
+    ],
+  },
+  {
+    id: 'around-where-kids',
+    chapter: 'around',
+    title: 'Where are the children?',
+    scene: 'The house is quiet, and the parent asks where everyone is.',
+    you: 'parent',
+    lines: [
+      { who: 'parent', od: 'Pilamane kouthi åchånti?', en: 'Where are the children?' },
+      { who: 'child', od: 'Semane upåre åchånti', en: 'They are upstairs' },
+      { who: 'parent', od: 'Rabi soichi-ki?', en: 'Is Rabi sleeping?' },
+      { who: 'child', od: 'Na, Rabi kheluchi', en: 'No, Rabi is playing' },
+      { who: 'parent', od: 'Mitu kouthi åchi?', en: 'Where is Mitu?' },
+      { who: 'child', od: 'Mitu tåle åchi', en: 'Mitu is downstairs' },
+    ],
+  },
+  {
+    id: 'around-grandmas-house',
+    chapter: 'around',
+    title: 'Grandma’s house',
+    scene: 'The family is getting into the car.',
+    you: 'child',
+    lines: [
+      { who: 'child', od: 'Ame kouthiki jauchu?', en: 'Where are we going?' },
+      { who: 'parent', od: 'Ame Aai-nkårå ghårå-ku jauchu', en: 'We are going to grandma’s house' },
+      { who: 'child', od: 'Aai kemiti åchånti?', en: 'How is grandma?' },
+      { who: 'parent', od: 'Aai båhut bhålå åchånti', en: 'Grandma is very well' },
+      { who: 'child', od: 'Aai-nkårå ghårå båhut bådå', en: 'Grandma’s house is very big' },
+    ],
+  },
+  {
+    id: 'around-dinner-call',
+    chapter: 'around',
+    title: 'Dinner time',
+    scene: 'Dinner is ready, and the parent calls for the child.',
+    you: 'parent',
+    lines: [
+      { who: 'parent', od: 'Mitu, tåme kouthi åchå?', en: 'Mitu, where are you?  (informal)' },
+      { who: 'child', od: 'Mu bahare åchi', en: 'I am outside' },
+      { who: 'parent', od: 'Ame ebe khauchu', en: 'We are eating now' },
+      { who: 'child', od: 'Rabi kouthi åchi?', en: 'Where is Rabi?' },
+      { who: 'parent', od: 'Rabi bhitåre åchi', en: 'Rabi is inside' },
+      { who: 'child', od: 'Mu asuchi!', en: 'I am coming!' },
+    ],
+  },
+  {
+    id: 'around-market',
+    chapter: 'around',
+    title: 'To the market',
+    scene: 'The parent picks up a shopping bag.',
+    you: 'child',
+    lines: [
+      { who: 'child', od: 'Tåme market-ku jauchå-ki?', en: 'Are you going to the market?  (informal)' },
+      { who: 'parent', od: 'Hå, mu market-ku jauchi', en: 'Yes, I am going to the market' },
+      { who: 'child', od: 'Rabi jauchi-ki?', en: 'Is Rabi going?' },
+      { who: 'parent', od: 'Na, Rabi soichi', en: 'No, Rabi is sleeping' },
+      { who: 'child', od: 'Ame market-ku jauchu!', en: 'We are going to the market!' },
+    ],
+  },
+  {
+    id: 'around-lost-book',
+    chapter: 'around',
+    title: 'The lost book',
+    scene: 'The child cannot find a book before school.',
+    you: 'parent',
+    lines: [
+      { who: 'child', od: 'Båhita kouthi åchi?', en: 'Where is the book?' },
+      { who: 'parent', od: 'Båhita upåre åchi', en: 'The book is upstairs' },
+      { who: 'child', od: 'Mu upårå-ku jauchi', en: 'I am going upstairs' },
+      { who: 'parent', od: 'Båhigudikå såbuthi åchi!', en: 'There are books everywhere!' },
+    ],
+  },
+  {
+    id: 'around-friends-coming',
+    chapter: 'around',
+    title: 'Are they coming?',
+    scene: 'The child is waiting by the window for friends.',
+    you: 'parent',
+    lines: [
+      { who: 'child', od: 'Pilamane asuchånti-ki?', en: 'Are the children coming?' },
+      { who: 'parent', od: 'Hå, semane asuchånti', en: 'Yes, they are coming' },
+      { who: 'child', od: 'Semane koutha-ru asuchånti?', en: 'Where are they coming from?' },
+      { who: 'parent', od: 'Semane bågicha-ru asuchånti', en: 'They are coming from the garden' },
+      { who: 'child', od: 'Ame bågicha-ku jauchu', en: 'We are going to the garden' },
+    ],
+  },
+  {
+    id: 'around-temple',
+    chapter: 'around',
+    title: 'Grandma and the temple',
+    scene: 'Grandma is visiting, and the parent cannot find her.',
+    you: 'child',
+    lines: [
+      { who: 'parent', od: 'Aai kouthi åchånti?', en: 'Where is grandma?' },
+      { who: 'child', od: 'Aai bahare åchånti', en: 'Grandma is outside' },
+      { who: 'parent', od: 'Aai måndirå-ku jauchånti-ki?', en: 'Is grandma going to the temple?' },
+      { who: 'child', od: 'Hå, Aai måndirå-ku jauchånti', en: 'Yes, grandma is going to the temple' },
+    ],
+  },
+]
