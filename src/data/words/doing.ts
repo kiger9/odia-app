@@ -65,26 +65,27 @@ export const DOING: Record<string, string> = {
   'anuchånti-ki': 'ଆଣୁଛନ୍ତି କି',
   'soichånti-ki': 'ଶୋଇଛନ୍ତି କି',
 
-  // With Others (withothers): "with" is a separate word in Odia script
-  // (ସଙ୍ଗରେ), so Rahul-sangåre → ରାହୁଲ ସଙ୍ଗରେ; elders: bapa-nkå → ବାପାଙ୍କ
-  'rahul-sangåre': 'ରାହୁଲ ସଙ୍ଗରେ',
-  'mo-sangåre': 'ମୋ ସଙ୍ଗରେ',
-  'tåmå-sangåre': 'ତମ ସଙ୍ଗରେ', // tåmå = the "you" stem in tåmåku; spoken ତମ, not formal ତୁମ
-  'bapa-nkå-sangåre': 'ବାପାଙ୍କ ସଙ୍ଗରେ',
+  // With Others (withothers): "with" is a separate word in Odia script, spoken
+  // ସାଙ୍ଗରେ as the book's "sangåre" says it (formal: ସଙ୍ଗରେ), so Rahul-sangåre →
+  // ରାହୁଲ ସାଙ୍ଗରେ; elders: bapa-nkå → ବାପାଙ୍କ
+  'rahul-sangåre': 'ରାହୁଲ ସାଙ୍ଗରେ',
+  'mo-sangåre': 'ମୋ ସାଙ୍ଗରେ',
+  'tåmå-sangåre': 'ତମ ସାଙ୍ଗରେ', // tåmå = the "you" stem in tåmåku; spoken ତମ, not formal ତୁମ
+  'bapa-nkå-sangåre': 'ବାପାଙ୍କ ସାଙ୍ଗରେ',
   // (khelibå, khaibå, asibå, råhibå, soibå and their -ki forms are the future
   // "you will …" forms defined in the future/time/life chapters)
 
   // Little Linking Words (smallwords): -rå attaches (Rahul-rå → ରାହୁଲର);
   // -sange (quick speech for -sangåre) is a separate word like -sangåre
   '-rå': 'ର', // the ending "'s", spoken on its own
-  '-sange': 'ସଙ୍ଗେ', // the ending "with", spoken on its own
+  '-sange': 'ସାଙ୍ଗେ', // the ending "with", spoken on its own
   'rahul-rå': 'ରାହୁଲର',
   'mitu-rå': 'ମିତୁର',
   'rabi-rå': 'ରବିର',
   'kirsten-rå': 'କିର୍ସ୍ଟେନର',
   'aai-nkårå': 'ଆଈଙ୍କର',
-  'rahul-sange': 'ରାହୁଲ ସଙ୍ଗେ',
-  'mo-sange': 'ମୋ ସଙ୍ଗେ',
+  'rahul-sange': 'ରାହୁଲ ସାଙ୍ଗେ',
+  'mo-sange': 'ମୋ ସାଙ୍ଗେ',
   be: 'ବେ', // spoken "be"; written Odia spells it ବି (the lesson says so) — spoken form wins
 
   // Saying No (neg): verb + -ni
@@ -116,7 +117,7 @@ export const DOING: Record<string, string> = {
   diåntu: 'ଦିଅନ୍ତୁ',
   kete: 'କେତେ',
   setiki: 'ସେତିକି',
-  tau: 'ତଉ', // "Setiki tau" = that's enough; the particle is spoken tau
+  tau: 'ଥାଉ', // "Setiki tau" = that's enough: ସେତିକି ଥାଉ ("let that much be"); the book writes it tau
   dhånyåvad: 'ଧନ୍ୟବାଦ',
   ådha: 'ଅଧା',
   eita: 'ଏଇଟା', // spoken -ଟା, not formal ଏଇଟି
