@@ -3,53 +3,45 @@
 // spoken aloud. A phrase converts only if every one of its words is listed;
 // anything else stays phonetic-only (and silent).
 //
+// The words live in words/<chapter>.ts, one file per chapter, so each chapter
+// can be transcribed on its own; a word used in several chapters must be spelt
+// the same everywhere (`npm run check:content` checks).
+//
 // DRAFT: written without a workbook to copy from. Have an Odia speaker check it.
 // Where the spoken form the book teaches differs from formal spelling, the
 // spoken form wins, since this is also what the audio is recorded from:
 // Tåme → ତମେ (formal: ତୁମେ); likewise tåmårå → ତମର (formal: ତୁମର) and
 // gote → ଗୋଟେ (formal: ଗୋଟିଏ).
 
-export const WORDS: Record<string, string> = {
-  // Lesson 1 — To Be (åchi)
-  mu: 'ମୁଁ',
-  tåme: 'ତମେ',
-  apånå: 'ଆପଣ',
-  se: 'ସେ',
-  ame: 'ଆମେ',
-  semane: 'ସେମାନେ',
-  åchi: 'ଅଛି',
-  åchå: 'ଅଛ',
-  åchånti: 'ଅଛନ୍ତି',
-  åchu: 'ଅଛୁ',
-  ghåre: 'ଘରେ',
-  // Lesson 2 — How Are You? (kemiti, bhålå, nahi)
-  kemiti: 'କେମିତି',
-  bhålå: 'ଭଲ',
-  båhut: 'ବହୁତ',
-  nahi: 'ନାହିଁ',
-  nahanti: 'ନାହାନ୍ତି',
-  ebe: 'ଏବେ',
-  tike: 'ଟିକେ',
-  // Lesson 3 — I Have (morå, tarå, åchi-ki)
-  morå: 'ମୋର',
-  tåmårå: 'ତମର',
-  tarå: 'ତାର',
-  apånånkårå: 'ଆପଣଙ୍କର',
-  mopakhåre: 'ମୋ ପାଖରେ',
-  gote: 'ଗୋଟେ',
-  båhi: 'ବହି',
-  ghårå: 'ଘର',
-  gadi: 'ଗାଡ଼ି',
-  gai: 'ଗାଈ',
-  pen: 'ପେନ୍',
-  'åchi-ki': 'ଅଛି କି',
-  hå: 'ହଁ',
-  na: 'ନା',
-  // names the practice generator uses in lesson 1
-  rahul: 'ରାହୁଲ',
-  mitu: 'ମିତୁ',
-  rabi: 'ରବି',
+import { START } from './words/start'
+import { MEET } from './words/meet'
+import { NUM } from './words/num'
+import { SIMPLECONJ } from './words/simpleconj'
+import { THINGS } from './words/things'
+import { AROUND } from './words/around'
+import { DOING } from './words/doing'
+import { CMD } from './words/cmd'
+import { PASTTENSE } from './words/pasttense'
+import { FUTURETENSE } from './words/futuretense'
+import { LIFE } from './words/life'
+import { TIME } from './words/time'
+
+export const WORD_LISTS: Record<string, Record<string, string>> = {
+  start: START,
+  meet: MEET,
+  num: NUM,
+  simpleconj: SIMPLECONJ,
+  things: THINGS,
+  around: AROUND,
+  doing: DOING,
+  cmd: CMD,
+  pasttense: PASTTENSE,
+  futuretense: FUTURETENSE,
+  life: LIFE,
+  time: TIME,
 }
+
+export const WORDS: Record<string, string> = Object.assign({}, ...Object.values(WORD_LISTS))
 
 export function toScript(phonetic: string): string | undefined {
   const out: string[] = []

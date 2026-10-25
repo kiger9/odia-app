@@ -15,7 +15,7 @@ import { CHAPTERS, LESSONS } from '../src/data/lessons'
 import bankJson from '../src/data/practice-bank.json'
 import { buildQuiz, generateSteps, lessonRun } from '../src/gen/exercises'
 import { makeRng } from '../src/gen/rng'
-import { WORDS } from '../src/data/script'
+import { WORD_LISTS, WORDS } from '../src/data/script'
 
 const SEEDS = 300
 const COURSE = CHAPTERS.flatMap((c) => c.lessons)
@@ -69,8 +69,23 @@ const offenders = [...found.keys()]
   .sort()
 const apart = found.get(' ki')
 
-if (offenders.length || apart) {
-  console.error('Question particle written without its hyphen (write "stem-ki"):')
+// A word in several chapters' word lists must be spelt the same in each.
+const spellings = new Map<string, Map<string, string[]>>()
+for (const [chapter, words] of Object.entries(WORD_LISTS))
+  for (const [word, script] of Object.entries(words)) {
+    if (!spellings.has(word)) spellings.set(word, new Map())
+    const by = spellings.get(word)!
+    by.set(script, [...(by.get(script) ?? []), chapter])
+  }
+const clashes = [...spellings].filter(([, by]) => by.size > 1)
+if (clashes.length) {
+  console.error('Words spelt differently in different chapters (src/data/words/):')
+  for (const [word, by] of clashes)
+    console.error(`  ${word}: ${[...by].map(([script, chs]) => `${script} (${chs.join(', ')})`).join('  vs  ')}`)
+}
+
+if (offenders.length || apart || clashes.length) {
+  if (offenders.length || apart) console.error('Question particle written without its hyphen (write "stem-ki"):')
   for (const t of offenders)
     console.error(`  ${t}  →  ${t.slice(0, -2)}-ki   (${[...found.get(t)!].sort().join(', ')})`)
   if (apart) console.error(`  "ki" as a separate word  →  attach it: "åchå-ki"   (${[...apart].sort().join(', ')})`)
