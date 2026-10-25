@@ -1018,4 +1018,8 @@ export const CLIPS: Record<string, string> = {
   'ସେମାନେ ଖୁସି ଅଛନ୍ତି କି?': 'semane-khusi-achanti-ki-q.mp3',
   'ମିତୁ ଖୁସି ଅଛି କି?': 'mitu-khusi-achi-ki-q.mp3',
   'ପିଲାମାନେ ଖୁସି ଅଛନ୍ତି କି?': 'pilamane-khusi-achanti-ki-q.mp3',
+  'ସେମାନେ ମାଛ ଖାଉଛନ୍ତି': 'semane-macha-khauchanti.mp3',
+  'ମୁଁ ହେଲ୍ପ କରିଥିଲି': 'mu-help-karithili.mp3',
+  'ମୁଁ ଗାଈ ଦେଖିଥିଲି': 'mu-gai-dekhithili.mp3',
+  'ମୁଁ ବାହାରେ ଖେଳିଥିଲି': 'mu-bahare-khelithili.mp3',
 }
