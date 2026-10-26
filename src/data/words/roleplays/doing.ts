@@ -3,7 +3,6 @@
 // already in any list must not be repeated here.
 
 export const RP_DOING: Record<string, string> = {
-  nia: 'ନିଅ', // take (informal command): "Ei nia" = here you go
   khaå: 'ଖାଅ', // eat (informal command), like jaå ଯାଅ
   piå: 'ପିଅ', // drink (informal command)
   dali: 'ଡାଲି', // dal

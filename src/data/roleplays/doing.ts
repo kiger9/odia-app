@@ -15,7 +15,7 @@ export const DOING: Roleplay[] = [
       { who: 'child', od: 'Ma, morå kichi khaiba-ku dårkar', en: 'Mom, I want something to eat' },
       { who: 'parent', od: 'Kådåli khaibå-ki?', en: 'Will you have a banana?' },
       { who: 'child', od: 'Na, kådåli nahi. Ambå åchi-ki?', en: 'No, not a banana. Is there a mango?' },
-      { who: 'parent', od: 'Hå, ambå åchi. Ei nia', en: 'Yes, there’s a mango. Here you go' },
+      { who: 'parent', od: 'Hå, ambå åchi. Ei niå', en: 'Yes, there’s a mango. Here you go' },
       { who: 'child', od: 'Dhånyåvad, Ma!', en: 'Thanks, Mom!' },
     ],
   },
@@ -28,7 +28,7 @@ export const DOING: Roleplay[] = [
     lines: [
       { who: 'parent', od: 'Rabi, au bhatå dårkar-ki?', en: 'Rabi, do you want more rice?' },
       { who: 'child', od: 'Na, au nahi. Tike dali diå', en: 'No more. Give me a little dal' },
-      { who: 'parent', od: 'Ei nia. Pani be dårkar-ki?', en: 'Here you go. Do you want water too?' },
+      { who: 'parent', od: 'Ei niå. Pani be dårkar-ki?', en: 'Here you go. Do you want water too?' },
       { who: 'child', od: 'Hå, tike pani diå', en: 'Yes, a little water, please' },
     ],
   },
@@ -39,7 +39,7 @@ export const DOING: Roleplay[] = [
     scene: 'The parent puts a glass of milk on the table; the child pulls a face.',
     you: 'child',
     lines: [
-      { who: 'parent', od: 'Ei nia, tåmårå khirå', en: 'Here’s your milk' },
+      { who: 'parent', od: 'Ei niå, tåmårå khirå', en: 'Here’s your milk' },
       { who: 'child', od: 'Ma, mu khirå piuni', en: 'Mom, I’m not drinking milk' },
       { who: 'parent', od: 'Khirå bhålå, piå', en: 'Milk is good for you, drink it' },
       { who: 'child', od: 'Khirå mitha nuhe', en: 'The milk isn’t sweet' },

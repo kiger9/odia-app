@@ -85,7 +85,7 @@ export const THINGS: Roleplay[] = [
     lines: [
       { who: 'child', od: 'Ma, ei gadi-ta morå!', en: 'Mom, this car is mine!' },
       { who: 'parent', od: 'Na, seita Mitu-rå. Eita tåmårå', en: 'No, that’s Mitu’s. This one is yours' },
-      { who: 'child', od: 'Seita puruna. Morå nua gadi dårkar', en: 'That one is old. I want a new car' },
+      { who: 'child', od: 'Eita puruna. Morå nua gadi dårkar', en: 'This one is old. I want a new car' },
       { who: 'parent', od: 'Thik åchi, kali gote nua gadi anibi', en: 'Okay, I’ll bring a new car tomorrow' },
       { who: 'child', od: 'Dhånyåvad, Ma!', en: 'Thank you, Mom!' },
     ],

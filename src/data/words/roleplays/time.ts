@@ -12,7 +12,6 @@ export const RP_TIME: Record<string, string> = {
   'aai-nkå-sangåre': 'ଆଈଙ୍କ ସାଙ୍ଗରେ', // with grandma, like bapa-nkå-sangåre
   jånmådinå: 'ଜନ୍ମଦିନ', // birthday
   jane: 'ଜାଣେ', // I know
-  cake: 'କେକ୍', // loanword
   football: 'ଫୁଟବଲ', // loanword
   goal: 'ଗୋଲ୍', // loanword
   'gadhoiba-ku': 'ଗାଧୋଇବାକୁ', // to bathe, like khaiba-ku
