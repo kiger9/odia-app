@@ -35,7 +35,8 @@ export default function Roleplay({
   const [got, setGot] = useState(0) // learner lines marked right
   const [asked, setAsked] = useState(0) // learner lines marked either way
   const [confirmQuit, setConfirmQuit] = useState(false)
-  const praise = useMemo(() => encouragement(), [])
+  const pct = asked ? Math.round((got / asked) * 100) : 100
+  const praise = useMemo(() => encouragement(pct), [pct])
 
   const rp = roleplays[rpIndex]
   const finished = rpIndex >= roleplays.length
@@ -70,7 +71,6 @@ export default function Roleplay({
   }
 
   if (finished) {
-    const pct = asked ? Math.round((got / asked) * 100) : 100
     return (
       <main className="app">
         <section className="card quiz-result">

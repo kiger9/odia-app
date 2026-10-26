@@ -17,7 +17,6 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
   const [answered, setAnswered] = useState(false)
   const [score, setScore] = useState(0)
   const [confirmQuit, setConfirmQuit] = useState(false)
-  const praise = useMemo(() => encouragement(), [])
   const learnerName = useMemo(() => getName() || 'Suresh', [])
 
   useEffect(() => {
@@ -31,6 +30,7 @@ export default function PopQuiz({ onExit }: { onExit: () => void }) {
 
   const finished = !!questions && index >= questions.length
   const pct = questions && questions.length ? Math.round((score / questions.length) * 100) : 0
+  const praise = useMemo(() => encouragement(pct), [pct])
 
   useEffect(() => {
     if (finished) {

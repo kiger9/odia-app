@@ -55,7 +55,9 @@ function nextRoleplayRun(chapter: string): number {
 // The learner's role in each conversation of a chapter for this run.
 function chapterRoles(chapter: string): Role[] {
   const run = nextRoleplayRun(chapter)
-  return (ROLEPLAYS_BY_CHAPTER[chapter] ?? []).map((r, i) => ((i + run) % 2 === 0 ? r.you : otherRole(r.you)))
+  // Strictly alternate parent and child within a run; the next run flips every
+  // conversation, so two runs cover both roles of each.
+  return (ROLEPLAYS_BY_CHAPTER[chapter] ?? []).map((_, i): Role => ((i + run) % 2 === 0 ? 'parent' : 'child'))
 }
 
 type Setup = 'name' | 'notifications' | 'done'

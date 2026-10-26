@@ -57,9 +57,21 @@ const named = (n: string) => [
   `You're on fire, ${n}!`,
 ]
 
-export function encouragement(): string {
+// Below this score the message encourages without celebrating.
+const PRAISE_FROM = 75
+const KEEP_GOING = ['Let’s keep at it', 'Room to improve', 'Keep trying', 'Practice makes perfect', 'You’ll get there', 'Let’s try again']
+const keepGoingNamed = (n: string) => [`Keep at it, ${n}`, `You’ll get there, ${n}`, `Let’s try again, ${n}`]
+
+// Praise for a lesson or streak (no score), or matched to a score in percent:
+// celebration from 75% up, a gentler nudge below.
+export function encouragement(pct?: number): string {
   const name = getName()
-  const pool = name ? named(name) : GENERIC
+  const pool =
+    pct !== undefined && pct < PRAISE_FROM
+      ? [...KEEP_GOING, ...(name ? keepGoingNamed(name) : [])]
+      : name
+        ? named(name)
+        : GENERIC
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
