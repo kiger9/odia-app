@@ -241,6 +241,7 @@ const WORDS: Array<{ english: string; phonetic: string }> = [
   { english: 'Sugar', phonetic: 'Chini' },
   { english: 'Sun', phonetic: 'Surjyå' },
   { english: 'Sunday', phonetic: 'Råbibar' },
+  { english: 'Sure', phonetic: 'Håu' },
   { english: 'Sweet', phonetic: 'Mitha' },
   { english: 'Table', phonetic: 'Table' },
   { english: 'Tail', phonetic: 'Lanjå' },

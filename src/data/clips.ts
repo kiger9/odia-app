@@ -2923,4 +2923,5 @@ export const CLIPS: Record<string, string> = {
   'ଆଚ୍ଛା, ପାଞ୍ଚ ମିନିଟ୍। ତାପରେ ହୋମୱାର୍କ': 'achha-panch-minit-tapare-homework.mp3',
   'ଆଚ୍ଛା, ରଖୁଛି। ଆଉ କଣ?': 'achha-rakhuchi-au-kana-q.mp3',
   'ଆଚ୍ଛା, ଏବେ ମୁଁ ପିଉଛି': 'achha-ebe-mu-piuchi.mp3',
+  'ହଉ': 'hau.mp3',
 }
