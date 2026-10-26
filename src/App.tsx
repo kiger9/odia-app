@@ -10,7 +10,8 @@ import Dictionary from './components/Dictionary'
 import Roleplay from './components/Roleplay'
 import Modal from './components/Modal'
 import { CHAPTERS, LESSON_BY_ID } from './data/lessons'
-import { ROLEPLAYS_BY_CHAPTER, ROLEPLAY_BY_ID, otherRole, unlockedRoleplays, withRole, type Role } from './data/roleplays'
+import { ROLEPLAY_BY_ID, unlockedRoleplays, withRole } from './data/roleplays'
+import { chapterPlaylist, undoneVariants, type Variant } from './roleplayProgress'
 import { db } from './db'
 import { getShowScript, setShowScript } from './settings'
 import { getName, setName, hasBeenAskedName, markNameAsked } from './profile'
@@ -31,35 +32,13 @@ type Screen =
   | { name: 'lesson'; id: string; startStep: number }
   | { name: 'review' }
   | { name: 'quiz' }
-  | { name: 'roleplay'; chapter: string; roles: Role[] } // a chapter's roleplays, in order, with the learner's role in each
-  | { name: 'roleplay-random'; pick: { id: string; you: Role }[] } // chosen from finished chapters
+  | { name: 'roleplay'; chapter: string; pick: Variant[]; total: number; base: number } // a chapter's variants still to play; base of total already done
+  | { name: 'roleplay-random'; pick: Variant[] } // chosen from finished chapters
   | { name: 'profile' }
   | { name: 'settings' }
   | { name: 'dictionary' }
 
 // First-run setup runs in order: name, then the offer of a daily reminder.
-// How many times a chapter's roleplays have been started: odd runs swap the
-// learner's role in every conversation, so two runs cover both sides of each.
-function nextRoleplayRun(chapter: string): number {
-  const key = `odia:rp-run:${chapter}`
-  let run = 0
-  try {
-    run = Number(localStorage.getItem(key)) || 0
-    localStorage.setItem(key, String(run + 1))
-  } catch {
-    // storage unavailable: always the default roles
-  }
-  return run
-}
-
-// The learner's role in each conversation of a chapter for this run.
-function chapterRoles(chapter: string): Role[] {
-  const run = nextRoleplayRun(chapter)
-  // Strictly alternate parent and child within a run; the next run flips every
-  // conversation, so two runs cover both roles of each.
-  return (ROLEPLAYS_BY_CHAPTER[chapter] ?? []).map((_, i): Role => ((i + run) % 2 === 0 ? 'parent' : 'child'))
-}
-
 type Setup = 'name' | 'notifications' | 'done'
 
 export default function App() {
@@ -136,9 +115,15 @@ export default function App() {
     const rows = await db.lessonProgress.toArray()
     const done = new Set(rows.filter((r) => r.completed).map((r) => r.lessonId))
     const open = unlockedRoleplays(done)
-    const pairs = open.flatMap((r) => [{ id: r.id, you: r.you }, { id: r.id, you: otherRole(r.you) }])
+    const pairs = undoneVariants(open.map((r) => r.id))
     const pick = pairs.length ? [pairs[Math.floor(Math.random() * pairs.length)]] : []
     setScreen({ name: 'roleplay-random', pick })
+  }
+
+  // A chapter's roleplays: the conversations (in a role) not played yet, computed once as the screen opens.
+  function startChapterRoleplay(chapter: string) {
+    const { list, total, base } = chapterPlaylist(chapter)
+    setScreen({ name: 'roleplay', chapter, pick: list, total, base })
   }
 
   const home = (
@@ -146,7 +131,7 @@ export default function App() {
       onStart={(id, startStep) => setScreen({ name: 'lesson', id, startStep })}
       onReview={() => setScreen({ name: 'review' })}
       onQuiz={() => setScreen({ name: 'quiz' })}
-      onRoleplay={(chapter) => setScreen({ name: 'roleplay', chapter, roles: chapterRoles(chapter) })}
+      onRoleplay={startChapterRoleplay}
       onRandomRoleplay={() => void startRandomRoleplay()}
       onProfile={() => setScreen({ name: 'profile' })}
       onDictionary={() => setScreen({ name: 'dictionary' })}
@@ -175,7 +160,9 @@ export default function App() {
     view = (
       <Roleplay
         key={screen.chapter}
-        roleplays={(ROLEPLAYS_BY_CHAPTER[screen.chapter] ?? []).map((r, i) => withRole(r, screen.roles[i] ?? r.you))}
+        roleplays={screen.pick.filter((p) => !!ROLEPLAY_BY_ID[p.id]).map((p) => withRole(ROLEPLAY_BY_ID[p.id], p.you))}
+        total={screen.total}
+        base={screen.base}
         heading={`${chapter?.title ?? 'Roleplay'} · Roleplay`}
         showScript={showScript}
         onExit={() => setScreen({ name: 'home' })}

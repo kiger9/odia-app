@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type LessonProgress, type Progress, type Stats } from '../db'
 import { CHAPTERS, LESSON_BY_ID } from '../data/lessons'
 import { ROLEPLAYS_BY_CHAPTER, unlockedChapters } from '../data/roleplays'
+import { doneCount } from '../roleplayProgress'
 import { poolStats, formatWhen } from '../reviews'
 import { viewStreak, todayString, getCelebratedDay, setCelebratedDay } from '../streak'
 import { encouragement } from '../profile'
@@ -16,6 +17,13 @@ function lessonFrac(lesson: { id: string }, p?: LessonProgress): number {
   if (p?.completed) return 1
   if (!p) return 0
   return Math.min(p.step / lessonRunLength(lesson.id), 1)
+}
+
+// Subtitle of a chapter's roleplay row: how many of its variants (two per conversation) are played.
+function rpSub(chapter: string): string {
+  const total = (ROLEPLAYS_BY_CHAPTER[chapter]?.length ?? 0) * 2
+  const done = doneCount(chapter)
+  return done > 0 ? `${done} of ${total} conversations played · both roles` : `${total} conversations · both roles`
 }
 
 export default function Home({
@@ -215,7 +223,7 @@ export default function Home({
                       <b>Roleplay</b>
                       <small>
                         {openChapters.has(ch.key)
-                          ? `${ROLEPLAYS_BY_CHAPTER[ch.key].length} conversations · play both roles`
+                          ? rpSub(ch.key)
                           : `Finish all ${ch.lessons.length} lessons to unlock`}
                       </small>
                     </span>

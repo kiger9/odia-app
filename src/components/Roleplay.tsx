@@ -2,14 +2,17 @@
 // role's lines aloud without their English (it fades in when the learner taps
 // Continue, so they listen first); for the learner's lines it shows the English,
 // the learner says the Odia out loud, then taps to hear the recording and marks
-// whether they got it. A chapter's roleplays run back to back, like a final test; the
-// random mode plays one from any finished chapter.
+// whether they got it. A chapter session plays the conversations (in a role)
+// not played yet, one after another, and after each the learner can go on or
+// exit; reaching the end of a conversation marks that variant done. The random
+// mode plays one from any finished chapter.
 
 import { useEffect, useMemo, useState } from 'react'
 import { ROLE_LABEL, otherRole, type Roleplay as RoleplayData } from '../data/roleplays'
 import { toScript } from '../data/script'
 import { speak, stopSpeaking } from '../audio'
 import { markPracticedToday } from '../streak'
+import { markDone } from '../roleplayProgress'
 import { encouragement } from '../profile'
 import { SHOW_SCRIPT_FEATURE } from '../settings'
 import { SpeakButton } from './Steps'
@@ -19,12 +22,16 @@ import Modal from './Modal'
 export default function Roleplay({
   roleplays,
   heading,
+  total = roleplays.length,
+  base = 0,
   showScript,
   onExit,
   onAnother,
 }: {
   roleplays: RoleplayData[]
   heading: string
+  total?: number // variants in the chapter, for the counter and bar
+  base?: number // of those, already done as the session opens
   showScript: boolean
   onExit: () => void
   onAnother?: () => void // random mode: play another one
@@ -35,11 +42,12 @@ export default function Roleplay({
   const [got, setGot] = useState(0) // learner lines marked right
   const [asked, setAsked] = useState(0) // learner lines marked either way
   const [confirmQuit, setConfirmQuit] = useState(false)
+  const [ended, setEnded] = useState(false) // exited after a finished conversation
   const pct = asked ? Math.round((got / asked) * 100) : 100
   const praise = useMemo(() => encouragement(pct), [pct])
 
   const rp = roleplays[rpIndex]
-  const finished = rpIndex >= roleplays.length
+  const finished = ended || rpIndex >= roleplays.length
   const sceneDone = !!rp && pos >= rp.lines.length
   const line = rp?.lines[pos]
   const mine = !!line && line.who === rp.you
@@ -51,6 +59,13 @@ export default function Roleplay({
     if (!mine || revealed) speak(line.od)
     return stopSpeaking
   }, [line, mine, revealed])
+
+  // Reaching the end of a conversation counts it as played, marked right or not.
+  const doneId = sceneDone ? rp.id : null
+  const doneRole = sceneDone ? rp.you : null
+  useEffect(() => {
+    if (doneId && doneRole) markDone(doneId, doneRole)
+  }, [doneId, doneRole])
 
   useEffect(() => {
     if (finished) void markPracticedToday()
@@ -105,6 +120,11 @@ export default function Roleplay({
     advance()
   }
 
+  function exitToResult() {
+    stopSpeaking()
+    setEnded(true)
+  }
+
   function nextScene() {
     stopSpeaking()
     setPos(0)
@@ -114,8 +134,7 @@ export default function Roleplay({
 
   // Lines said so far (the current one included once it's been said or revealed).
   const shown = rp.lines.slice(0, sceneDone ? rp.lines.length : mine && !revealed ? pos : pos + 1)
-  const progress = roleplays.reduce((sum, r, i) => sum + (i < rpIndex ? r.lines.length : i === rpIndex ? pos : 0), 0)
-  const totalLines = roleplays.reduce((sum, r) => sum + r.lines.length, 0)
+  const progress = (base + rpIndex + (sceneDone ? 1 : pos / rp.lines.length)) / total
 
   return (
     <main className="app player">
@@ -124,11 +143,11 @@ export default function Roleplay({
           ✕
         </button>
         <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${(progress / totalLines) * 100}%` }} />
+          <div className="progress-fill" style={{ width: `${Math.min(100, progress * 100)}%` }} />
         </div>
-        {roleplays.length > 1 && (
+        {total > 1 && (
           <span className="q-count">
-            {rpIndex + 1} / {roleplays.length}
+            {base + rpIndex + 1} / {total}
           </span>
         )}
         <MuteButton />
@@ -171,9 +190,20 @@ export default function Roleplay({
 
       <div className="rp-actions">
         {sceneDone ? (
-          <button className="btn-primary" onClick={nextScene}>
-            {rpIndex + 1 < roleplays.length ? 'Next conversation' : 'Finish'}
-          </button>
+          rpIndex + 1 < roleplays.length ? (
+            <>
+              <button className="btn-primary" onClick={nextScene}>
+                Next conversation
+              </button>
+              <button className="btn-ghost" onClick={exitToResult}>
+                Exit
+              </button>
+            </>
+          ) : (
+            <button className="btn-primary" onClick={nextScene}>
+              Finish
+            </button>
+          )
         ) : !mine ? (
           <button className="btn-primary" onClick={advance}>
             Continue
