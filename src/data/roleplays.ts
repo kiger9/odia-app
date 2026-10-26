@@ -1,14 +1,20 @@
 // Roleplays: short scripted conversations (4–6 lines) between a parent and a
-// child at home — meals, playing, going out, how everyone feels. The learner
-// takes one role: the app says the other role's lines aloud, the learner says
-// theirs back, then hears the recording to check.
+// child at home — meals, playing, going out, bedtime, how everyone feels. The
+// learner takes one role: the app says the other role's lines aloud (their
+// meaning appears only after Continue, to check comprehension), the learner
+// says theirs, then hears the recording to check.
 //
-// One file per chapter in roleplays/<chapter>.ts. A roleplay uses only words
-// from its chapter's word list (src/data/words/) and the chapters before it in
-// course order, so it only asks for things the learner has met — and so every
-// line has Odia script and can be recorded. `npm run check:roleplays` enforces
-// this; `npm run check:content` checks the "-ki" spelling; the lines are part of
-// `npm run -s audio:todo -- --check all`, so they need clips before deploy.
+// Every conversation is played in both roles: `you` is the learner's role the
+// first time; the chapter test swaps roles on alternate runs, and the random
+// mode picks either. So every line is a line the learner will say.
+//
+// One file per chapter in roleplays/<chapter>.ts. Each conversation is built
+// around what its chapter (and the ones before it) teaches, but it reads as a
+// real exchange first: words the lessons haven't taught are fine where the
+// conversation needs them. Every word must have Odia script — new words go in
+// words/roleplays/<chapter>.ts. `npm run check:roleplays` checks the rules
+// (`-- --new` lists the untaught words); `npm run check:content` the "-ki"
+// spelling; the lines are part of `audio:todo --check all`, so they need clips.
 
 import { CHAPTERS } from './lessons'
 import { START } from './roleplays/start'
@@ -37,7 +43,7 @@ export interface Roleplay {
   chapter: string // chapter key from lessons.ts; unlocks when that chapter is complete
   title: string // 'Breakfast time'
   scene: string // one line of English setting the scene
-  you: Role // the role the learner plays
+  you: Role // the learner's role the first time (the other on alternate runs)
   lines: RoleplayLine[] // 4–6, speakers alternating
 }
 
@@ -65,6 +71,11 @@ export const ROLE_LABEL: Record<Role, string> = { parent: 'Parent', child: 'Chil
 
 export function otherRole(role: Role): Role {
   return role === 'parent' ? 'child' : 'parent'
+}
+
+// The same conversation with the learner in the given role.
+export function withRole(r: Roleplay, you: Role): Roleplay {
+  return { ...r, you }
 }
 
 // Chapters whose every lesson is finished: their roleplays are unlocked.

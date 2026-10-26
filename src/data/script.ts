@@ -26,6 +26,7 @@ import { FUTURETENSE } from './words/futuretense'
 import { LIFE } from './words/life'
 import { TIME } from './words/time'
 import { DICTIONARY_WORDS } from './words/dictionary'
+import { ROLEPLAY_WORD_LISTS } from './words/roleplays'
 
 export const WORD_LISTS: Record<string, Record<string, string>> = {
   start: START,
@@ -41,6 +42,7 @@ export const WORD_LISTS: Record<string, Record<string, string>> = {
   life: LIFE,
   time: TIME,
   dictionary: DICTIONARY_WORDS,
+  ...ROLEPLAY_WORD_LISTS, // "rp-<chapter>": words only the roleplays use
 }
 
 export const WORDS: Record<string, string> = Object.assign({}, ...Object.values(WORD_LISTS))
@@ -48,7 +50,8 @@ export const WORDS: Record<string, string> = Object.assign({}, ...Object.values(
 export function toScript(phonetic: string): string | undefined {
   const out: string[] = []
   let prev = ''
-  for (const word of phonetic.trim().split(/\s+/)) {
+  const all = phonetic.trim().split(/\s+/)
+  for (const [i, word] of all.entries()) {
     if (word === '·') {
       out.push('·') // "Morå · Tåmårå · Tarå": several words on one card
       prev = ''
@@ -61,7 +64,11 @@ export function toScript(phonetic: string): string | undefined {
     // The book writes "-ibå" for both "you will …" (ଖାଇବ) and, after "aså",
     // "let's …" (ଖାଇବା) — the word list holds the first; "let's" takes the long ା.
     if (prev === 'aså' && key.endsWith('ibå') && script.endsWith('ବ')) script += 'ା'
-    out.push(script + (word.endsWith(',') ? ',' : '')) // keep the pause in "Na, …"
+    // Keep the pause in "Na, …", and a full stop between two sentences of one
+    // line ("Ebe ath ta bajila. Tåme …") as the Odia danda. Nothing else in the
+    // course has a "." inside a phrase, so no other script changes.
+    const end = word.endsWith(',') ? ',' : word.endsWith('.') && i < all.length - 1 ? '।' : ''
+    out.push(script + end)
     prev = key
   }
   if (!out.length) return undefined
