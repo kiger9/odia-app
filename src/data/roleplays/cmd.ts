@@ -90,7 +90,7 @@ export const CMD: Roleplay[] = [
       { who: 'parent', od: 'Ebe nuhe, mu kamå kåruchi', en: 'Not now, I’m working' },
       { who: 'child', od: 'Panch minit, Ma!', en: 'Just five minutes, Mom!' },
       { who: 'parent', od: 'Thik åchi, tike. Besi nahi', en: 'Okay, a little. Not a lot' },
-      { who: 'child', od: 'Hå, mu bål anuchi!', en: 'Yay, I’ll get the ball!' },
+      { who: 'child', od: 'Hå, mu bål anuchi!', en: 'Yes! I’ll get the ball!' },
     ],
   },
   {

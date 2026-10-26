@@ -100,7 +100,7 @@ export const THINGS: Roleplay[] = [
       { who: 'parent', od: 'Mitu, thaligudikå eithi råkhå', en: 'Mitu, put the plates here' },
       { who: 'child', od: 'Au glassgudikå?', en: 'And the glasses?' },
       { who: 'parent', od: 'Segudikå seithi råkhå', en: 'Put them there' },
-      { who: 'child', od: 'Hå, råkhuchi. Au kånå?', en: 'Okay, I’m doing it. What else?' },
+      { who: 'child', od: 'Achha, råkhuchi. Au kånå?', en: 'Okay, I’m doing it. What else?' },
       { who: 'parent', od: 'Au kichi nahi. Aså, khaibå', en: 'Nothing else. Come on, let’s eat' },
       { who: 'child', od: 'Bapa, khaiba-ku aså!', en: 'Dad, come and eat!' },
     ],

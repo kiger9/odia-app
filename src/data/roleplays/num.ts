@@ -31,7 +31,7 @@ export const NUM: Roleplay[] = [
       { who: 'child', od: 'Bapa, sei balloon-ta kete tånka?', en: 'Dad, how much is that balloon?' },
       { who: 'parent', od: 'Dås tånka', en: 'Ten rupees' },
       { who: 'child', od: 'Mopakhåre panch tånka åchi', en: 'I have five rupees on me' },
-      { who: 'parent', od: 'Håu, mu au panch tånka dåuchi', en: 'Okay, I’ll give the other five' },
+      { who: 'parent', od: 'Achha, mu au panch tånka dåuchi', en: 'Okay, I’ll give the other five' },
       { who: 'child', od: 'Dhånyåvad, Bapa!', en: 'Thank you, Dad!' },
     ],
   },
@@ -45,7 +45,7 @@ export const NUM: Roleplay[] = [
       { who: 'parent', od: 'Jåldi khaå. Bus panch minit-re asibå', en: 'Eat quickly. The bus comes in five minutes' },
       { who: 'child', od: 'Mu au gote ruti khaibi', en: 'I want one more roti' },
       { who: 'parent', od: 'Såmåyå nahi. Tiffin-re duita ruti åchi', en: 'There’s no time! There are two rotis in your lunchbox' },
-      { who: 'child', od: 'Håu, Ma. Mu jauchi!', en: 'Okay, Mom. I’m off!' },
+      { who: 'child', od: 'Achha, Ma. Mu jauchi!', en: 'Okay, Mom. I’m off!' },
     ],
   },
   {
@@ -73,7 +73,7 @@ export const NUM: Roleplay[] = [
       { who: 'parent', od: 'Dui kilo machå, au dåsta kådåli', en: 'Two kilos of fish, and ten bananas' },
       { who: 'child', od: 'Mu duita kådåli khaibi!', en: 'I’m going to eat two bananas!' },
       { who: 'parent', od: 'Na, gote khaå. Shighrå bhatå khaibå', en: 'No, eat one. You’ll have dinner soon' },
-      { who: 'child', od: 'Håu, gote!', en: 'Okay, one!' },
+      { who: 'child', od: 'Achha, gote!', en: 'Okay, one!' },
     ],
   },
   {
@@ -85,8 +85,8 @@ export const NUM: Roleplay[] = [
     lines: [
       { who: 'parent', od: 'Rahul, charita bajila. TV bånd kårå', en: 'Rahul, it’s four o’clock. Turn off the TV' },
       { who: 'child', od: 'Au panch minit, Ma!', en: 'Five more minutes, Mom!' },
-      { who: 'parent', od: 'Håu, panch minit. Tapåre homework', en: 'Okay, five minutes. Then homework' },
-      { who: 'child', od: 'Håu, Ma!', en: 'Okay, Mom!' },
+      { who: 'parent', od: 'Achha, panch minit. Tapåre homework', en: 'Okay, five minutes. Then homework' },
+      { who: 'child', od: 'Achha, Ma!', en: 'Okay, Mom!' },
     ],
   },
   {

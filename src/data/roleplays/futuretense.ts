@@ -46,7 +46,7 @@ export const FUTURETENSE: Roleplay[] = [
       { who: 'parent', od: 'Kaha-sangåre khelibå?', en: 'Who will you play with?' },
       { who: 'child', od: 'Rahul-sangåre khelibi', en: 'I’ll play with Rahul' },
       { who: 'parent', od: 'Thik åchi, kintu deri kårå nahi', en: 'Okay, but don’t be late' },
-      { who: 'child', od: 'Hå, Ma. Mu jauchi!', en: 'Okay, mom. Bye!' },
+      { who: 'child', od: 'Achha, Ma. Mu jauchi!', en: 'Okay, mom. Bye!' },
     ],
   },
   {
@@ -101,7 +101,7 @@ export const FUTURETENSE: Roleplay[] = [
       { who: 'child', od: 'Hati dekhibu-ki?', en: 'Will we see elephants?' },
       { who: 'parent', od: 'Hå, båhut hati dekhibu', en: 'Yes, we’ll see lots of elephants' },
       { who: 'child', od: 'Mu hati-ku kådåli khuaibi!', en: 'I’ll feed an elephant a banana!' },
-      { who: 'parent', od: 'Hå, kintu jagrata thå', en: 'Okay, but be careful' },
+      { who: 'parent', od: 'Hå, kintu jagrata thå', en: 'Yes, but be careful' },
     ],
   },
   {
@@ -112,7 +112,7 @@ export const FUTURETENSE: Roleplay[] = [
     you: 'parent',
     lines: [
       { who: 'child', od: 'Bapa, mote tike help kåribå-ki?', en: 'Dad, will you help me a bit?' },
-      { who: 'parent', od: 'Hå, kåribi. Kånå kåruchå?', en: 'Sure, I will. What are you doing?' },
+      { who: 'parent', od: 'Hå, kåribi. Kånå kåruchå?', en: 'Yes, I will. What are you doing?' },
       { who: 'child', od: 'Homework. Eita båhut kåstå', en: 'Homework. It’s really hard' },
       { who: 'parent', od: 'Chinta kårå nahi, ame ekåthi kåribu', en: 'Don’t worry, we’ll do it together' },
       { who: 'child', od: 'Dhånyåvad, Bapa!', en: 'Thanks, dad!' },

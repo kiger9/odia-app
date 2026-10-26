@@ -16,7 +16,7 @@ export const MEET: Roleplay[] = [
       { who: 'parent', od: 'Subha såkalå, Mitu. Uthå', en: 'Good morning, Mitu! Wake up' },
       { who: 'child', od: 'Subha såkalå, Ma. Mu au tike soibi', en: 'Good morning, Mom. I’ll sleep a bit more' },
       { who: 'parent', od: 'Na, aji school åchi. Jåldi uthå!', en: 'No, there’s school today. Get up quickly!' },
-      { who: 'child', od: 'Håu, Ma. Mu uthuchi', en: 'Okay, Mom. I’m getting up' },
+      { who: 'child', od: 'Achha, Ma. Mu uthuchi', en: 'Okay, Mom. I’m getting up' },
     ],
   },
   {
@@ -44,8 +44,8 @@ export const MEET: Roleplay[] = [
       { who: 'parent', od: 'Ruhå. Tåmårå jota kouthi?', en: 'Wait! Where are your shoes?' },
       { who: 'child', od: 'Jota bhitåre åchi', en: 'My shoes are inside' },
       { who: 'parent', od: 'Jåldi pindhå!', en: 'Put them on, quick!' },
-      { who: 'child', od: 'Håu. Ebe mu jauchi!', en: 'Okay. Now I’m off!' },
-      { who: 'parent', od: 'Håu, mu råhuchi!', en: 'Okay, bye-bye!' },
+      { who: 'child', od: 'Achha. Ebe mu jauchi!', en: 'Okay. Now I’m off!' },
+      { who: 'parent', od: 'Achha, mu råhuchi!', en: 'Okay, bye-bye!' },
     ],
   },
   {
@@ -101,7 +101,7 @@ export const MEET: Roleplay[] = [
       { who: 'parent', od: 'Subha ratri. Aai-nku be kåhå', en: 'Good night! Say it to Grandma too' },
       { who: 'child', od: 'Aai soichånti-ki?', en: 'Is Grandma asleep?' },
       { who: 'parent', od: 'Na, Aai upåre båhi pådhuchånti', en: 'No, Grandma is upstairs reading' },
-      { who: 'child', od: 'Håu, mu upårå-ku jauchi', en: 'Okay, I’m going up' },
+      { who: 'child', od: 'Achha, mu upårå-ku jauchi', en: 'Okay, I’m going up' },
     ],
   },
 ]

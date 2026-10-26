@@ -120,7 +120,7 @@ export const SIMPLECONJ: Roleplay[] = [
       { who: 'parent', od: 'Mu kamå kåruchi. Aai kånå kåruchånti?', en: 'I’m working. What’s Grandma doing?' },
       { who: 'child', od: 'Aai TV dekhuchånti', en: 'Grandma is watching TV' },
       { who: 'parent', od: 'Thik åchi. Mu ebe råkhuchi', en: 'Okay. I’m hanging up now' },
-      { who: 'child', od: 'Håu, Bapa', en: 'Okay, Dad' },
+      { who: 'child', od: 'Achha, Bapa', en: 'Okay, Dad' },
     ],
   },
 ]

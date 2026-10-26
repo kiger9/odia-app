@@ -183,7 +183,7 @@ const WORDS: Array<{ english: string; phonetic: string }> = [
   { english: 'Now', phonetic: 'Ebe' },
   { english: 'Now', phonetic: 'Bårtåman' },
   { english: 'Office', phonetic: 'Office' },
-  { english: 'OK', phonetic: 'Håu' },
+  { english: 'OK', phonetic: 'Achha' },
   { english: 'Old (objects)', phonetic: 'Puruna' },
   { english: 'Old (beings)', phonetic: 'Budha, Budhi' },
   { english: 'On', phonetic: 'Upåre' },

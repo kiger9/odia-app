@@ -141,7 +141,7 @@ export const DICTIONARY_WORDS: Record<string, string> = {
   kehi: 'କେହି',
   bårtåman: 'ବର୍ତ୍ତମାନ',
   office: 'ଅଫିସ୍', // loanword
-  håu: 'ହଉ',
+  achha: 'ଆଚ୍ଛା', // okay / alright (in place of the book's håu, which the owner reads as "yes")
   puruna: 'ପୁରୁଣା',
   budha: 'ବୁଢ଼ା',
   budhi: 'ବୁଢ଼ୀ',

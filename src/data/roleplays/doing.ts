@@ -44,7 +44,7 @@ export const DOING: Roleplay[] = [
       { who: 'parent', od: 'Khirå bhålå, piå', en: 'Milk is good for you, drink it' },
       { who: 'child', od: 'Khirå mitha nuhe', en: 'The milk isn’t sweet' },
       { who: 'parent', od: 'Thik åchi, mu tike chini anuchi', en: 'Okay, I’ll bring a little sugar' },
-      { who: 'child', od: 'Hå, ebe mu piuchi', en: 'Okay, I’ll drink it now' },
+      { who: 'child', od: 'Achha, ebe mu piuchi', en: 'Okay, I’ll drink it now' },
     ],
   },
   {

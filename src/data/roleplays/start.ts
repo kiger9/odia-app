@@ -17,7 +17,7 @@ export const START: Roleplay[] = [
       { who: 'child', od: 'Mu bhålå nahi, Ma. Mundå bindhuchi', en: 'I’m not well, Mom. My head hurts' },
       { who: 'parent', od: 'Tåmårå jårå åchi-ki?', en: 'Do you have a fever?' },
       { who: 'child', od: 'Na, jårå nahi', en: 'No, no fever' },
-      { who: 'parent', od: 'Håu, aji ghåre ruhå', en: 'Okay, stay home today' },
+      { who: 'parent', od: 'Achha, aji ghåre ruhå', en: 'Okay, stay home today' },
     ],
   },
   {
@@ -45,7 +45,7 @@ export const START: Roleplay[] = [
       { who: 'parent', od: 'Kådåli åchi', en: 'There are bananas' },
       { who: 'child', od: 'Biscuit åchi-ki?', en: 'Are there any biscuits?' },
       { who: 'parent', od: 'Na, biscuit nahi', en: 'No, there are no biscuits' },
-      { who: 'child', od: 'Håu, gote kådåli diå', en: 'Okay, give me a banana' },
+      { who: 'child', od: 'Achha, gote kådåli diå', en: 'Okay, give me a banana' },
     ],
   },
   {
@@ -72,7 +72,7 @@ export const START: Roleplay[] = [
       { who: 'child', od: 'Ma, bahare bårsa håuchi', en: 'Mom, it’s raining outside' },
       { who: 'parent', od: 'Tåmårå chata åchi-ki?', en: 'Do you have your umbrella?' },
       { who: 'child', od: 'Na, morå chata school-re åchi', en: 'No, my umbrella is at school' },
-      { who: 'parent', od: 'Håu, morå chata niå', en: 'Okay, take my umbrella' },
+      { who: 'parent', od: 'Achha, morå chata niå', en: 'Okay, take my umbrella' },
     ],
   },
   {
