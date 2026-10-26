@@ -1,7 +1,8 @@
 // Roleplay: a scripted conversation, line by line. The app says the other
-// role's lines aloud; for the learner's lines it shows the English, the learner
-// says the Odia out loud, then taps to hear the recording and marks whether
-// they got it. A chapter's roleplays run back to back, like a final test; the
+// role's lines aloud without their English (it fades in when the learner taps
+// Continue, so they listen first); for the learner's lines it shows the English,
+// the learner says the Odia out loud, then taps to hear the recording and marks
+// whether they got it. A chapter's roleplays run back to back, like a final test; the
 // random mode plays one from any finished chapter.
 
 import { useEffect, useMemo, useState } from 'react'
@@ -154,7 +155,9 @@ export default function Roleplay({
             {SHOW_SCRIPT_FEATURE && showScript && toScript(l.od) && (
               <p className="rp-script muted">{toScript(l.od)}</p>
             )}
-            <p className="rp-en muted">{l.en}</p>
+            {(l.who === rp.you || i < pos || sceneDone) && (
+              <p className={`rp-en muted${l.who === rp.you ? '' : ' reveal'}`}>{l.en}</p>
+            )}
           </div>
         ))}
 

@@ -215,7 +215,7 @@ export default function Home({
                       <b>Roleplay</b>
                       <small>
                         {openChapters.has(ch.key)
-                          ? `${ROLEPLAYS_BY_CHAPTER[ch.key].length} conversations · put the chapter to use`
+                          ? `${ROLEPLAYS_BY_CHAPTER[ch.key].length} conversations · play both roles`
                           : `Finish all ${ch.lessons.length} lessons to unlock`}
                       </small>
                     </span>

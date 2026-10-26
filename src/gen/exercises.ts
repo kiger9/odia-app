@@ -328,16 +328,17 @@ function roleplayStep(r: Roleplay, i: number, format: RpFormat, rng: Rng): PStep
       }
     }
     case 'type':
-      if (line.od.split(' ').length > 4) return null
+      if (line.od.split(' ').length > 4 || line.od.includes('.')) return null
       return { t: 'type', q: `Type in Odia: “${line.en}”`, ans: line.od, sig: sig + ':t', fresh: true }
     case 'build': {
       // Tiles carry no "?" or ",": a "-ki" question still speaks as one; other
-      // questions and lines with a pause would need a second recording, so skip them.
+      // questions and lines with a pause or a second sentence ("." "!" "," before
+      // the end) would need a second recording, so skip them.
       const words = line.od.split(' ')
-      if (line.od.includes(',') || (question && !words[words.length - 1].endsWith('-ki?'))) return null
-      const ans = words.map((w) => w.replace(/\?$/, ''))
+      if (/[.!,]/.test(line.od.slice(0, -1)) || (question && !words[words.length - 1].endsWith('-ki?'))) return null
+      const ans = words.map((w) => w.replace(/[?.!]$/, ''))
       const have = new Set(ans.map(norm))
-      const dist = shuffle(rng, [...new Set(pool.flatMap((l) => l.od.replace(/[?,]/g, '').split(' ')))])
+      const dist = shuffle(rng, [...new Set(pool.flatMap((l) => l.od.replace(/[?,.!]/g, '').split(' ')))])
         .filter((w) => !have.has(norm(w))).slice(0, 2)
       if (dist.length < 2) return null
       return { t: 'assemble', q: `Build in Odia: “${line.en}”`, ans, dist, sig: sig + ':b', fresh: true }

@@ -10,7 +10,7 @@ import Dictionary from './components/Dictionary'
 import Roleplay from './components/Roleplay'
 import Modal from './components/Modal'
 import { CHAPTERS, LESSON_BY_ID } from './data/lessons'
-import { ROLEPLAYS_BY_CHAPTER, ROLEPLAY_BY_ID, unlockedRoleplays } from './data/roleplays'
+import { ROLEPLAYS_BY_CHAPTER, ROLEPLAY_BY_ID, otherRole, unlockedRoleplays, withRole, type Role } from './data/roleplays'
 import { db } from './db'
 import { getShowScript, setShowScript } from './settings'
 import { getName, setName, hasBeenAskedName, markNameAsked } from './profile'
@@ -31,13 +31,33 @@ type Screen =
   | { name: 'lesson'; id: string; startStep: number }
   | { name: 'review' }
   | { name: 'quiz' }
-  | { name: 'roleplay'; chapter: string } // a chapter's roleplays, in order
-  | { name: 'roleplay-random'; pick: string[] } // ids chosen from finished chapters
+  | { name: 'roleplay'; chapter: string; roles: Role[] } // a chapter's roleplays, in order, with the learner's role in each
+  | { name: 'roleplay-random'; pick: { id: string; you: Role }[] } // chosen from finished chapters
   | { name: 'profile' }
   | { name: 'settings' }
   | { name: 'dictionary' }
 
 // First-run setup runs in order: name, then the offer of a daily reminder.
+// How many times a chapter's roleplays have been started: odd runs swap the
+// learner's role in every conversation, so two runs cover both sides of each.
+function nextRoleplayRun(chapter: string): number {
+  const key = `odia:rp-run:${chapter}`
+  let run = 0
+  try {
+    run = Number(localStorage.getItem(key)) || 0
+    localStorage.setItem(key, String(run + 1))
+  } catch {
+    // storage unavailable: always the default roles
+  }
+  return run
+}
+
+// The learner's role in each conversation of a chapter for this run.
+function chapterRoles(chapter: string): Role[] {
+  const run = nextRoleplayRun(chapter)
+  return (ROLEPLAYS_BY_CHAPTER[chapter] ?? []).map((r, i) => ((i + run) % 2 === 0 ? r.you : otherRole(r.you)))
+}
+
 type Setup = 'name' | 'notifications' | 'done'
 
 export default function App() {
@@ -109,12 +129,13 @@ export default function App() {
     setSetup('done')
   }
 
-  // One roleplay at random from the chapters finished so far.
+  // One roleplay at random from the chapters finished so far, in either role.
   async function startRandomRoleplay() {
     const rows = await db.lessonProgress.toArray()
     const done = new Set(rows.filter((r) => r.completed).map((r) => r.lessonId))
     const open = unlockedRoleplays(done)
-    const pick = open.length ? [open[Math.floor(Math.random() * open.length)].id] : []
+    const pairs = open.flatMap((r) => [{ id: r.id, you: r.you }, { id: r.id, you: otherRole(r.you) }])
+    const pick = pairs.length ? [pairs[Math.floor(Math.random() * pairs.length)]] : []
     setScreen({ name: 'roleplay-random', pick })
   }
 
@@ -123,7 +144,7 @@ export default function App() {
       onStart={(id, startStep) => setScreen({ name: 'lesson', id, startStep })}
       onReview={() => setScreen({ name: 'review' })}
       onQuiz={() => setScreen({ name: 'quiz' })}
-      onRoleplay={(chapter) => setScreen({ name: 'roleplay', chapter })}
+      onRoleplay={(chapter) => setScreen({ name: 'roleplay', chapter, roles: chapterRoles(chapter) })}
       onRandomRoleplay={() => void startRandomRoleplay()}
       onProfile={() => setScreen({ name: 'profile' })}
       onDictionary={() => setScreen({ name: 'dictionary' })}
@@ -152,17 +173,17 @@ export default function App() {
     view = (
       <Roleplay
         key={screen.chapter}
-        roleplays={ROLEPLAYS_BY_CHAPTER[screen.chapter] ?? []}
+        roleplays={(ROLEPLAYS_BY_CHAPTER[screen.chapter] ?? []).map((r, i) => withRole(r, screen.roles[i] ?? r.you))}
         heading={`${chapter?.title ?? 'Roleplay'} · Roleplay`}
         showScript={showScript}
         onExit={() => setScreen({ name: 'home' })}
       />
     )
   } else if (screen.name === 'roleplay-random') {
-    const picked = screen.pick.map((id) => ROLEPLAY_BY_ID[id]).filter((r) => !!r)
+    const picked = screen.pick.filter((p) => !!ROLEPLAY_BY_ID[p.id]).map((p) => withRole(ROLEPLAY_BY_ID[p.id], p.you))
     view = (
       <Roleplay
-        key={screen.pick.join(',')}
+        key={screen.pick.map((p) => `${p.id}:${p.you}`).join(',')}
         roleplays={picked}
         heading="Random roleplay"
         showScript={showScript}
